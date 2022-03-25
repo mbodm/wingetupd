@@ -17,7 +17,7 @@ For more information about _WinGet_ itself, take a look at: https://docs.microso
 - The tool is specifically __not__ designed to install packages (that are not actually installed on your machine). It´s sole purpose is just to update your installed packages. Means: Before you can update some of your packages with this tool, you have to install them "by hand" or by using _WinGet_. In short: The tool can not (and want not) install any software. It´s just there for updating your already existing software.
 
 ### Requirements
-- There are not really any special requirements. It´s just a typical commandline _.exe_ file. Just download the newest release, from the [_Releases_](https://github.com/MBODM/wingetupd/releases) page. All the releases are compiled for x64, assuming you are using some 64-bit Windows (and that´s rather likely).
+- There are not really any special requirements. It´s just a typical commandline _.exe_ file. Just download the newest release, from the [_Releases_](https://github.com/MBODM/wingetupd/releases) page. All the releases are compiled for x64, assuming you are using some 64-bit Windows (and that's quite likely).
 
 ### Notes
 - The tool is written in C#, using .NET 6 and built with Visual Studio 2022.
