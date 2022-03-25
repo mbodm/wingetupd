@@ -30,7 +30,7 @@ There are not any special requirements. It´s just a typical commandline _.exe_ 
 - If you wanna compile the source by your own, you just need Visual Studio 2022 Community. Nothing else.
 - The release-binaries are compiled as self-contained .NET 6 .exe files for x64 Windows.
 - Self-contained: That´s the reason why the binariy-size is 15 MB and why you don´t need any .NET Framework as requirement.
-- The .csproj source file contains MSBUILD tasks, to create a release zip file, when publishing with VS2022.
+- The .csproj source file contains a MSBUILD task, to create a release zip file, when publishing with VS2022.
 - The tool just exists, because i am lazy and made my life a bit easier, by writing this tool.
 
 #### Have fun.
