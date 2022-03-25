@@ -24,8 +24,8 @@ There are not any special requirements. It´s just a typical commandline _.exe_ 
 - If you wanna compile the source by your own, you just need Visual Studio 2022 Community. Nothing else.
 - The binaries in the releases are compiled as self-contained .NET 6 .exe files for x64 Windows.
 - Self-contained: That´s the reason why the binariy-size is 15 MB and why you don´t need any .NET Framework as requirement.
-- The tool has no paramters and is not using any parameters at all.
 - The .csproj source code file contains MSBUILD tasks, to create a release zip file, when building with VS2022.
+- The tool has no paramters and is not using any parameters at all.
 - When _wingetupd.exe_ starts, it creates a log file (_wingetupd.log_) in the same folder.
 - This means the folder needs the rights for writing files in it. A location like _C:\ProgramFiles_ don´t has this rights.
 - The log file contains all the _WinGet_ calls and their output, so you can exactly see how _WinGet_ was used.
