@@ -20,7 +20,9 @@ For more information about _WinGet_ itself, take a look at: https://docs.microso
 
 ### Additional notes
 - The tool is written in C# using .NET 6 and Visual Studio 2022.
-- The binaries on the release is compiled as self-cont
+- The binaries in the releases are compiled as self-contained .NET 6 .exe files.
+- That´s the reason why it´s size is 15 MB and why you don´t need any .NET Framework as requirement.
+- When _wingetupd.exe_ starts it creates a log file (_wingetupd.log_) in the same folder.
+- The log file contains all the _WinGet_ calls and their output, so you can exactly see what _WinGet_ does.
 
-
-![wingetupd.exe](screenshot-files.png)
+#### Have fun.
