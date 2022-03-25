@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <Target Name="My-Build-Event" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
+    <Copy SourceFiles="$(ProjectDir)WinGetUpdPackages.txt" DestinationFiles="$(TargetDir)packages.txt" />
+    <Message Text="My-Build-Event finished." Importance="high" />
+  </Target>
+
+  <Target Name="My-Publish-Event" AfterTargets="Publish" Condition="'$(Configuration)' == 'Release'">
+    <RemoveDir Directories="$(PublishDir)zip"></RemoveDir>
+    <MakeDir Directories="$(PublishDir)zip"></MakeDir>
+    <Copy SourceFiles="$(PublishDir)WinGetUpd.exe" DestinationFiles="$(PublishDir)zip\wingetupd.exe" />
+    <Copy SourceFiles="$(ProjectDir)WinGetUpdPackages.txt" DestinationFiles="$(PublishDir)zip\packages.txt" />
+    <ZipDirectory SourceDirectory="$(PublishDir)zip" DestinationFile="$(PublishDir)wingetupd.zip" Overwrite="true" />
+    <RemoveDir Directories="$(PublishDir)zip"></RemoveDir>
+    <Message Text="My-Publish-Event finished." Importance="high" />
+  </Target>
+
+</Project>
