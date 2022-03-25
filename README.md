@@ -13,6 +13,15 @@ For more information about _WinGet_ itself, take a look at: https://docs.microso
 - So, when _wingetupd.exe_ is started and it founds a package-file, it just checks for each package-ID, listed in the package-file, if the package exists, if the package is installed and if the package has an update. If so, it updates the package. _wingetupd.exe_ does all of this, by using _WinGet_.
 - This means: All you have to do, is to edit the package-file and insert the ID´s of your installed _WinGet_ packages there. When starting _wingetupd.exe_ it will try to update all that packages.
 
+### How it looks
 ![wingetupd.exe](screenshot-tool.png)
+
+### Requirements
+There are no requirements. It´s just an .exe commandline file. Just download the newest release, from the release page. All the releases are compiled for x64, assuming you have some 64-bit Windows version (which is rather likely).
+
+### Additional notes
+- The tool is written in C# using .NET 6 and Visual Studio 2022.
+- The binaries on the release is compiled as self-cont
+
 
 ![wingetupd.exe](screenshot-files.png)
