@@ -20,7 +20,7 @@ For more information about _WinGet_ itself, take a look at: https://docs.microso
 - There are not really any special requirements. It´s just a typical commandline _.exe_ file. Just download the newest release, from the _Releases_ page (https://github.com/MBODM/wingetupd/releases). All the releases are compiled for x64, assuming you have some 64-bit Windows version (which is rather likely).
 
 ### Notes
-- The tool is written in C# using .NET 6 and Visual Studio 2022.
+- The tool is written in C#, using .NET 6 and built with Visual Studio 2022.
 - The binaries in the releases are compiled as self-contained .NET 6 .exe files.
 - That´s the reason why it´s size is 15 MB and why you don´t need any .NET Framework as requirement.
 - When _wingetupd.exe_ starts it creates a log file (_wingetupd.log_) in the same folder.
