@@ -6,21 +6,21 @@ A tiny commandline tool, using [_WinGet_](https://docs.microsoft.com/de-de/windo
 ### What it is
 It´s a simple and tiny tool named _wingetupd.exe_. The tool works on top of the popular Windows-App [_WinGet_](https://docs.microsoft.com/de-de/windows/package-manager/winget). The tool uses _WinGet_, to update a specific bunch of packages, on a Windows machine.
 
-When using _WinGet_ to install and update Windows software, _wingetupd.exe_ just wanna make your life a tiny bit easier, by updating all your software (or better said: a specific set of software) within a single call.
+When using _WinGet_ to install and update Windows software, ´wingetupd.exe´ just wanna make your life a tiny bit easier, by updating all your software (or better said: a specific set of software) within a single call.
 
 For more information about _WinGet_ itself, take a look at: https://docs.microsoft.com/de-de/windows/package-manager/winget
 
 ### How it works
-- When started, _wingetupd.exe_ first searches for a so-called "package-file". The package-file is simply a file named _packages.txt_, located in the same folder as the _wingetupd.exe_. The package-file contains a list of _WinGet_ package-ID´s (__not__ package-names, this is important).
-- So, when _wingetupd.exe_ is started and it founds a package-file, it just checks for each package-ID, listed in the package-file, if the package exists, if the package is installed and if the package has an update. If so, it updates the package. _wingetupd.exe_ does all of this, by using _WinGet_ internally.
-- This means: All you have to do, is to edit the package-file and insert the ID´s of your installed _WinGet_ packages there. When _wingetupd.exe_ is called, it will try to update all that packages.
+- When started, ´wingetupd.exe´ first searches for a so-called "package-file". The package-file is simply a file named _packages.txt_, located in the same folder as the ´wingetupd.exe´. The package-file contains a list of _WinGet_ package-ID´s (__not__ package-names, this is important).
+- So, when ´wingetupd.exe´ is started and it founds a package-file, it just checks for each package-ID, listed in the package-file, if the package exists, if the package is installed and if the package has an update. If so, it updates the package. ´wingetupd.exe´ does all of this, by using _WinGet_ internally.
+- This means: All you have to do, is to edit the package-file and insert the ID´s of your installed _WinGet_ packages there. When ´wingetupd.exe´ is called, it will try to update all that packages.
 - The tool is specifically __not__ designed to install packages (that are not actually installed on your machine). It´s sole purpose is just to update your installed packages. Means: Before you can update some of your packages with this tool, you have to install them "by hand" or by using _WinGet_. In short: The tool can not (and want not) install any software. It´s just there for updating your already existing software.
 
 ### Requirements
 There are not any special requirements. It´s just a typical commandline _.exe_ file. Just download the newest release, from the [_Releases_](https://github.com/MBODM/wingetupd/releases) page. All the releases are compiled for x64, assuming you are using some 64-bit Windows (and that's quite likely).
 
 ### Notes
-- When _wingetupd.exe_ starts, it creates a log file named "_wingetupd.log_" in the same folder.
+- When ´wingetupd.exe´ starts, it creates a log file named "_wingetupd.log_" in the same folder.
 - This means: The folder needs the rights for writing files in it. A location like _C:\ProgramFiles_ not has this rights.
 - The log file contains all the _WinGet_ calls and their output, so you can exactly see how _WinGet_ was used.
 - The tool has no paramters and is not using any parameters at all.
