@@ -6,7 +6,7 @@ It´s a simple tiny tool named _wingetupd.exe_. The tool works on top of the pop
 
 When using _WinGet_ to install and update Windows software, _wingetupd.exe_ just wanna make your life a tiny bit easier, by updating all your software (or better said: a specific set of software) with a single click.
 
-For more information about _WinGet_ take a look at https://docs.microsoft.com/de-de/windows/package-manager/winget
+For more information about _WinGet_ itself, take a look at: https://docs.microsoft.com/de-de/windows/package-manager/winget
 
 ### How it works
 - When started, _wingetupd.exe_ first searches for a so-called package-file. The package-file is simply a file named "_packages.txt_", located in the same folder as the _wingetupd.exe_. The package-file contains a list of _WinGet_ package ID´s (__not__ package names, this is important).
