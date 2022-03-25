@@ -20,17 +20,17 @@ For more information about _WinGet_ itself, take a look at: https://docs.microso
 There are not any special requirements. It´s just a typical commandline _.exe_ file. Just download the newest release, from the [_Releases_](https://github.com/MBODM/wingetupd/releases) page. All the releases are compiled for x64, assuming you are using some 64-bit Windows (and that's quite likely).
 
 ### Notes
+- When _wingetupd.exe_ starts, it creates a log file (_wingetupd.log_) in the same folder.
+- This means the folder needs the rights for writing files in it. A location like _C:\ProgramFiles_ don´t has this rights.
+- The log file contains all the _WinGet_ calls and their output, so you can exactly see how _WinGet_ was used.
+- The tool has no paramters and is not using any parameters at all.
+- To find out the package-ID´s of your installed software, you wanna put into the packages-file, you can just use `winget search`.
+- At the time of writing, the _Zoom.Zoom_ ID seems to be not corresponding to the installed Zoom package.
 - The tool is written in C#, using .NET 6 and built with Visual Studio 2022.
 - If you wanna compile the source by your own, you just need Visual Studio 2022 Community. Nothing else.
 - The release-binaries are compiled as self-contained .NET 6 .exe files for x64 Windows.
 - Self-contained: That´s the reason why the binariy-size is 15 MB and why you don´t need any .NET Framework as requirement.
 - The .csproj source file contains MSBUILD tasks, to create a release zip file, when publishing with VS2022.
-- The tool has no paramters and is not using any parameters at all.
-- When _wingetupd.exe_ starts, it creates a log file (_wingetupd.log_) in the same folder.
-- This means the folder needs the rights for writing files in it. A location like _C:\ProgramFiles_ don´t has this rights.
-- The log file contains all the _WinGet_ calls and their output, so you can exactly see how _WinGet_ was used.
 - The tool just exists, because i am lazy and made my life a bit easier, by writing this tool.
-- To find out the package-ID´s of your installed software, you wanna put into the packages-file, you can just use `winget search`.
-- At the time of writing, the _Zoom.Zoom_ ID seems to be not corresponding to the installed Zoom package.
 
 #### Have fun.
