@@ -16,7 +16,7 @@ For more information about _WinGet_ itself, take a look at: https://docs.microso
 - This means: All you have to do, is to edit the package-file and insert the ID´s of your installed _WinGet_ packages there. When starting _wingetupd.exe_ it will try to update all that packages.
 
 ### Requirements
-There are no requirements. It´s just an .exe commandline file. Just download the newest release, from the release page. All the releases are compiled for x64, assuming you have some 64-bit Windows version (which is rather likely).
+There are no requirements. It´s just an .exe commandline file. Just download the newest release, from the _Releases_ page (https://github.com/MBODM/wingetupd/releases). All the releases are compiled for x64, assuming you have some 64-bit Windows version (which is rather likely).
 
 ### Additional notes
 - The tool is written in C# using .NET 6 and Visual Studio 2022.
