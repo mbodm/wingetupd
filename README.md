@@ -26,5 +26,6 @@ For more information about _WinGet_ itself, take a look at: https://docs.microso
 - When _wingetupd.exe_ starts it creates a log file (_wingetupd.log_) in the same folder.
 - The log file contains all the _WinGet_ calls and their output, so you can exactly see what _WinGet_ does.
 - The tool has no paramters and is not using any parameters at all.
+- The tool just exists, because i am lazy and made my life a bit easier, by writing this tool.
 
 #### Have fun.
