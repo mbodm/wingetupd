@@ -24,7 +24,7 @@ There are not any special requirements. It´s just a typical commandline _.exe_ 
 - This means: The folder needs the rights for writing files in it. A location like _C:\ProgramFiles_ not has this rights.
 - The log file contains all the _WinGet_ calls and their output, so you can exactly see how _WinGet_ was used.
 - The tool has no paramters and is not using any parameters at all.
-- To find out the package-ID´s (you wanna put into the package-file) of your installed software, you can use `winget search`.
+- To find out the package-ID´s (you wanna use inside the package-file) of your installed software, you can use `winget search`.
 - At the time of writing, the _Zoom.Zoom_ ID seems to be not corresponding to the installed Zoom package.
 - The tool is written in C#, using .NET 6 and built with Visual Studio 2022.
 - If you wanna compile the source by your own, you just need Visual Studio 2022 Community. Nothing else.
