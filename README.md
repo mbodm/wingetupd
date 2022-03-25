@@ -12,7 +12,7 @@ For more information about _WinGet_ itself, take a look at: https://docs.microso
 
 ### How it works
 - When started, `wingetupd.exe` first searches for a so-called "package-file". The package-file is simply a file named _packages.txt_, located in the same folder as the `wingetupd.exe`. The package-file contains a list of _WinGet_ package-ID´s (__not__ package-names, this is important).
-- So, when `wingetupd.exe` is started and it founds a package-file, it just checks for each package-ID, listed in the package-file, if the package exists, if the package is installed and if the package has an update. If so, it updates the package. ´wingetupd.exe´ does all of this, by using _WinGet_ internally.
+- So, when `wingetupd.exe` is started and it founds a package-file, it just checks for each package-ID, listed in the package-file, if the package exists, if the package is installed and if the package has an update. If so, it updates the package. `wingetupd.exe` does all of this, by using _WinGet_ internally.
 - This means: All you have to do, is to edit the package-file and insert the ID´s of your installed _WinGet_ packages there. When `wingetupd.exe` is called, it will try to update all that packages.
 - The tool is specifically __not__ designed to install packages (that are not actually installed on your machine). It´s sole purpose is just to update your installed packages. Means: Before you can update some of your packages with this tool, you have to install them "by hand" or by using _WinGet_. In short: The tool can not (and want not) install any software. It´s just there for updating your already existing software.
 
