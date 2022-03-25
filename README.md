@@ -1,5 +1,5 @@
 # wingetupd
-A tiny commandline tool, using _WinGet_ to update specific Windows packages.
+A tiny commandline tool, using _WinGet_ to update a specific set of packages on a Windows machine.
 
 ![wingetupd.exe](screenshot-tool.png)
 
