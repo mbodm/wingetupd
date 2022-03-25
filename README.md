@@ -21,7 +21,7 @@ There are not any special requirements. It´s just a typical commandline _.exe_ 
 
 ### Notes
 - When `wingetupd.exe` starts, it creates a log file named "_wingetupd.log_" in the same folder.
-- This means: The folder needs the rights for writing files in it. A location like _C:\ProgramFiles_ not has this rights.
+- This means: The folder needs the rights for writing files in it. A location like "_C:\ProgramFiles_" not has this rights.
 - The log file contains all the _WinGet_ calls and their output, so you can exactly see how _WinGet_ was used.
 - The tool has no parameters and is not using any parameters at all.
 - To find out the package-ID´s (you wanna use inside the package-file) of your installed applications, you can use `winget search`.
