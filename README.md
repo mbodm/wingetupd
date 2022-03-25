@@ -20,7 +20,7 @@ For more information about _WinGet_ itself, take a look at: https://docs.microso
 There are not any special requirements. It´s just a typical commandline _.exe_ file. Just download the newest release, from the [_Releases_](https://github.com/MBODM/wingetupd/releases) page. All the releases are compiled for x64, assuming you are using some 64-bit Windows (and that's quite likely).
 
 ### Notes
-- When _wingetupd.exe_ starts, it creates a log file (_wingetupd.log_) in the same folder.
+- When _wingetupd.exe_ starts, it creates a log file named "_wingetupd.log_" in the same folder.
 - This means: The folder needs the rights for writing files in it. A location like _C:\ProgramFiles_ not has this rights.
 - The log file contains all the _WinGet_ calls and their output, so you can exactly see how _WinGet_ was used.
 - The tool has no paramters and is not using any parameters at all.
