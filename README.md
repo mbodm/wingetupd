@@ -4,7 +4,7 @@ A tiny commandline tool, using _WinGet_, to update a specific set of packages on
 ![wingetupd.exe](screenshot-tool.png)
 
 ### What it is
-It´s a simple tiny tool named _wingetupd.exe_. The tool works on top of the popular Windows-Tool [_WinGet_](https://docs.microsoft.com/de-de/windows/package-manager/winget), by using it to update a specific bunch of packages, on a Windows machine.
+It´s a simple and tiny tool named _wingetupd.exe_. The tool works on top of the popular Windows-Tool [_WinGet_](https://docs.microsoft.com/de-de/windows/package-manager/winget), by using it to update a specific bunch of packages, on a Windows machine.
 
 When using _WinGet_ to install and update Windows software, _wingetupd.exe_ just wanna make your life a tiny bit easier, by updating all your software (or better said: a specific set of software) within a single call.
 
