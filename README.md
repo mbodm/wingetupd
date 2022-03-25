@@ -1,7 +1,7 @@
 # wingetupd
 A tiny commandline tool, using _WinGet_, to update a specific set of packages on a Windows machine.
 
-![wingetupd.exe](screenshot-tool.png)
+![wingetupd.exe](screenshot.png)
 
 ### What it is
 It´s a simple and tiny tool named _wingetupd.exe_. The tool works on top of the popular Windows-Tool [_WinGet_](https://docs.microsoft.com/de-de/windows/package-manager/winget), by using it to update a specific bunch of packages, on a Windows machine.
