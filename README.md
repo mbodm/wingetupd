@@ -26,8 +26,8 @@ There are not any special requirements. It´s just a typical commandline _.exe_ 
 - The tool has no parameters and is not using any parameters at all.
 - To find out the package-ID´s (you wanna use inside the package-file) of your installed applications, you can use `winget search`.
 - At the time of writing, the ID _Zoom.Zoom_ seems to not match the corresponding installed _Zoom_ package.
-- The tool is written in C#, using .NET 6 and built with Visual Studio 2022.
-- If you wanna compile the source by your own, you just need Visual Studio 2022 Community. Nothing else.
+- The tool is written in C#, using .NET 6 and built with _Visual Studio 2022_.
+- If you wanna compile the source by your own, you just need _Visual Studio 2022 Community_. Nothing else.
 - The release-binaries are compiled as _self-contained_ .NET 6 .exe files, with _x64 Windows_ as target.
 - Self-contained: That´s the reason why the binariy-size is 15 MB and why you don´t need any .NET Framework as requirement.
 - The .csproj source file contains a MSBUILD task, to create a release zip file, when publishing with VS2022.
