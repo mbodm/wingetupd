@@ -24,9 +24,9 @@ For more information about _WinGet_ itself, take a look at: https://docs.microso
 - If you wanna compile the source by your own, you just need Visual Studio 2022 Community. Nothing else.
 - The binaries in the releases are compiled as self-contained .NET 6 .exe files for x64 Windows.
 - That´s the reason why it´s size is 15 MB and why you don´t need any .NET Framework as requirement.
+- The tool has no paramters and is not using any parameters at all.
 - When _wingetupd.exe_ starts, it creates a log file (_wingetupd.log_) in the same folder.
 - The log file contains all the _WinGet_ calls and their output, so you can exactly see how _WinGet_ was used.
-- The tool has no paramters and is not using any parameters at all.
 - The tool just exists, because i am lazy and made my life a bit easier, by writing this tool.
 - To find out the package-ID´s of your installed software, you wanna put into the packages-file, just use `winget search`.
 - At the time of writing, the _Zoom.Zoom_ ID seems to be not corresponding to the installed Zoom package.
