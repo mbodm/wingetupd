@@ -24,7 +24,7 @@ There are not any special requirements, besides _WinGet_. `wingetupd.exe` is jus
 - When `wingetupd.exe` starts, it creates a log file named "_wingetupd.log_" in the same folder.
 - So keep in mind: That folder needs security permissions for writing files in it.
 - Some locations like "_C:\\_" or "_C:\ProgramFiles_" don´t have such security permissions (for a good reason).
-- If you don´t wanna run the tool just from your Desktop, "_C:\Users\USERNAME\AppData\Local_" is fine too.
+- If you don´t wanna run `wingetupd.exe` just from your Desktop, "_C:\Users\USERNAME\AppData\Local_" is an alternative.
 - The log file contains all the _WinGet_-Calls and their output, so you can exactly see how _WinGet_ was used.
 - `wingetupd.exe` has no parameters and is not using any parameters at all.
 - Use `winget search`, to find out the package-id´s (you put into the package-file) of your installed applications.
