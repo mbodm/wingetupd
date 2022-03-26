@@ -12,7 +12,41 @@ namespace WinGetUpd
             this.winGet = winGet ?? throw new ArgumentNullException(nameof(winGet));
         }
 
-        public async Task<bool> WinGetExists()
+        public async Task<string> InitAsync()
+        {
+            if (!await WinGetExists())
+            {
+                return "Error: It seems WinGet is not installed on this computer.");
+            }
+
+            if (!PackageFileExists())
+            {
+                return $"Error: The package-file ('{AppData.PkgFile}') not exists.");
+            }
+
+            if (!CanWriteLogFile())
+            {
+                return $"Error: Can not create log file ('{AppData.LogFile}'). It seems this folder has no write permissions.");
+            }
+
+            return string.Empty;
+        }
+
+        public async Task<IEnumerable<string>> GetPackagesAsync()
+        {
+            var lines = await File.ReadAllLinesAsync(AppData.PkgFile).ConfigureAwait(false);
+
+            return lines;
+        }
+
+        public async Task ProcessPackagesAsync(IEnumerable<string> packages, IProgress<ProgressData> progress)
+        {
+            var tasks = packages.Select(package => ProcessPackage(package, progress)).ToList();
+
+            await Task.WhenAll(tasks).ConfigureAwait(false);
+        }
+
+        private async Task<bool> WinGetExists()
         {
             try
             {
@@ -39,12 +73,12 @@ namespace WinGetUpd
             }
         }
 
-        public bool PackageFileExists()
+        private bool PackageFileExists()
         {
             return File.Exists($"{AppData.PkgFile}");
         }
 
-        public bool CanWriteLogFile()
+        private bool CanWriteLogFile()
         {
             try
             {
@@ -56,20 +90,6 @@ namespace WinGetUpd
             {
                 return false;
             }
-        }
-
-        public async Task<IEnumerable<string>> GetPackagesAsync()
-        {
-            var lines = await File.ReadAllLinesAsync(AppData.PkgFile).ConfigureAwait(false);
-
-            return lines;
-        }
-
-        public async Task ProcessPackagesAsync(IEnumerable<string> packages, IProgress<ProgressData> progress)
-        {
-            var tasks = packages.Select(package => ProcessPackage(package, progress)).ToList();
-
-            await Task.WhenAll(tasks).ConfigureAwait(false);
         }
 
         private async Task ProcessPackage(string package, IProgress<ProgressData> progress)
