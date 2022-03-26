@@ -29,7 +29,7 @@ namespace WinGetUpd
         {
             var output = await RunWinGetCommandAsync("list", id).ConfigureAwait(false);
 
-            return output.Contains(" Available ");
+            return output.Contains(" Available ") || output.Contains(" Verf├╝gbar ");
         }
 
         public Task UpdatePackageAsync(string id)
