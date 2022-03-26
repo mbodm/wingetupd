@@ -30,7 +30,7 @@ There are not any special requirements. It´s just a typical command line _.exe_
 - To find out the package-id´s (you put into the package-file) of your installed applications, you can use `winget search`.
 - Everything the tool does, when using _WinGet_, is based on exact _WinGet_ package-id´s (_WinGet_ parameters: _--exact --id_).
 - At the time of writing, the package-id _Zoom.Zoom_ seems to not match the corresponding installed _Zoom_ package.
-- I assume the _WinGet_-Team will correct this wrong behaviour in their [repository](https://github.com/microsoft/winget-pkgs/tree/master/manifests) soon.
+- I assume the _WinGet_-Team will correct this wrong behaviour in their [packages repository](https://github.com/microsoft/winget-pkgs/tree/master/manifests) soon.
 - The tool is written in C#, using .NET 6 and built with _Visual Studio 2022_.
 - If you wanna compile the source by your own, you just need _Visual Studio 2022 Community_. Nothing else.
 - The release-binaries are compiled as _self-contained_ .NET 6 .exe files, with _x64 Windows_ as target.
