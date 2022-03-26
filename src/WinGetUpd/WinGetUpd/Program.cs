@@ -18,7 +18,13 @@ if (!businessLogic.PackageFileExists())
     Environment.Exit(1);
 }
 
-var packages = await businessLogic.GetPackages();
+if (!businessLogic.CanWriteLogFile())
+{
+    Console.WriteLine($"Error: Can not create log file ('{AppData.LogFile}'). It seems this folder has no write permissions.");
+    Environment.Exit(1);
+}
+
+var packages = await businessLogic.GetPackagesAsync();
 
 var existsCounter = 0;
 var installedCounter = 0;
@@ -27,7 +33,7 @@ var errorCounter = 0;
 
 Console.Write($"Processing {packages.Count()} packages ...");
 
-await businessLogic.ProcessPackages(packages, new Progress<ProgressData>(progressData =>
+await businessLogic.ProcessPackagesAsync(packages, new Progress<ProgressData>(progressData =>
 {
     if (progressData.Status == ProgressStatus.ErrorOccurred)
     {

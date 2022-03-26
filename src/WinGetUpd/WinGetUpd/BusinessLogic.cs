@@ -44,14 +44,28 @@ namespace WinGetUpd
             return File.Exists($"{AppData.PkgFile}");
         }
 
-        public async Task<IEnumerable<string>> GetPackages()
+        public bool CanWriteLogFile()
+        {
+            try
+            {
+                File.WriteAllText(AppData.LogFile, string.Empty);
+
+                return true;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return false;
+            }
+        }
+
+        public async Task<IEnumerable<string>> GetPackagesAsync()
         {
             var lines = await File.ReadAllLinesAsync(AppData.PkgFile).ConfigureAwait(false);
 
             return lines;
         }
 
-        public async Task ProcessPackages(IEnumerable<string> packages, IProgress<ProgressData> progress)
+        public async Task ProcessPackagesAsync(IEnumerable<string> packages, IProgress<ProgressData> progress)
         {
             var tasks = packages.Select(package => ProcessPackage(package, progress)).ToList();
 
