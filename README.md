@@ -34,7 +34,7 @@ There are not any special requirements. It´s just a typical command line _.exe_
 - The tool is written in C#, using .NET 6 and built with _Visual Studio 2022_.
 - If you wanna compile the source by your own, you just need _Visual Studio 2022 Community_. Nothing else.
 - The release-binaries are compiled as _self-contained_ .NET 6 .exe files, with _x64 Windows_ as target.
-- Self-contained: That´s the reason why the binariy-size is 15 MB and why there are no .NET Framework requirements.
+- Self-contained: That´s the reason why the binariy-size is 15 MB and why there are not any .NET Framework requirements.
 - The .csproj source file contains some MSBUILD task, to create a release zip file, when publishing with VS2022.
 - The tool is written, using an asynchronous TAP approach, including "_Progress&lt;T&gt;_" and "_async all the way_" concepts.
 - The tool just exists, because i am lazy and made my life a bit easier, by writing this tool. :grin:
