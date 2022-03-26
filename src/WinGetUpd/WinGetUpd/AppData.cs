@@ -12,11 +12,11 @@ namespace WinGetUpd
             {
                 var version = Assembly.GetExecutingAssembly()?.GetName()?.Version;
 
-                return version == null ? string.Empty : version.ToString();
+                return version == null ? string.Empty : version.ToString(3);
             }
         }
 
-        public static string AppDate => "2022-03-25";
+        public static string AppDate => "2022-03-26";
 
         public static string PkgFile => $"packages.txt";
 

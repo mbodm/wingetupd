@@ -16,17 +16,17 @@ namespace WinGetUpd
         {
             if (!await WinGetExists())
             {
-                return "Error: It seems WinGet is not installed on this computer.");
+                return "Error: It seems WinGet is not installed on this computer.";
             }
 
             if (!PackageFileExists())
             {
-                return $"Error: The package-file ('{AppData.PkgFile}') not exists.");
+                return $"Error: The package-file ('{AppData.PkgFile}') not exists.";
             }
 
             if (!CanWriteLogFile())
             {
-                return $"Error: Can not create log file ('{AppData.LogFile}'). It seems this folder has no write permissions.");
+                return $"Error: Can not create log file ('{AppData.LogFile}'). It seems this folder has no write permissions.";
             }
 
             return string.Empty;
