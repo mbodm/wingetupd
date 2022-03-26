@@ -27,7 +27,7 @@ There are not any special requirements. It´s just a typical command line _.exe_
 - If you don´t wanna run the tool just from your Desktop, "_C:\Users\USERNAME\AppData\Local_" is fine too.
 - The log file contains all the _WinGet_-Calls and their output, so you can exactly see how _WinGet_ was used.
 - The tool has no parameters and is not using any parameters at all.
-- To find out the package-id´s (you put into the package-file) of your installed applications, you can use `winget search`.
+- Use `winget search`, to find out the package-id´s (you put into the package-file) of your installed applications.
 - Everything the tool does, when using _WinGet_, is based on exact _WinGet_ package-id´s (_WinGet_ parameters: _--exact --id_).
 - At the time of writing, the package-id _Zoom.Zoom_ seems to not match the corresponding installed _Zoom_ package.
 - I assume the _WinGet_-Team will correct this wrong behaviour in their [packages repository](https://github.com/microsoft/winget-pkgs/tree/master/manifests) soon.
