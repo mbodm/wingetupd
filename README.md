@@ -38,6 +38,6 @@ There are not any special requirements, besides _WinGet_. `wingetupd.exe` is jus
 - The _.csproj_ source file contains some MSBUILD task, to create a zip file, when publishing with VS2022.
 - GitHub´s default _.gitignore_ excludes VS2022 publish-profiles, so i added a [publish-settings screenshot](img/screenshot-publish-settings.png) to repo.
 - The source is using an asynchronous TAP approach, including "_Progress&lt;T&gt;_" and "_async all the way_" concepts.
-- The tool just exists, because i am lazy and made my life a bit easier, by writing this tool. :grin:
+- `wingetupd.exe` just exists, because i am lazy and made my life a bit easier, by writing this tool. :grin:
 
 #### Have fun.
