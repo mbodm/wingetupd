@@ -28,7 +28,7 @@ There are not any special requirements. It´s just a typical commandline _.exe_ 
 - The tool has no parameters and is not using any parameters at all.
 - To find out the package-ID´s (you put into the package-file) of your installed applications, you can use `winget search`.
 - At the time of writing, the ID _Zoom.Zoom_ seems to not match the corresponding installed _Zoom_ package.
-- Maybe the _WinGet_-Team will be correct this wrong behaviour in their repository soon.
+- I assume the _WinGet_-Team will be correct this wrong behaviour in their repository soon.
 - The tool is written in C#, using .NET 6 and built with _Visual Studio 2022_.
 - If you wanna compile the source by your own, you just need _Visual Studio 2022 Community_. Nothing else.
 - The release-binaries are compiled as _self-contained_ .NET 6 .exe files, with _x64 Windows_ as target.
