@@ -23,7 +23,7 @@ There are not any special requirements. It´s just a typical command line _.exe_
 ### Notes
 - When `wingetupd.exe` starts, it creates a log file named "_wingetupd.log_" in the same folder.
 - So keep in mind: That folder needs security permissions for writing files in it.
-- Some locations like "_C:\\_" or "_C:\ProgramFiles_" don´t have security permissions to write (for a good reason).
+- Some locations like "_C:\\_" or "_C:\ProgramFiles_" don´t have such security permissions (for a good reason).
 - If you don´t wanna run the tool just from your Desktop, "_C:\Users\USERNAME\AppData\Local_" is also a good location.
 - The log file contains all the _WinGet_-Calls and their output, so you can exactly see how _WinGet_ was used.
 - The tool has no parameters and is not using any parameters at all.
