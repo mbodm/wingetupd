@@ -8,7 +8,7 @@ It´s a simple and tiny tool named _wingetupd.exe_. The tool works on top of the
 
 When using _WinGet_ to install and update Windows software, `wingetupd.exe` just wanna make your life a tiny bit easier, by updating all your software (or better said: a specific set of software) within a single call.
 
-_WinGet_ is a __fantastic!__ tool, to manage all your Windows applications and keep your Windows software up2date. Fat cheers to Microsoft here.
+_WinGet_ is imo a __fantastic!__ tool, to manage all your Windows applications and keep your Windows software up2date. Fat cheers to Microsoft here.
 For more information about _WinGet_ itself, take a look at: https://docs.microsoft.com/de-de/windows/package-manager/winget
 
 ### How it works
