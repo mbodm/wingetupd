@@ -1,5 +1,5 @@
 # wingetupd
-A tiny command line tool, using [_WinGet_](https://docs.microsoft.com/de-de/windows/package-manager/winget) for updating a specific set of packages on a Windows machine.
+A tiny command line tool, using [_WinGet_](https://docs.microsoft.com/de-de/windows/package-manager/winget) to update a specific set of packages on a Windows machine.
 
 ![wingetupd.exe](screenshot.png)
 
