@@ -29,14 +29,14 @@ There are not any special requirements. It´s just a typical command line _.exe_
 - The tool has no parameters and is not using any parameters at all.
 - Use `winget search`, to find out the package-id´s (you put into the package-file) of your installed applications.
 - Everything the tool does, when using _WinGet_, is based on exact _WinGet_ package-id´s (_WinGet_ parameters: _--exact --id_).
-- At the time of writing, the package-id _Zoom.Zoom_ seems to not match the corresponding installed _Zoom_ package.
+- At time of writing, the package-id _Zoom.Zoom_ seems to missmatch the corresponding installed _Zoom_ package.
 - I assume the _WinGet_-Team will correct this wrong behaviour in their [packages repository](https://github.com/microsoft/winget-pkgs/tree/master/manifests) soon.
 - The tool is written in C#, using .NET 6 and built with _Visual Studio 2022_.
 - If you wanna compile the source by your own, you just need _Visual Studio 2022 Community_. Nothing else.
 - The release-binaries are compiled as _self-contained_ .NET 6 .exe files, with _x64 Windows_ as target.
 - Self-contained: That´s the reason why the binariy-size is 15 MB and why there is no .NET Framework requirement.
 - The _.csproj_ source file contains some MSBUILD task, to create a zip file, when publishing with VS2022.
-- Since GitHub´s default _.gitignore_ excludes the VS2022 publish-profile, i added a publish-settings screenshot to this repo. 
+- Since GitHub´s default _.gitignore_ excludes VS2022 publish-profiles, i added a publish-settings screenshot to this repo. 
 - The source is using an asynchronous TAP approach, including "_Progress&lt;T&gt;_" and "_async all the way_" concepts.
 - The tool just exists, because i am lazy and made my life a bit easier, by writing this tool. :grin:
 
