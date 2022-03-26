@@ -8,13 +8,14 @@ It´s a simple and tiny tool named _wingetupd.exe_. The tool works on top of the
 
 When using _WinGet_ to install and update Windows software, `wingetupd.exe` just wanna make your life a tiny bit easier, by updating all your software (or better said: a specific set of software) within a single call.
 
+_wingetupd.exe_ is specifically __not__ designed to install packages, that are not actually already installed on your machine. It´s sole purpose is just to update your installed applications. Means: Before you can update some of your applications with this tool, you have to install them "by hand" or by using _WinGet_. In short: The tool can not (and want not) install any software. It´s just there for updating your already existing software.
+
 _WinGet_ is imo a __fantastic!__ tool, to manage all your Windows applications and keep your Windows software up2date. Fat kudos :thumbsup: to Microsoft here!  For more information about _WinGet_ itself, take a look at: https://docs.microsoft.com/de-de/windows/package-manager/winget
 
 ### How it works
 - When started, `wingetupd.exe` first searches for a so-called "package-file". The package-file is simply a file named _packages.txt_, located in the same folder as the `wingetupd.exe`. The package-file contains a list of _WinGet_ package-id´s (__not__ package-names, this is important, see [Notes](#Notes) section below).
 - So, when `wingetupd.exe` is started and it founds a package-file, it just checks for each package-id (listed in the package-file), if the package exists, if the package is installed and if the package has an update. If so, it updates the package. `wingetupd.exe` does all of this, by using _WinGet_ internally.
 - This means: All you have to do, is to edit the package-file and insert the _WinGet_ package-id´s of your installed Windows applications there. When `wingetupd.exe` is executed, it will try to update all that packages (aka "your Windows applications").
-- The tool is specifically __not__ designed to install packages, that are not actually already installed on your machine. It´s sole purpose is just to update your installed applications. Means: Before you can update some of your applications with this tool, you have to install them "by hand" or by using _WinGet_. In short: The tool can not (and want not) install any software. It´s just there for updating your already existing software.
 
 ### Requirements
 There are not any special requirements. It´s just a typical commandline _.exe_ file. Just download the newest release, from the [_Releases_](https://github.com/MBODM/wingetupd/releases) page. Unzip and run it. All the releases are compiled for x64, assuming you are using some 64-bit Windows (and that's quite likely).
