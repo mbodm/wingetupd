@@ -8,9 +8,9 @@ It´s a simple and tiny tool for Windows, named `wingetupd.exe`, used on the Win
 
 When using _WinGet_ to install and update Windows software, `wingetupd.exe` just wants to make your life a tiny bit easier, by updating all your software (or better said: a specific bunch of software) within a single call.
 
-`wingetupd.exe` is specifically __not__ designed to install packages, that are actually not already installed on your machine. It´s sole purpose is just to update your installed applications. Means: Before you can update some of your applications with this tool, you have to install them "by hand" or by using _WinGet_. In short: The tool can not (and want not) install any software. It´s just there for updating your already existing software.
+`wingetupd.exe` is specifically __not__ designed to install packages, that actually are not already installed on your machine. It´s sole purpose is just to update your installed packages. Means: Before you can update some of your applications with this tool, you have to install them "by hand" or by using _WinGet_. In short: This tool can not (and want not) install any software. It´s just there for updating your already existing software.
 
-Btw: _WinGet_ is imo a __fantastic!__ tool, to manage all your Windows applications and keep your Windows software up2date. Fat kudos :thumbsup: to Microsoft here!  For more information about _WinGet_ itself, take a look at: https://docs.microsoft.com/de-de/windows/package-manager/winget
+Btw: _WinGet_ is imo a __fantastic!__ piece of software, to manage all your Windows applications and keep your Windows software up2date. Fat kudos :thumbsup: to Microsoft here!  For more information about _WinGet_ itself, take a look at: https://docs.microsoft.com/de-de/windows/package-manager/winget
 
 ### How it works
 - When started, `wingetupd.exe` first searches for a so-called "package-file". The package-file is simply a file named _packages.txt_, located in the same folder as the `wingetupd.exe`. The package-file contains a list of _WinGet_ package-id´s (__not__ package-names, this is important, see [Notes](#Notes) section below).
@@ -18,26 +18,28 @@ Btw: _WinGet_ is imo a __fantastic!__ tool, to manage all your Windows applicati
 - This means: All you have to do, is to edit the package-file and insert the _WinGet_ package-id´s of your installed Windows applications there. When `wingetupd.exe` is executed, it will try to update all that packages (aka "your Windows applications").
 
 ### Requirements
-There are not any special requirements. It´s just a typical command line _.exe_ file for Windows. Just download the newest release, from the [_Releases_](https://github.com/MBODM/wingetupd/releases) page, unzip and run it. All the releases are compiled for x64, assuming you are using some 64-bit Windows (and that's quite likely).
+There are not any special requirements, besides _WinGet_. `wingetupd.exe` is just a typical command line _.exe_ file for Windows. Just download the newest release, from the [_Releases_](https://github.com/MBODM/wingetupd/releases) page, unzip and run it. All the releases are compiled for x64, assuming you are using some 64-bit Windows (and that's quite likely).
 
 ### Notes
 - When `wingetupd.exe` starts, it creates a log file named "_wingetupd.log_" in the same folder.
 - So keep in mind: That folder needs security permissions for writing files in it.
 - Some locations like "_C:\\_" or "_C:\ProgramFiles_" don´t have such security permissions (for a good reason).
-- If you don´t wanna run the tool just from your Desktop, "_C:\Users\USERNAME\AppData\Local_" is fine too.
+- If you don´t wanna run `wingetupd.exe` just from your Desktop, "_C:\Users\USERNAME\AppData\Local_" is fine too.
 - The log file contains all the _WinGet_-Calls and their output, so you can exactly see how _WinGet_ was used.
-- The tool has no parameters and is not using any parameters at all.
+- `wingetupd.exe` has no parameters and is not using any parameters at all.
 - Use `winget search`, to find out the package-id´s (you put into the package-file) of your installed applications.
 - All internal calls, when using _WinGet_, are based on exact _WinGet_ package-id´s (_WinGet_ parameters: _--exact --id_).
+- _Why not just use `winget --upgrade-all` ?_ Well, often you don´t wanna update everything (i.e. runtimes).
+- _Why not just use some .bat or .ps script ?_ Well, `wingetupd.exe` is lightyears fastar, cause of async parallelization.
 - At time of writing, the package-id _Zoom.Zoom_ seems to missmatch the corresponding installed _Zoom_ package.
 - I assume the _WinGet_-Team will correct this wrong behaviour in their [packages repository](https://github.com/microsoft/winget-pkgs/tree/master/manifests) soon.
-- The tool is written in C#, using .NET 6 and built with _Visual Studio 2022_.
+- `wingetupd.exe` is written in C#, using .NET 6 and built with _Visual Studio 2022_.
 - If you wanna compile the source by your own, you just need _Visual Studio 2022 Community_. Nothing else.
 - The release-binaries are compiled as _self-contained_ .NET 6 .exe files, with _x64 Windows_ as target.
 - Self-contained: That´s the reason why the binariy-size is 15 MB and why there is no framework requirement.
 - The _.csproj_ source file contains some MSBUILD task, to create a zip file, when publishing with VS2022.
-- GitHub´s default _.gitignore_ excludes VS2022 publish-profiles, so i added a [publish-settings screenshot](img/screenshot-tool.png) to repo.
+- GitHub´s default _.gitignore_ excludes VS2022 publish-profiles, so i added a [publish-settings screenshot](img/screenshot-publish-settings.png) to repo.
 - The source is using an asynchronous TAP approach, including "_Progress&lt;T&gt;_" and "_async all the way_" concepts.
-- The tool just exists, because i am lazy and made my life a bit easier, by writing this tool. :grin:
+- `wingetupd.exe` just exists, because i am lazy and made my life a bit easier, by writing this tool. :grin:
 
 #### Have fun.
