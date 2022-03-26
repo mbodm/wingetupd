@@ -8,7 +8,7 @@ It´s a simple and tiny tool for Windows, named `wingetupd.exe`, used on the Win
 
 When using _WinGet_ to install and update Windows software, `wingetupd.exe` just wants to make your life a tiny bit easier, by updating all your software (or better said: a specific bunch of software) within a single call.
 
-`wingetupd.exe` is specifically __not__ designed to install packages, that are actually not already installed on your machine. It´s sole purpose is just to update your installed packages. Means: Before you can update some of your applications with this tool, you have to install them "by hand" or by using _WinGet_. In short: This tool can not (and want not) install any software. It´s just there for updating your already existing software.
+`wingetupd.exe` is specifically __not__ designed to install packages, that actually are not already installed on your machine. It´s sole purpose is just to update your installed packages. Means: Before you can update some of your applications with this tool, you have to install them "by hand" or by using _WinGet_. In short: This tool can not (and want not) install any software. It´s just there for updating your already existing software.
 
 Btw: _WinGet_ is imo a __fantastic!__ piece of software, to manage all your Windows applications and keep your Windows software up2date. Fat kudos :thumbsup: to Microsoft here!  For more information about _WinGet_ itself, take a look at: https://docs.microsoft.com/de-de/windows/package-manager/winget
 
