@@ -26,7 +26,7 @@ There are not any special requirements, besides _WinGet_. `wingetupd.exe` is jus
 - Some locations like "_C:\\_" or "_C:\ProgramFiles_" don´t have such security permissions (for a good reason).
 - If you don´t wanna run the tool just from your Desktop, "_C:\Users\USERNAME\AppData\Local_" is fine too.
 - The log file contains all the _WinGet_-Calls and their output, so you can exactly see how _WinGet_ was used.
-- The tool has no parameters and is not using any parameters at all.
+- `wingetupd.exe` has no parameters and is not using any parameters at all.
 - Use `winget search`, to find out the package-id´s (you put into the package-file) of your installed applications.
 - All internal calls, when using _WinGet_, are based on exact _WinGet_ package-id´s (_WinGet_ parameters: _--exact --id_).
 - At time of writing, the package-id _Zoom.Zoom_ seems to missmatch the corresponding installed _Zoom_ package.
