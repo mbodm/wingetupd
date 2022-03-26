@@ -18,7 +18,7 @@ Btw: _WinGet_ is imo a __fantastic!__ tool, to manage all your Windows applicati
 - This means: All you have to do, is to edit the package-file and insert the _WinGet_ package-id´s of your installed Windows applications there. When `wingetupd.exe` is executed, it will try to update all that packages (aka "your Windows applications").
 
 ### Requirements
-There are not any special requirements. It´s just a typical command line _.exe_ file for Windows. Just download the newest release, from the [_Releases_](https://github.com/MBODM/wingetupd/releases) page. Unzip and run it. All the releases are compiled for x64, assuming you are using some 64-bit Windows (and that's quite likely).
+There are not any special requirements. It´s just a typical command line _.exe_ file for Windows. Just download the newest release, from the [_Releases_](https://github.com/MBODM/wingetupd/releases) page, unzip and run it. All the releases are compiled for x64, assuming you are using some 64-bit Windows (and that's quite likely).
 
 ### Notes
 - When `wingetupd.exe` starts, it creates a log file named "_wingetupd.log_" in the same folder.
