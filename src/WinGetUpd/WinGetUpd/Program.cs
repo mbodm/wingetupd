@@ -6,21 +6,10 @@ Console.WriteLine();
 
 var businessLogic = new BusinessLogic(new WinGet(new WinGetLogger()));
 
-if (!await businessLogic.WinGetExists())
+var errorMessage = await businessLogic.InitAsync();
+if (errorMessage != string.Empty)
 {
-    Console.WriteLine("Error: It seems WinGet is not installed on this computer.");
-    Environment.Exit(1);
-}
-
-if (!businessLogic.PackageFileExists())
-{
-    Console.WriteLine($"Error: The package-file ('{AppData.PkgFile}') not exists.");
-    Environment.Exit(1);
-}
-
-if (!businessLogic.CanWriteLogFile())
-{
-    Console.WriteLine($"Error: Can not create log file ('{AppData.LogFile}'). It seems this folder has no write permissions.");
+    Console.WriteLine(errorMessage);
     Environment.Exit(1);
 }
 
