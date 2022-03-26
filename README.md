@@ -27,7 +27,7 @@ There are not any special requirements. It´s just a typical commandline _.exe_ 
 - The log file contains all the _WinGet_-Calls and their output, so you can exactly see how _WinGet_ was used.
 - The tool has no parameters and is not using any parameters at all.
 - To find out the package-id´s (you put into the package-file) of your installed applications, you can use `winget search`.
-- Everything the tool does, when using _WinGet_, is based on exact _WinGet_ package-id´s (_WinGet_ parameters _--exact_ and  _--id_).
+- Everything the tool does, when using _WinGet_, is based on exact _WinGet_ package-id´s (using _WinGet_ parameters _--exact --id_).
 - At the time of writing, the package-id _Zoom.Zoom_ seems to not match the corresponding installed _Zoom_ package.
 - I assume the _WinGet_-Team will correct this wrong behaviour in their repository soon.
 - The tool is written in C#, using .NET 6 and built with _Visual Studio 2022_.
