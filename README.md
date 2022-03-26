@@ -30,7 +30,7 @@ There are not any special requirements, besides _WinGet_. `wingetupd.exe` is jus
 - Use `winget search`, to find out the package-id´s (you put into the package-file) of your installed applications.
 - All internal calls, when using _WinGet_, are based on exact _WinGet_ package-id´s (_WinGet_ parameters: _--exact --id_).
 - _Why not just use `winget --upgrade-all` ?_ Well, often you don´t wanna update everything (i.e. runtimes).
-- _Why not just use some .bat or .ps script ?_ Well, `wingetupd.exe` is lightyears fastar, cause of async parallelization.
+- _Why not just use some .bat or .ps script ?_ Well, `wingetupd.exe` is lightyears faster, cause of async parallelization.
 - At time of writing, the package-id _Zoom.Zoom_ seems to missmatch the corresponding installed _Zoom_ package.
 - I assume the _WinGet_-Team will correct this wrong behaviour in their [packages repository](https://github.com/microsoft/winget-pkgs/tree/master/manifests) soon.
 - `wingetupd.exe` is written in C#, using .NET 6 and built with _Visual Studio 2022_.
