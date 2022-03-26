@@ -37,19 +37,16 @@
 
         private static string RemoveProgressUnicodeCharsFromWinGetOuput(string output)
         {
-            if (output.Contains("Name ") && output.Contains("---"))
+            if (output.Contains('\b'))
             {
-                return output[output.IndexOf("Name ")..];
-            }
+                output = output.Replace("\b|", string.Empty);
+                output = output.Replace("\b/", string.Empty);
+                output = output.Replace("\b-", string.Empty);
+                output = output.Replace("\b\\", string.Empty);
+                output = output.Replace("\b", string.Empty);
+                output = output.Replace("\r", string.Empty);
 
-            if (output.Contains("Fehler ") && output.Contains("---"))
-            {
-                return output[output.IndexOf("Fehler ")..];
-            }
-
-            if (output.Contains("Es wurde kein installiertes Paket gefunden"))
-            {
-                return output[output.IndexOf("Es wurde kein installiertes Paket gefunden")..];
+                output = output.Trim();
             }
 
             return output;
@@ -57,10 +54,10 @@
 
         private static string AddTabsToWinGetOuput(string output)
         {
-            output = output.Replace("\r\n", "\r\n\t");
+            output = output.Replace("\n", "\n\t");
             output = output.TrimEnd('\t');
             output = output.TrimEnd('\n');
-            output = output.TrimEnd('\r');
+
             output = "\t" + output;
 
             return output;
