@@ -6,6 +6,12 @@ Console.WriteLine();
 
 var businessLogic = new BusinessLogic(new WinGet(new WinGetLogger()));
 
+if (!await businessLogic.WinGetExists())
+{
+    Console.WriteLine("Error: It seems WinGet is not installed on this computer.");
+    Environment.Exit(1);
+}
+
 if (!businessLogic.PackageFileExists())
 {
     Console.WriteLine($"Error: The package-file ('{AppData.PkgFile}') not exists.");

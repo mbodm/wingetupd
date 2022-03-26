@@ -50,13 +50,17 @@ namespace WinGetUpd
 
         private static async Task<string> StartWinGetProcessAsync(string arguments)
         {
-            using var process = new Process();
-
-            process.StartInfo.FileName = "winget.exe";
-            process.StartInfo.Arguments = arguments;
-            process.StartInfo.CreateNoWindow = true;
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
+            using var process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "winget",
+                    Arguments = arguments,
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true
+                }
+            };
 
             process.Start();
 

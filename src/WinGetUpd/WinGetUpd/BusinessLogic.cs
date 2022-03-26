@@ -1,4 +1,7 @@
-﻿namespace WinGetUpd
+﻿using System.ComponentModel;
+using System.Diagnostics;
+
+namespace WinGetUpd
 {
     internal sealed class BusinessLogic
     {
@@ -7,6 +10,33 @@
         public BusinessLogic(IWinGet winGet)
         {
             this.winGet = winGet ?? throw new ArgumentNullException(nameof(winGet));
+        }
+
+        public async Task<bool> WinGetExists()
+        {
+            try
+            {
+                using var process = new Process
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "winget",
+                        Arguments = "--version",
+                        CreateNoWindow = true,
+                        UseShellExecute = false,
+                    }
+                };
+
+                process.Start();
+
+                await process.WaitForExitAsync().ConfigureAwait(false);
+
+                return true;
+            }
+            catch (Win32Exception)
+            {
+                return false;
+            }
         }
 
         public bool PackageFileExists()
