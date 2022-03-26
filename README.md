@@ -1,7 +1,7 @@
 # wingetupd
 A tiny command line tool, using [_WinGet_](https://docs.microsoft.com/de-de/windows/package-manager/winget) to update a user-defined set of packages on a Windows machine.
 
-![wingetupd.exe](screenshot.png)
+![wingetupd.exe](img/screenshot-tool.png)
 
 ### What it is
 It´s a simple and tiny tool for Windows, named `wingetupd.exe`, used on the Windows command line. The tool works on top of the popular Windows-App [_WinGet_](https://docs.microsoft.com/de-de/windows/package-manager/winget). The tool uses _WinGet_, to update a specific user-defined set of packages, on a Windows machine.
@@ -23,21 +23,21 @@ There are not any special requirements. It´s just a typical command line _.exe_
 ### Notes
 - When `wingetupd.exe` starts, it creates a log file named "_wingetupd.log_" in the same folder.
 - So keep in mind: That folder needs security permissions for writing files in it.
-- Some locations like "_C:\\_" or "_C:\ProgramFiles_" don´t have security permissions for writing files in them (for a good reason).
-- If you don´t wanna run the tool just from your Desktop, "_C:\Users\USERNAME\AppData\Local_" is also a good location.
+- Some locations like "_C:\\_" or "_C:\ProgramFiles_" don´t have such security permissions (for a good reason).
+- If you don´t wanna run the tool just from your Desktop, "_C:\Users\USERNAME\AppData\Local_" is fine too.
 - The log file contains all the _WinGet_-Calls and their output, so you can exactly see how _WinGet_ was used.
 - The tool has no parameters and is not using any parameters at all.
-- To find out the package-id´s (you put into the package-file) of your installed applications, you can use `winget search`.
-- Everything the tool does, when using _WinGet_, is based on exact _WinGet_ package-id´s (_WinGet_ parameters: _--exact --id_).
-- At the time of writing, the package-id _Zoom.Zoom_ seems to not match the corresponding installed _Zoom_ package.
+- Use `winget search`, to find out the package-id´s (you put into the package-file) of your installed applications.
+- All internal calls, when using _WinGet_, are based on exact _WinGet_ package-id´s (_WinGet_ parameters: _--exact --id_).
+- At time of writing, the package-id _Zoom.Zoom_ seems to missmatch the corresponding installed _Zoom_ package.
 - I assume the _WinGet_-Team will correct this wrong behaviour in their [packages repository](https://github.com/microsoft/winget-pkgs/tree/master/manifests) soon.
 - The tool is written in C#, using .NET 6 and built with _Visual Studio 2022_.
 - If you wanna compile the source by your own, you just need _Visual Studio 2022 Community_. Nothing else.
 - The release-binaries are compiled as _self-contained_ .NET 6 .exe files, with _x64 Windows_ as target.
 - Self-contained: That´s the reason why the binariy-size is 15 MB and why there is no .NET Framework requirement.
 - The _.csproj_ source file contains some MSBUILD task, to create a zip file, when publishing with VS2022.
-- Since GitHub´s default _.gitignore_ excludes the VS2022 publish-profile, i added a publish-settings screenshot to this repo. 
-- The tool is written, using an asynchronous TAP approach, including "_Progress&lt;T&gt;_" and "_async all the way_" concepts.
+- GitHub´s default _.gitignore_ excludes VS2022 publish-profiles, so i added a [publish-settings screenshot](img/screenshot-tool.png) to repo.
+- The source is using an asynchronous TAP approach, including "_Progress&lt;T&gt;_" and "_async all the way_" concepts.
 - The tool just exists, because i am lazy and made my life a bit easier, by writing this tool. :grin:
 
 #### Have fun.
