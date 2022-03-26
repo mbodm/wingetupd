@@ -23,6 +23,7 @@
                 call = "\t" + call;
 
                 output = RemoveProgressUnicodeCharsFromWinGetOuput(output);
+                output = CorrectSpecificUnicodeCharsInWinGetOuput(output);
                 output = AddTabsToWinGetOuput(output);
 
                 var lines = new string[] { $"[{dateTime}]", call, output };
@@ -47,6 +48,16 @@
                 output = output.Replace("\r", string.Empty);
 
                 output = output.Trim();
+            }
+
+            return output;
+        }
+
+        private static string CorrectSpecificUnicodeCharsInWinGetOuput(string output)
+        {
+            if (output.Contains("Verf├╝gbar"))
+            {
+                output = output.Replace("Verf├╝gbar", "Verfügbar");
             }
 
             return output;
