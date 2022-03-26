@@ -1,10 +1,10 @@
 # wingetupd
-A tiny commandline tool, using [_WinGet_](https://docs.microsoft.com/de-de/windows/package-manager/winget), to update a specific set of packages on a Windows machine.
+A tiny command line tool, using [_WinGet_](https://docs.microsoft.com/de-de/windows/package-manager/winget), to update a specific set of packages on a Windows machine.
 
 ![wingetupd.exe](screenshot.png)
 
 ### What it is
-It´s a simple and tiny tool named _wingetupd.exe_. The tool works on top of the popular Windows-App [_WinGet_](https://docs.microsoft.com/de-de/windows/package-manager/winget). The tool uses _WinGet_, to update a specific bunch of packages, on a Windows machine.
+It´s a simple and tiny tool named _wingetupd.exe_, used on the command line, for Windows. The tool works on top of the popular Windows-App [_WinGet_](https://docs.microsoft.com/de-de/windows/package-manager/winget). The tool uses _WinGet_, to update a specific bunch of packages, on a Windows machine.
 
 When using _WinGet_ to install and update Windows software, `wingetupd.exe` just wanna make your life a tiny bit easier, by updating all your software (or better said: a specific set of software) within a single call.
 
