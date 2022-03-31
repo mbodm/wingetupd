@@ -49,7 +49,7 @@ await businessLogic.ProcessPackagesAsync(packages, new Progress<ProgressData>(pr
         Console.Write(".");
         updatedCounter++;
     }
-})).ConfigureAwait(false);
+}));
 
 // Not 100% sure here, if the .ConfigureAwait(false) approach (when used by all async calls, in a console app) really makes
 // Progress<T> using Send() for the message-queue, instead of Post(). Because in a Post() scenario it is possible for above

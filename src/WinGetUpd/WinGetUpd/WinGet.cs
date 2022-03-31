@@ -13,21 +13,21 @@ namespace WinGetUpd
 
         public async Task<bool> PackageExistsAsync(string id)
         {
-            var output = await RunWinGetCommandAsync("search", id).ConfigureAwait(false);
+            var output = await RunWinGetCommandAsync("search", id);
 
             return output.Contains(id);
         }
 
         public async Task<bool> PackageIsInstalledAsync(string id)
         {
-            var output = await RunWinGetCommandAsync("list", id).ConfigureAwait(false);
+            var output = await RunWinGetCommandAsync("list", id);
 
             return output.Contains(id);
         }
 
         public async Task<bool> PackageHasUpdateAsync(string id)
         {
-            var output = await RunWinGetCommandAsync("list", id).ConfigureAwait(false);
+            var output = await RunWinGetCommandAsync("list", id);
 
             return output.Contains(" Available ") || output.Contains(" Verf├╝gbar ");
         }
@@ -41,9 +41,9 @@ namespace WinGetUpd
         {
             var arguments = $"{command} --exact --id {id}";
 
-            var output = await StartWinGetProcessAsync(arguments).ConfigureAwait(false);
+            var output = await StartWinGetProcessAsync(arguments);
 
-            await winGetLogger.LogAsync($"winget.exe {arguments}", output).ConfigureAwait(false);
+            await winGetLogger.LogAsync($"winget.exe {arguments}", output);
 
             return output;
         }
@@ -64,7 +64,7 @@ namespace WinGetUpd
 
             process.Start();
 
-            await process.WaitForExitAsync().ConfigureAwait(false);
+            await process.WaitForExitAsync();
 
             var output = process.StandardOutput.ReadToEnd();
 

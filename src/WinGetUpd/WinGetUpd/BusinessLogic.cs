@@ -34,7 +34,7 @@ namespace WinGetUpd
 
         public async Task<IEnumerable<string>> GetPackagesAsync()
         {
-            var lines = await File.ReadAllLinesAsync(AppData.PkgFile).ConfigureAwait(false);
+            var lines = await File.ReadAllLinesAsync(AppData.PkgFile);
 
             return lines;
         }
@@ -43,7 +43,7 @@ namespace WinGetUpd
         {
             var tasks = packages.Select(package => ProcessPackage(package, progress)).ToList();
 
-            await Task.WhenAll(tasks).ConfigureAwait(false);
+            await Task.WhenAll(tasks);
         }
 
         private async Task<bool> WinGetExists()
@@ -63,7 +63,7 @@ namespace WinGetUpd
 
                 process.Start();
 
-                await process.WaitForExitAsync().ConfigureAwait(false);
+                await process.WaitForExitAsync();
 
                 return true;
             }
@@ -94,7 +94,7 @@ namespace WinGetUpd
 
         private async Task ProcessPackage(string package, IProgress<ProgressData> progress)
         {
-            var packageExists = await winGet.PackageExistsAsync(package).ConfigureAwait(false);
+            var packageExists = await winGet.PackageExistsAsync(package);
             if (!packageExists)
             {
                 var error = $"The package '{package}', given in package-file ('{AppData.PkgFile}'), not exists.";
@@ -105,7 +105,7 @@ namespace WinGetUpd
 
             progress.Report(new ProgressData { Package = package, Status = ProgressStatus.PackageExists });
 
-            var packageIsInstalled = await winGet.PackageIsInstalledAsync(package).ConfigureAwait(false);
+            var packageIsInstalled = await winGet.PackageIsInstalledAsync(package);
             if (!packageIsInstalled)
             {
                 var error = $"The package '{package}', given in package-file ('{AppData.PkgFile}'), is not installed.";
@@ -116,10 +116,10 @@ namespace WinGetUpd
 
             progress.Report(new ProgressData { Package = package, Status = ProgressStatus.PackageIsInstalled });
 
-            var packageHasUpdate = await winGet.PackageHasUpdateAsync(package).ConfigureAwait(false);
+            var packageHasUpdate = await winGet.PackageHasUpdateAsync(package);
             if (packageHasUpdate)
             {
-                await winGet.UpdatePackageAsync(package).ConfigureAwait(false);
+                await winGet.UpdatePackageAsync(package);
                 progress.Report(new ProgressData { Package = package, Status = ProgressStatus.PackageUpdated });
             }
         }

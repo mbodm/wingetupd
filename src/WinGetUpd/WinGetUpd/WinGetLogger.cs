@@ -14,7 +14,7 @@
 
         public async Task LogAsync(string call, string output)
         {
-            await semaphoreSlim.WaitAsync().ConfigureAwait(false);
+            await semaphoreSlim.WaitAsync();
 
             try
             {
@@ -28,7 +28,7 @@
 
                 var lines = new string[] { $"[{dateTime}]", call, output };
 
-                await File.AppendAllLinesAsync(AppData.LogFile, lines).ConfigureAwait(false);
+                await File.AppendAllLinesAsync(AppData.LogFile, lines);
             }
             finally
             {
