@@ -1,7 +1,7 @@
 ﻿using WinGetUpd;
 
-// We don´t use .ConfigureAwait(false) any longer, for all the async calls, since it´s useless
-// in a console app. For more information about that topic, have a look at the following links:
+// None of the async calls is using .ConfigureAwait(false) any longer now, since it´s useless
+// in console apps. For more information about that topic, take a look at the following links:
 // https://devblogs.microsoft.com/dotnet/configureawait-faq/
 // https://stackoverflow.com/questions/25817703/configureawaitfalse-not-needed-in-console-win-service-apps-right
 
