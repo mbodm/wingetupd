@@ -4,3 +4,4 @@ CPUID.HWMonitor
 Microsoft.VisualStudio.2022.Community
 Microsoft.VisualStudioCode
 Zoom.Zoom
+wusa

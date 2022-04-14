@@ -2,23 +2,37 @@
 {
     internal sealed class WinGetLogger : IWinGetLogger
     {
-        private static readonly SemaphoreSlim semaphoreSlim = new(1, 1);
+        private readonly SemaphoreSlim semaphoreSlim = new(1, 1);
 
-        public WinGetLogger()
+        private bool isInitialized;
+
+        public void Init()
         {
-            if (File.Exists(AppData.LogFile))
+            if (!isInitialized)
             {
-                File.Delete(AppData.LogFile);
+                DeleteLogFile();
+
+                isInitialized = true;
             }
         }
 
-        public async Task LogAsync(string call, string output)
+        public async Task LogAsync(string call, string output, CancellationToken cancellationToken = default)
         {
-            await semaphoreSlim.WaitAsync();
+            if (string.IsNullOrWhiteSpace(call))
+            {
+                throw new ArgumentException($"'{nameof(call)}' cannot be null or whitespace.", nameof(call));
+            }
+
+            if (string.IsNullOrWhiteSpace(output))
+            {
+                throw new ArgumentException($"'{nameof(output)}' cannot be null or whitespace.", nameof(output));
+            }
+
+            await semaphoreSlim.WaitAsync(cancellationToken);
 
             try
             {
-                var dateTime = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
+                var dateTime = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss:fff");
 
                 call = "\t" + call;
 
@@ -26,13 +40,21 @@
                 output = CorrectSpecificUnicodeCharsInWinGetOuput(output);
                 output = AddTabsToWinGetOuput(output);
 
-                var lines = new string[] { $"[{dateTime}]", call, output };
+                var lines = new string[] { $"{dateTime}", call, output };
 
-                await File.AppendAllLinesAsync(AppData.LogFile, lines);
+                await File.AppendAllLinesAsync(AppData.LogFile, lines, cancellationToken);
             }
             finally
             {
                 semaphoreSlim.Release();
+            }
+        }
+
+        private static void DeleteLogFile()
+        {
+            if (File.Exists(AppData.LogFile))
+            {
+                File.Delete(AppData.LogFile);
             }
         }
 

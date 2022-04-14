@@ -1,127 +1,102 @@
-﻿using System.ComponentModel;
-using System.Diagnostics;
+﻿using System.Collections.Concurrent;
 
 namespace WinGetUpd
 {
     internal sealed class BusinessLogic
     {
-        private readonly IWinGet winGet;
+        private readonly IPrerequisitesValidator prerequisitesValidator;
+        private readonly IPackageManager packageManager;
 
-        public BusinessLogic(IWinGet winGet)
+        public BusinessLogic(IPrerequisitesValidator prerequisitesValidator, IPackageManager packageManager)
         {
-            this.winGet = winGet ?? throw new ArgumentNullException(nameof(winGet));
+            this.prerequisitesValidator = prerequisitesValidator ?? throw new ArgumentNullException(nameof(prerequisitesValidator));
+            this.packageManager = packageManager ?? throw new ArgumentNullException(nameof(packageManager));
         }
 
-        public async Task<string> InitAsync()
+        public IPackageManager PackageManager => packageManager;
+
+        public async Task InitAsync(CancellationToken cancellationToken = default)
         {
-            if (!await WinGetExists())
+            if (!prerequisitesValidator.PackageFileExists())
             {
-                return "Error: It seems WinGet is not installed on this computer.";
+                throw new InvalidOperationException($"The package-file ('{AppData.PkgFile}') not exists.");
             }
 
-            if (!PackageFileExists())
+            if (!await prerequisitesValidator.CanWriteLogFileAsync(cancellationToken))
             {
-                return $"Error: The package-file ('{AppData.PkgFile}') not exists.";
+                throw new InvalidOperationException($"Can not create log file ('{AppData.LogFile}'). It seems this folder has no write permissions.");
             }
 
-            if (!CanWriteLogFile())
+            if (!await prerequisitesValidator.WinGetExistsAsync(cancellationToken))
             {
-                return $"Error: Can not create log file ('{AppData.LogFile}'). It seems this folder has no write permissions.";
+                throw new InvalidOperationException("It seems WinGet is not installed on this computer.");
             }
-
-            return string.Empty;
         }
 
-        public async Task<IEnumerable<string>> GetPackagesAsync()
+        public async Task<IEnumerable<string>> GetPackagesAsync(CancellationToken cancellationToken = default)
         {
-            var lines = await File.ReadAllLinesAsync(AppData.PkgFile);
+            var lines = await File.ReadAllLinesAsync(AppData.PkgFile, cancellationToken);
 
             return lines;
         }
 
-        public async Task ProcessPackagesAsync(IEnumerable<string> packages, IProgress<ProgressData> progress)
+        public async Task<BusinessLogicResult> GetSummaryAsync(IEnumerable<string> packages, IProgress<PackageProgressData>? progress = default, CancellationToken cancellationToken = default)
         {
-            var tasks = packages.Select(package => ProcessPackage(package, progress)).ToList();
+            var existingPackages = new ConcurrentBag<string>();
+            var nonExistingPackages = new ConcurrentBag<string>();
+            var installedPackages = new ConcurrentBag<string>();
+            var nonInstalledPackages = new ConcurrentBag<string>();
+            var updatablePackages = new ConcurrentBag<string>();
+            var nonUpdatablePackages = new ConcurrentBag<string>();
+            var updatedPackages = new ConcurrentBag<string>();
+            var nonUpdatedPackages = new ConcurrentBag<string>();
 
-            await Task.WhenAll(tasks);
-        }
-
-        private async Task<bool> WinGetExists()
-        {
-            try
+            var packageProgress = new PackageProgress(packageProgressData =>
             {
-                using var process = new Process
+                switch (packageProgressData.Status)
                 {
-                    StartInfo = new ProcessStartInfo
-                    {
-                        FileName = "winget",
-                        Arguments = "--version",
-                        CreateNoWindow = true,
-                        UseShellExecute = false,
-                    }
-                };
+                    case PackageProgressStatus.PackageExists:
+                        existingPackages.Add(packageProgressData.Package);
+                        break;
+                    case PackageProgressStatus.PackageNotExists:
+                        nonExistingPackages.Add(packageProgressData.Package);
+                        throw new InvalidOperationException("Package not exists. Stoped.");
+                        break;
+                    case PackageProgressStatus.PackageInstalled:
+                        installedPackages.Add(packageProgressData.Package);
+                        break;
+                    case PackageProgressStatus.PackageNotInstalled:
+                        nonInstalledPackages.Add(packageProgressData.Package);
+                        break;
+                    case PackageProgressStatus.PackageUpdatable:
+                        updatablePackages.Add(packageProgressData.Package);
+                        break;
+                    case PackageProgressStatus.PackageNotUpdatable:
+                        nonUpdatablePackages.Add(packageProgressData.Package);
+                        break;
+                    case PackageProgressStatus.PackageUpdated:
+                        updatedPackages.Add(packageProgressData.Package);
+                        break;
+                    case PackageProgressStatus.PackageNotUpdated:
+                        nonUpdatablePackages.Add(packageProgressData.Package);
+                        break;
+                }
 
-                process.Start();
+                progress?.Report(packageProgressData);
+            });
 
-                await process.WaitForExitAsync();
+            await packageManager.ShowUpdatablePackagesAsync(packages, packageProgress, cancellationToken);
 
-                return true;
-            }
-            catch (Win32Exception)
-            {
-                return false;
-            }
-        }
-
-        private bool PackageFileExists()
-        {
-            return File.Exists($"{AppData.PkgFile}");
-        }
-
-        private bool CanWriteLogFile()
-        {
-            try
-            {
-                File.WriteAllText(AppData.LogFile, string.Empty);
-
-                return true;
-            }
-            catch (UnauthorizedAccessException)
-            {
-                return false;
-            }
-        }
-
-        private async Task ProcessPackage(string package, IProgress<ProgressData> progress)
-        {
-            var packageExists = await winGet.PackageExistsAsync(package);
-            if (!packageExists)
-            {
-                var error = $"The package '{package}', given in package-file ('{AppData.PkgFile}'), not exists.";
-                progress.Report(new ProgressData { Package = package, Status = ProgressStatus.ErrorOccurred, Error = error });
-
-                return;
-            }
-
-            progress.Report(new ProgressData { Package = package, Status = ProgressStatus.PackageExists });
-
-            var packageIsInstalled = await winGet.PackageIsInstalledAsync(package);
-            if (!packageIsInstalled)
-            {
-                var error = $"The package '{package}', given in package-file ('{AppData.PkgFile}'), is not installed.";
-                progress.Report(new ProgressData { Package = package, Status = ProgressStatus.ErrorOccurred, Error = error });
-
-                return;
-            }
-
-            progress.Report(new ProgressData { Package = package, Status = ProgressStatus.PackageIsInstalled });
-
-            var packageHasUpdate = await winGet.PackageHasUpdateAsync(package);
-            if (packageHasUpdate)
-            {
-                await winGet.UpdatePackageAsync(package);
-                progress.Report(new ProgressData { Package = package, Status = ProgressStatus.PackageUpdated });
-            }
+            return new BusinessLogicResult(
+                packages,
+                existingPackages,
+                nonExistingPackages,
+                installedPackages,
+                nonInstalledPackages,
+                updatablePackages,
+                nonUpdatablePackages,
+                updatedPackages,
+                nonUpdatedPackages);
         }
     }
 }

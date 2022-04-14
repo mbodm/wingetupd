@@ -2,6 +2,7 @@
 {
     internal interface IWinGetLogger
     {
-        Task LogAsync(string call, string output);
+        void Init();
+        Task LogAsync(string call, string output, CancellationToken cancellationToken = default);
     }
 }

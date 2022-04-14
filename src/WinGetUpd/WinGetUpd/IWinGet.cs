@@ -2,9 +2,8 @@
 {
     internal interface IWinGet
     {
-        Task<bool> PackageExistsAsync(string id);
-        Task<bool> PackageIsInstalledAsync(string id);
-        Task<bool> PackageHasUpdateAsync(string id);
-        Task UpdatePackageAsync(string id);
+        Task<WinGetResult> SearchAsync(string id, CancellationToken cancellationToken = default);
+        Task<WinGetResult> ListAsync(string id, CancellationToken cancellationToken = default);
+        Task<WinGetResult> UpgradeAsync(string id, CancellationToken cancellationToken = default);
     }
 }

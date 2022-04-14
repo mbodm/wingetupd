@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "WinGetUpd": {
+      "commandName": "Project",
+      "commandLineArgs": "--show"
+    }
+  }
+}
