@@ -1,9 +1,9 @@
-﻿namespace WinGetUpd
+﻿namespace PackageManager
 {
-    internal enum PackageProgressStatus
+    public enum PackageProgressStatus
     {
-        PackageExists,
-        PackageNotExists,
+        PackageValid,
+        PackageNotValid,
         PackageInstalled,
         PackageNotInstalled,
         PackageUpdatable,

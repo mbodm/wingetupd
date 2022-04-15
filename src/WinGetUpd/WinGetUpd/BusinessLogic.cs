@@ -1,13 +1,13 @@
 ﻿using System.Collections.Concurrent;
 
-namespace WinGetUpd
+namespace PackageManager
 {
     internal sealed class BusinessLogic
     {
         private readonly IPrerequisitesValidator prerequisitesValidator;
         private readonly IPackageManager packageManager;
 
-        public BusinessLogic(IPrerequisitesValidator prerequisitesValidator, IPackageManager packageManager)
+        public BusinessLogic(IPrerequisitesValidator prerequisitesValidator, IHelper helper)
         {
             this.prerequisitesValidator = prerequisitesValidator ?? throw new ArgumentNullException(nameof(prerequisitesValidator));
             this.packageManager = packageManager ?? throw new ArgumentNullException(nameof(packageManager));
@@ -39,6 +39,15 @@ namespace WinGetUpd
 
             return lines;
         }
+
+        public async Task<IEnumerable<string>> ValidatePackagesAsync(IEnumerable<string> packages, CancellationToken cancellationToken = default)
+        {
+            
+        }
+
+        private 
+
+
 
         public async Task<BusinessLogicResult> GetSummaryAsync(IEnumerable<string> packages, IProgress<PackageProgressData>? progress = default, CancellationToken cancellationToken = default)
         {

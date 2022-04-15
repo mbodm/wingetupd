@@ -1,55 +1,48 @@
 ﻿using System.Diagnostics;
 using System.Text;
 
-namespace WinGetUpd
+namespace WinGet
 {
-    internal sealed class WinGet : IWinGet
+    public sealed class WinGet : IWinGet
     {
         private const string WinGetApp = "winget.exe";
-        private const int WinGetAppTimeoutSeconds = 30;
+        private const double WinGetAppTimeoutInSeconds = 30;
 
         private readonly IWinGetLogger winGetLogger;
 
         public WinGet(IWinGetLogger winGetLogger)
         {
-            this.winGetLogger = winGetLogger ?? throw new ArgumentNullException(nameof(WinGet.winGetLogger));
+            this.winGetLogger = winGetLogger ?? throw new ArgumentNullException(nameof(winGetLogger));
         }
 
-        public Task<WinGetResult> SearchAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<WinGetResult> RunWinGetAsync(string command, string options, CancellationToken cancellationToken = default)
         {
-            return RunCommandAsync("search", id, cancellationToken);
-        }
+            if (string.IsNullOrWhiteSpace(command))
+            {
+                throw new ArgumentException($"'{nameof(command)}' cannot be null or whitespace.", nameof(command));
+            }
 
-        public Task<WinGetResult> ListAsync(string id, CancellationToken cancellationToken = default)
-        {
-            return RunCommandAsync("list", id, cancellationToken);
-        }
+            if (string.IsNullOrWhiteSpace(options))
+            {
+                throw new ArgumentException($"'{nameof(options)}' cannot be null or whitespace.", nameof(options));
+            }
 
-        public Task<WinGetResult> UpgradeAsync(string id, CancellationToken cancellationToken = default)
-        {
-            return RunCommandAsync("upgrade", id, cancellationToken);
-        }
-
-        private async Task<WinGetResult> RunCommandAsync(string command, string id, CancellationToken cancellationToken = default)
-        {
-            var arguments = $"{command} --exact --id {id}";
-
-            using var ctsTimeout = new CancellationTokenSource(TimeSpan.FromSeconds(WinGetAppTimeoutSeconds));
+            using var ctsTimeout = new CancellationTokenSource(TimeSpan.FromSeconds(WinGetAppTimeoutInSeconds));
             using var ctsLinked = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, ctsTimeout.Token);
 
             try
             {
-                var result = await StartProcessAsync(arguments, ctsLinked.Token);
+                var result = await StartProcessAsync($"{command} {options}", ctsLinked.Token);
 
-                await winGetLogger.LogAsync($"{WinGetApp} {arguments}", result.ConsoleOutput, cancellationToken);
+                await winGetLogger.LogAsync($"{WinGetApp} {command} {options}", result.ConsoleOutput, cancellationToken);
 
                 return result;
             }
             catch (OperationCanceledException) when (ctsTimeout.IsCancellationRequested)
             {
-                var output = $"winget.exe reached timeout after {WinGetAppTimeoutSeconds} seconds. winget.exe process canceled.";
+                var output = $"{WinGetApp} reached timeout after {WinGetAppTimeoutInSeconds} seconds. {WinGetApp} process canceled.";
 
-                await winGetLogger.LogAsync($"{WinGetApp} {arguments}", output, cancellationToken);
+                await winGetLogger.LogAsync($"{WinGetApp} {command} {options}", output, cancellationToken);
 
                 throw;
             }

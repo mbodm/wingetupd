@@ -1,6 +1,6 @@
-﻿namespace WinGetUpd
+﻿namespace PackageManager
 {
-    internal sealed class PackageProgress : IProgress<PackageProgressData>
+    public sealed class PackageProgress : IProgress<PackageProgressData>
     {
         private readonly Action<PackageProgressData> action;
 

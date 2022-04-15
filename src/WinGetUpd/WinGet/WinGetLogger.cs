@@ -1,19 +1,14 @@
-﻿namespace WinGetUpd
+﻿namespace WinGet
 {
-    internal sealed class WinGetLogger : IWinGetLogger
+    public sealed class WinGetLogger : IWinGetLogger
     {
         private readonly SemaphoreSlim semaphoreSlim = new(1, 1);
 
-        private bool isInitialized;
+        private readonly string logFile;
 
-        public void Init()
+        public WinGetLogger(string logFile)
         {
-            if (!isInitialized)
-            {
-                DeleteLogFile();
-
-                isInitialized = true;
-            }
+            this.logFile = logFile ?? throw new ArgumentNullException(nameof(logFile));
         }
 
         public async Task LogAsync(string call, string output, CancellationToken cancellationToken = default)
@@ -42,19 +37,11 @@
 
                 var lines = new string[] { $"{dateTime}", call, output };
 
-                await File.AppendAllLinesAsync(AppData.LogFile, lines, cancellationToken);
+                await File.AppendAllLinesAsync(logFile, lines, cancellationToken);
             }
             finally
             {
                 semaphoreSlim.Release();
-            }
-        }
-
-        private static void DeleteLogFile()
-        {
-            if (File.Exists(AppData.LogFile))
-            {
-                File.Delete(AppData.LogFile);
             }
         }
 

@@ -1,8 +1,7 @@
-﻿namespace WinGetUpd
+﻿namespace WinGet
 {
-    internal interface IWinGetLogger
+    public interface IWinGetLogger
     {
-        void Init();
         Task LogAsync(string call, string output, CancellationToken cancellationToken = default);
     }
 }

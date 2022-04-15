@@ -1,4 +1,4 @@
-﻿namespace WinGetUpd
+﻿namespace PackageManager
 {
     internal static class ProgramHelper
     {

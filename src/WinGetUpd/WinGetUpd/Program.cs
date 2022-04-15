@@ -1,4 +1,5 @@
-﻿using WinGetUpd;
+﻿using WinGet;
+using PackageManager;
 
 // None of the async calls is using .ConfigureAwait(false) any longer now, since it´s useless
 // in console apps. For more information about that topic, take a look at the following links:
@@ -9,21 +10,7 @@ Console.WriteLine();
 Console.WriteLine($"{AppData.AppName} {AppData.AppVersion} (by MBODM {AppData.AppDate})");
 Console.WriteLine();
 
-var allowedArguments = new List<string> { "--show", "--update" };
-
-if (args.Length != 1)
-{
-    ProgramHelper.ShowUsage();
-    Environment.Exit(0);
-}
-
-if (!allowedArguments.Contains(args[0]))
-{
-    ProgramHelper.ShowUnknownArgumentError(args[0]);
-    Environment.Exit(1);
-}
-
-var businessLogic = new BusinessLogic(new PrerequisitesValidator(), new PackageManager(new WinGet(new WinGetLogger())));
+var businessLogic = new BusinessLogic(new PrerequisitesValidator(), new PackageManager(new WinGet(new WinGetLogger(AppData.LogFile))));
 
 try
 {

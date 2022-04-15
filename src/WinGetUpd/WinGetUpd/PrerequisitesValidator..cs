@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 
-namespace WinGetUpd
+namespace PackageManager
 {
     internal sealed class PrerequisitesValidator : IPrerequisitesValidator
     {
