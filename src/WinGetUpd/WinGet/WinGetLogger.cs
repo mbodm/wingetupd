@@ -18,12 +18,12 @@
                 throw new ArgumentException($"'{nameof(call)}' cannot be null or whitespace.", nameof(call));
             }
 
-            if (string.IsNullOrWhiteSpace(output))
+            if (output is null)
             {
-                throw new ArgumentException($"'{nameof(output)}' cannot be null or whitespace.", nameof(output));
+                throw new ArgumentNullException(nameof(output));
             }
 
-            await semaphoreSlim.WaitAsync(cancellationToken);
+            await semaphoreSlim.WaitAsync(cancellationToken).ConfigureAwait(false);
 
             try
             {
@@ -37,7 +37,7 @@
 
                 var lines = new string[] { $"{dateTime}", call, output };
 
-                await File.AppendAllLinesAsync(logFile, lines, cancellationToken);
+                await File.AppendAllLinesAsync(logFile, lines, cancellationToken).ConfigureAwait(false);
             }
             finally
             {
@@ -74,11 +74,14 @@
 
         private static string AddTabsToWinGetOuput(string output)
         {
-            output = output.Replace("\n", "\n\t");
-            output = output.TrimEnd('\t');
-            output = output.TrimEnd('\n');
+            if (!string.IsNullOrWhiteSpace(output))
+            {
+                output = output.Replace("\n", "\n\t");
+                output = output.TrimEnd('\t');
+                output = output.TrimEnd('\n');
 
-            output = "\t" + output;
+                output = "\t" + output;
+            }
 
             return output;
         }

@@ -3,19 +3,19 @@ using System.Text;
 
 namespace WinGet
 {
-    public sealed class WinGet : IWinGet
+    public sealed class WinGetRunner : IWinGetRunner
     {
         private const string WinGetApp = "winget.exe";
         private const double WinGetAppTimeoutInSeconds = 30;
 
         private readonly IWinGetLogger winGetLogger;
 
-        public WinGet(IWinGetLogger winGetLogger)
+        public WinGetRunner(IWinGetLogger winGetLogger)
         {
             this.winGetLogger = winGetLogger ?? throw new ArgumentNullException(nameof(winGetLogger));
         }
 
-        public async Task<WinGetResult> RunWinGetAsync(string command, string options, CancellationToken cancellationToken = default)
+        public async Task<WinGetRunnerResult> RunWinGetAsync(string command, string options, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(command))
             {
@@ -32,9 +32,9 @@ namespace WinGet
 
             try
             {
-                var result = await StartProcessAsync($"{command} {options}", ctsLinked.Token);
+                var result = await StartProcessAsync($"{command} {options}", ctsLinked.Token).ConfigureAwait(false);
 
-                await winGetLogger.LogAsync($"{WinGetApp} {command} {options}", result.ConsoleOutput, cancellationToken);
+                await winGetLogger.LogAsync($"{WinGetApp} {command} {options}", result.ConsoleOutput, cancellationToken).ConfigureAwait(false);
 
                 return result;
             }
@@ -42,13 +42,13 @@ namespace WinGet
             {
                 var output = $"{WinGetApp} reached timeout after {WinGetAppTimeoutInSeconds} seconds. {WinGetApp} process canceled.";
 
-                await winGetLogger.LogAsync($"{WinGetApp} {command} {options}", output, cancellationToken);
+                await winGetLogger.LogAsync($"{WinGetApp} {command} {options}", output, cancellationToken).ConfigureAwait(false);
 
                 throw;
             }
         }
 
-        private static async Task<WinGetResult> StartProcessAsync(string arguments, CancellationToken cancellationToken = default)
+        private static async Task<WinGetRunnerResult> StartProcessAsync(string arguments, CancellationToken cancellationToken = default)
         {
             using var process = Process.Start(new ProcessStartInfo
             {
@@ -67,10 +67,10 @@ namespace WinGet
                 throw new InvalidOperationException($"Could not start {WinGetApp} process.");
             }
 
-            await process.WaitForExitAsync(cancellationToken);
+            await process.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
 
-            var stdOut = await process.StandardOutput.ReadToEndAsync();
-            var stdErr = await process.StandardError.ReadToEndAsync();
+            var stdOut = await process.StandardOutput.ReadToEndAsync().ConfigureAwait(false);
+            var stdErr = await process.StandardError.ReadToEndAsync().ConfigureAwait(false);
 
             var consoleOutput = string.Empty;
 
@@ -91,7 +91,7 @@ namespace WinGet
                 consoleOutput = string.Empty;
             }
 
-            return new WinGetResult($"{process.StartInfo.FileName} {process.StartInfo.Arguments}", consoleOutput, process.ExitCode);
+            return new WinGetRunnerResult($"{process.StartInfo.FileName} {process.StartInfo.Arguments}", consoleOutput, process.ExitCode);
         }
     }
 }

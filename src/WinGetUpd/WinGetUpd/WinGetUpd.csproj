@@ -25,4 +25,8 @@
     <Message Text="My-Publish-Event finished." Importance="high" />
   </Target>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WinGetUpdCore\WinGetUpdCore.csproj" />
+  </ItemGroup>
+
 </Project>

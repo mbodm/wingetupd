@@ -1,4 +1,4 @@
-﻿namespace PackageManager
+﻿namespace WinGetUpdCore
 {
     public sealed class PackageProgress : IProgress<PackageProgressData>
     {

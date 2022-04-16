@@ -1,7 +1,26 @@
-﻿namespace PackageManager
+﻿namespace WinGetUpdCore
 {
-    public interface IPackageManager
+    public interface IBusinessLogic
     {
+        /// <summary>
+        /// Application data
+        /// </summary>
+        AppData AppData { get; }
+
+        /// <summary>
+        /// Initializes BusinessLogic (call is reentrant)
+        /// </summary>
+        /// <param name="cancellationToken">Typical TAP cancellation token pattern for task cancellation</param>
+        /// <returns></returns>
+        Task InitAsync(CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Get entries from package file
+        /// </summary>
+        /// <param name="cancellationToken">Typical TAP cancellation token pattern for task cancellation</param>
+        /// <returns>List of WinGet package id entries from package file</returns>
+        Task<IEnumerable<string>> GetPackageFileEntries(CancellationToken cancellationToken = default);
+
         /// <summary>
         /// Analyzes every package in a list of given packages
         /// </summary>

@@ -1,12 +1,53 @@
-﻿namespace PackageManager
+﻿namespace WinGetUpdCore
 {
-    public sealed class PackageManager : IPackageManager
+    public sealed class BusinessLogic : IBusinessLogic
     {
+        private bool isInitialized;
+
+        private readonly IPrerequisitesHelper prerequisitesHelper;
         private readonly IWinGetWrapper winGetWrapper;
 
-        public PackageManager(IWinGetWrapper winGetWrapper)
+        public BusinessLogic(IPrerequisitesHelper prerequisitesHelper, IWinGetWrapper winGetWrapper)
         {
+            this.prerequisitesHelper = prerequisitesHelper ?? throw new ArgumentNullException(nameof(prerequisitesHelper));
             this.winGetWrapper = winGetWrapper ?? throw new ArgumentNullException(nameof(winGetWrapper));
+        }
+
+        public async Task InitAsync(CancellationToken cancellationToken = default)
+        {
+            if (!isInitialized)
+            {
+                isInitialized = true;
+
+                if (!prerequisitesHelper.PackageFileExists())
+                {
+                    throw new BusinessLogicException($"The package-file ('{AppData.PkgFile}') not exists.");
+                }
+
+                if (!await prerequisitesHelper.CanWriteLogFileAsync(cancellationToken))
+                {
+                    throw new BusinessLogicException($"Can not create log file ('{AppData.LogFile}'). It seems this folder has no write permissions.");
+                }
+
+                if (!await prerequisitesHelper.WinGetExistsAsync(cancellationToken))
+                {
+                    throw new BusinessLogicException("It seems WinGet is not installed on this computer.");
+                }
+            }
+        }
+
+        public async Task<IEnumerable<string>> GetPackageFileEntries(CancellationToken cancellationToken = default)
+        {
+            var entries = await File.ReadAllLinesAsync(AppData.PkgFile, cancellationToken);
+            
+            var nonWhiteSpaceEntries = entries.Where(entry => !string.IsNullOrWhiteSpace(entry));
+
+            if (!nonWhiteSpaceEntries.Any())
+            {
+                throw new BusinessLogicException("Package-File is empty.");
+            }
+
+            return nonWhiteSpaceEntries;
         }
 
         public async Task<IEnumerable<PackageInfo>> AnalyzePackagesAsync(

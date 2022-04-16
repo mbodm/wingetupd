@@ -1,14 +1,14 @@
 ﻿using WinGet;
 
-namespace PackageManager
+namespace WinGetUpdCore
 {
     public sealed class WinGetWrapper : IWinGetWrapper
     {
-        private readonly IWinGet winGet;
+        private readonly IWinGetRunner winGetRunner;
 
-        public WinGetWrapper(IWinGet winGet)
+        public WinGetWrapper(IWinGetRunner winGetRunner)
         {
-            this.winGet = winGet ?? throw new ArgumentNullException(nameof(winGet));
+            this.winGetRunner = winGetRunner ?? throw new ArgumentNullException(nameof(winGetRunner));
         }
 
         public async Task<bool> SearchPackageAsync(string package, CancellationToken cancellationToken = default)
@@ -18,7 +18,7 @@ namespace PackageManager
                 throw new ArgumentException($"'{nameof(package)}' cannot be null or whitespace.", nameof(package));
             }
 
-            var result = await winGet.RunWinGetAsync("search", $"--exact --id {package}", cancellationToken);
+            var result = await winGetRunner.RunWinGetAsync("search", $"--exact --id {package}", cancellationToken);
 
             return result.ExitCode == 0 && result.ConsoleOutput.Contains(package);
         }
@@ -30,7 +30,7 @@ namespace PackageManager
                 throw new ArgumentException($"'{nameof(package)}' cannot be null or whitespace.", nameof(package));
             }
 
-            var result = await winGet.RunWinGetAsync("list", $"--exact --id {package}", cancellationToken);
+            var result = await winGetRunner.RunWinGetAsync("list", $"--exact --id {package}", cancellationToken);
 
             var installed = false;
             var updatable = false;
@@ -55,7 +55,7 @@ namespace PackageManager
                 throw new ArgumentException($"'{nameof(package)}' cannot be null or whitespace.", nameof(package));
             }
 
-            var result = await winGet.RunWinGetAsync("upgrade", $"--exact --id {package}", cancellationToken);
+            var result = await winGetRunner.RunWinGetAsync("upgrade", $"--exact --id {package}", cancellationToken);
 
             return result.ExitCode == 0;
         }

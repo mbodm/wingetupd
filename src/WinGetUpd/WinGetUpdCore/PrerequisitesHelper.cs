@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 
-namespace PackageManager
+namespace WinGetUpdCore
 {
-    internal sealed class PrerequisitesValidator : IPrerequisitesValidator
+    public sealed class PrerequisitesHelper : IPrerequisitesHelper
     {
         public bool PackageFileExists()
         {

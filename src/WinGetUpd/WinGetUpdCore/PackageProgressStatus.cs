@@ -1,4 +1,4 @@
-﻿namespace PackageManager
+﻿namespace WinGetUpdCore
 {
     public enum PackageProgressStatus
     {

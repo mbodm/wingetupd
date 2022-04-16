@@ -1,4 +1,6 @@
-﻿namespace PackageManager
+﻿using WinGetUpdCore;
+
+namespace WinGetUpd
 {
     internal static class ProgramHelper
     {
@@ -17,13 +19,13 @@
             ShowUsage();
         }
 
-        public static void ShowSummary(BusinessLogicResult result)
+        public static void ShowSummary(IEnumerable<PackageInfo> packageInfos)
         {
-            var parsed = result.ExistingPackages.Count() + result.NonExistingPackages.Count();
-            var lines = result.AllPackages.Count();
-            
+            Console.WriteLine($"{packageInfos.Count()} {GetEntryOrEntriesText(packageInfos.Count())} parsed");
 
-            Console.WriteLine($"{parsed}/{lines} line(s) parsed.");
+            var validPackages = packageInfos.Where(packageInfo => packageInfo.IsValid).Select(packageInfo => packageInfo.Package);
+            var installedPackages = packageInfos.Where(packageInfo => packageInfo.IsInstalled).Select(packageInfo => packageInfo.Package);
+            var updatablePackages = packageInfos.Where(packageInfo => packageInfo.IsUpdatable).Select(packageInfo => packageInfo.Package);
             
             Console.WriteLine($"{result.ExistingPackages.Count()}/{lines} line(s) valid.");
             if (result.NonExistingPackages.Any())
@@ -66,6 +68,16 @@
 
                 Console.WriteLine($"  Use '{AppData.AppName}.exe --update' to update these packages.");
             }
+        }
+
+        public static string GetEntryOrEntriesText(int count)
+        {
+            return count == 1 ? "entry" : "entries";
+        }
+
+        public static string GetPackageOrPackagesText(int count)
+        {
+            return count == 1 ? "entry" : "entries";
         }
     }
 }
