@@ -11,9 +11,18 @@
             this.logFile = logFile ?? throw new ArgumentNullException(nameof(logFile));
         }
 
-        public Task<bool> CanWriteLogFileAsync(CancellationToken cancellationToken = default)
+        public async Task<bool> CanWriteLogFileAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await File.WriteAllTextAsync(logFile, string.Empty, cancellationToken).ConfigureAwait(false);
+
+                return true;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return false;
+            }
         }
 
         public async Task LogWinGetCallAsync(string call, string output, CancellationToken cancellationToken = default)

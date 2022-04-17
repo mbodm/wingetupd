@@ -1,6 +1,6 @@
 ﻿namespace WinGetUpdCore
 {
-    public interface IWinGetWrapper
+    public interface IWinGetManager
     {
         /// <summary>
         /// Validates existence of WinGet package by running 'search' command
@@ -16,7 +16,7 @@
         /// <param name="package">WinGet package id</param>
         /// <param name="cancellationToken">Typical TAP cancellation token pattern for task cancellation</param>
         /// <returns>Model object containing installation and update state of WinGet package</returns>
-        Task<WinGetWrapperListResult> ListPackageAsync(string package, CancellationToken cancellationToken = default);
+        Task<WinGetManagerListResult> ListPackageAsync(string package, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Updates WinGet package by running 'upgrade' command

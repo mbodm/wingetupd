@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using WinGet;
 
 namespace WinGetUpdCore
 {
@@ -6,32 +6,32 @@ namespace WinGetUpdCore
     {
         private bool isInitialized;
 
-        private readonly IPrerequisitesHelper prerequisitesHelper;
-        private readonly IWinGetWrapper winGetWrapper;
+        private readonly IWinGetRunner winGetRunner;
+        private readonly IWinGetManager winGetManager;
 
-        public BusinessLogic(IPrerequisitesHelper prerequisitesHelper, IWinGetWrapper winGetWrapper)
+        public BusinessLogic(IWinGetRunner winGetRunner, IWinGetManager winGetManager)
         {
-            this.prerequisitesHelper = prerequisitesHelper ?? throw new ArgumentNullException(nameof(prerequisitesHelper));
-            this.winGetWrapper = winGetWrapper ?? throw new ArgumentNullException(nameof(winGetWrapper));
+            this.winGetRunner = winGetRunner ?? throw new ArgumentNullException(nameof(winGetRunner));
+            this.winGetManager = winGetManager ?? throw new ArgumentNullException(nameof(winGetManager));
         }
 
-        public async Task InitAsync(CancellationToken cancellationToken = default)
+        public void InitAsync(CancellationToken cancellationToken = default)
         {
             if (!isInitialized)
             {
                 isInitialized = true;
 
-                if (!prerequisitesHelper.PackageFileExists())
+                if (!File.Exists($"{AppData.PkgFile}"))
                 {
                     throw new BusinessLogicException($"The package-file ('{AppData.PkgFile}') not exists.");
                 }
 
-                if (!await prerequisitesHelper.CanWriteLogFileAsync(cancellationToken).ConfigureAwait(false))
-                {
-                    throw new BusinessLogicException($"Can not create log file ('{AppData.LogFile}'). It seems this folder has no write permissions.");
-                }
+                //if (!await prerequisitesHelper.CanWriteLogFileAsync(cancellationToken).ConfigureAwait(false))
+                //{
+                //    throw new BusinessLogicException($"Can not create log file ('{AppData.LogFile}'). It seems this folder has no write permissions.");
+                //}
 
-                if (!await prerequisitesHelper.WinGetExistsAsync(cancellationToken).ConfigureAwait(false))
+                if (!winGetRunner.WinGetIsInstalled)
                 {
                     throw new BusinessLogicException("It seems WinGet is not installed on this computer.");
                 }
@@ -57,8 +57,6 @@ namespace WinGetUpdCore
             IProgress<PackageProgressData>? progress = default,
             CancellationToken cancellationToken = default)
         {
-            var sw = Stopwatch.StartNew();
-
             if (packages is null)
             {
                 throw new ArgumentNullException(nameof(packages));
@@ -74,25 +72,18 @@ namespace WinGetUpdCore
                 throw new InvalidOperationException("Given list of packages contains null or empty entries.");
             }
 
-            var infos = new List<PackageInfo>();
+            // Todo: Comment why we can not use concurrent version with Task.WhenAll() here.
+
+            var packageInfos = new List<PackageInfo>();
 
             foreach (var package in packages)
             {
-                var info = await AnalyzePackageAsync(package, progress, cancellationToken).ConfigureAwait(false);
+                var packageInfo = await AnalyzePackageAsync(package, progress, cancellationToken).ConfigureAwait(false);
 
-                infos.Add(info);
+                packageInfos.Add(packageInfo);
             }
 
-
-            //var tasks = packages.Select(package => AnalyzePackageAsync(package, progress, cancellationToken)).ToList();
-
-            //var infos = await Task.WhenAll(tasks).ConfigureAwait(false);
-
-            sw.Stop();
-
-            Console.WriteLine("---------- DAUER WAR " + sw.Elapsed.Seconds + "MS ----------");
-
-            return infos;
+            return packageInfos;
         }
 
         public async Task<IEnumerable<string>> UpdatePackagesAsync(
