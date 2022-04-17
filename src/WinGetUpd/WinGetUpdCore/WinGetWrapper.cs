@@ -5,17 +5,12 @@ namespace WinGetUpdCore
     public sealed class WinGetWrapper : IWinGetWrapper
     {
         private readonly IWinGetRunner winGetRunner;
-        private readonly ILogger logger;
+        private readonly IFileLogger logger;
 
-        public WinGetWrapper(IWinGetRunner winGetRunner, ILogger logger)
+        public WinGetWrapper(IWinGetRunner winGetRunner, IFileLogger logger)
         {
             this.winGetRunner = winGetRunner ?? throw new ArgumentNullException(nameof(winGetRunner));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        }
-
-        public async Task WinGetWarmup(CancellationToken cancellationToken)
-        {
-            await winGetRunner.RunWinGetAsync("search", string.Empty, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<bool> SearchPackageAsync(string package, CancellationToken cancellationToken = default)

@@ -3,8 +3,15 @@ using WinGet;
 
 namespace WinGetTestHost
 {
-    internal static class Test
+    internal static class Tests
     {
+        public static bool Installed()
+        {
+            var winGetRunner = new WinGetRunner();
+
+            return winGetRunner.WinGetIsInstalled;
+        }
+
         public static async Task RunAsync(string command, string[] packages, bool concurrentMode, bool silentMode)
         {
             var stopwatch = new Stopwatch();
@@ -16,20 +23,20 @@ namespace WinGetTestHost
             {
                 var tasks = packages.Select(async package =>
                 {
-                    var result = await winGetRunner.RunWinGetAsync(command, $"--exact --id {package}");
+                    var result = await winGetRunner.RunWinGetAsync($"{command} --exact --id {package}");
 
                     if (!silentMode) ShowResult(result);
 
                     return result;
                 });
 
-                var results = await Task.WhenAll(tasks);
+                await Task.WhenAll(tasks);
             }
             else
             {
                 foreach (var package in packages)
                 {
-                    var result = await winGetRunner.RunWinGetAsync(command, $"--exact --id {package}");
+                    var result = await winGetRunner.RunWinGetAsync($"{command} --exact --id {package}");
 
                     if (!silentMode) ShowResult(result);
                 }

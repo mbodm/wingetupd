@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Text;
 
 namespace WinGet
@@ -8,32 +9,68 @@ namespace WinGet
         private const string WinGetApp = "winget.exe";
         private const double WinGetAppTimeoutInSeconds = 30;
 
-        public async Task<WinGetRunnerResult> RunWinGetAsync(string command, string options, CancellationToken cancellationToken = default)
+        public bool WinGetIsInstalled
         {
-            if (string.IsNullOrWhiteSpace(command))
+            get
             {
-                throw new ArgumentException($"'{nameof(command)}' cannot be null or whitespace.", nameof(command));
+                try
+                {
+                    using var process = Process.Start(new ProcessStartInfo
+                    {
+                        FileName = WinGetApp,
+                        Arguments = "--version",
+                        CreateNoWindow = true,
+                        UseShellExecute = false,
+                    });
+
+                    if (process != null)
+                    {
+                        if (!process.HasExited)
+                        {
+                            process.Kill();
+                        }
+                    }
+
+                    return true;
+                }
+                catch (Win32Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
+        public async Task<WinGetRunnerResult> RunWinGetAsync(string parameters, CancellationToken cancellationToken = default)
+        {
+            if (parameters is null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
             }
 
-            if (options is null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
+            using var process = new Process();
 
-            command = command.Trim();
-            options = options.Trim();
-
-            using var process = Process.Start(new ProcessStartInfo
+            process.StartInfo = new ProcessStartInfo
             {
                 FileName = WinGetApp,
-                Arguments = options != string.Empty ? $"{command} {options}" : command,
+                Arguments = parameters.Trim(),
                 CreateNoWindow = true,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 StandardOutputEncoding = Encoding.UTF8
-            });
+            };
 
-            if (process == null)
+            var processStarted = false;
+
+            try
+            {
+                processStarted = process.Start();
+            }
+            catch (Win32Exception)
+            {
+                throw new WinGetRunnerException($"{WinGetApp} not installed.");
+            }
+
+            if (!processStarted)
             {
                 throw new WinGetRunnerException($"{WinGetApp} process not started.");
             }
@@ -57,7 +94,9 @@ namespace WinGet
                 throw new WinGetRunnerException($"{WinGetApp} reached timeout after {WinGetAppTimeoutInSeconds} seconds. {WinGetApp} process canceled.");
             }
 
-            return new WinGetRunnerResult($"{process.StartInfo.FileName} {process.StartInfo.Arguments}", consoleOutput, process.ExitCode);
+            var processCall = $"{process.StartInfo.FileName} {process.StartInfo.Arguments}".Trim();
+
+            return new WinGetRunnerResult(processCall, consoleOutput, process.ExitCode);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace WinGetUpdLogging
 {
-    public sealed class FileLogger : ILogger
+    public sealed class FileLogger : IFileLogger
     {
         private readonly SemaphoreSlim semaphoreSlim = new(1, 1);
 
@@ -9,6 +9,11 @@
         public FileLogger(string logFile)
         {
             this.logFile = logFile ?? throw new ArgumentNullException(nameof(logFile));
+        }
+
+        public Task<bool> CanWriteLogFileAsync(CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task LogWinGetCallAsync(string call, string output, CancellationToken cancellationToken = default)
