@@ -1,4 +1,6 @@
-﻿namespace WinGetUpdCore
+﻿using System.Diagnostics;
+
+namespace WinGetUpdCore
 {
     public sealed class BusinessLogic : IBusinessLogic
     {
@@ -24,12 +26,12 @@
                     throw new BusinessLogicException($"The package-file ('{AppData.PkgFile}') not exists.");
                 }
 
-                if (!await prerequisitesHelper.CanWriteLogFileAsync(cancellationToken))
+                if (!await prerequisitesHelper.CanWriteLogFileAsync(cancellationToken).ConfigureAwait(false))
                 {
                     throw new BusinessLogicException($"Can not create log file ('{AppData.LogFile}'). It seems this folder has no write permissions.");
                 }
 
-                if (!await prerequisitesHelper.WinGetExistsAsync(cancellationToken))
+                if (!await prerequisitesHelper.WinGetExistsAsync(cancellationToken).ConfigureAwait(false))
                 {
                     throw new BusinessLogicException("It seems WinGet is not installed on this computer.");
                 }
@@ -38,7 +40,7 @@
 
         public async Task<IEnumerable<string>> GetPackageFileEntries(CancellationToken cancellationToken = default)
         {
-            var entries = await File.ReadAllLinesAsync(AppData.PkgFile, cancellationToken);
+            var entries = await File.ReadAllLinesAsync(AppData.PkgFile, cancellationToken).ConfigureAwait(false);
             
             var nonWhiteSpaceEntries = entries.Where(entry => !string.IsNullOrWhiteSpace(entry));
 
@@ -55,6 +57,8 @@
             IProgress<PackageProgressData>? progress = default,
             CancellationToken cancellationToken = default)
         {
+            var sw = Stopwatch.StartNew();
+
             if (packages is null)
             {
                 throw new ArgumentNullException(nameof(packages));
@@ -70,9 +74,23 @@
                 throw new InvalidOperationException("Given list of packages contains null or empty entries.");
             }
 
-            var tasks = packages.Select(package => AnalyzePackageAsync(package, progress, cancellationToken)).ToList();
+            var infos = new List<PackageInfo>();
 
-            var infos = await Task.WhenAll(tasks);
+            foreach (var package in packages)
+            {
+                var info = await AnalyzePackageAsync(package, progress, cancellationToken).ConfigureAwait(false);
+
+                infos.Add(info);
+            }
+
+
+            //var tasks = packages.Select(package => AnalyzePackageAsync(package, progress, cancellationToken)).ToList();
+
+            //var infos = await Task.WhenAll(tasks).ConfigureAwait(false);
+
+            sw.Stop();
+
+            Console.WriteLine("---------- DAUER WAR " + sw.Elapsed.Seconds + "MS ----------");
 
             return infos;
         }
@@ -94,7 +112,7 @@
 
             var tasks = packageInfos.Select(packageInfo => UpdatePackageAsync(packageInfo, progress, cancellationToken)).ToList();
 
-            var tuples = await Task.WhenAll(tasks);
+            var tuples = await Task.WhenAll(tasks).ConfigureAwait(false);
 
             var updatedPackages = tuples.Where(tuple => tuple.updated).Select(tuple => tuple.package);
 
@@ -106,7 +124,7 @@
             IProgress<PackageProgressData>? progress,
             CancellationToken cancellationToken)
         {
-            var valid = await winGetWrapper.SearchPackageAsync(package, cancellationToken);
+            var valid = await winGetWrapper.SearchPackageAsync(package, cancellationToken).ConfigureAwait(false);
             if (!valid)
             {
                 Report(progress, package, PackageProgressStatus.PackageNotValid);
@@ -116,7 +134,7 @@
 
             Report(progress, package, PackageProgressStatus.PackageValid);
 
-            var listResult = await winGetWrapper.ListPackageAsync(package, cancellationToken);
+            var listResult = await winGetWrapper.ListPackageAsync(package, cancellationToken).ConfigureAwait(false);
             if (!listResult.IsInstalled)
             {
                 Report(progress, package, PackageProgressStatus.PackageNotInstalled);
@@ -170,7 +188,7 @@
 
             Report(progress, packageInfo.Package, PackageProgressStatus.PackageUpdatable);
 
-            var updated = await winGetWrapper.UpgradePackageAsync(packageInfo.Package, cancellationToken);
+            var updated = await winGetWrapper.UpgradePackageAsync(packageInfo.Package, cancellationToken).ConfigureAwait(false);
             if (!updated)
             {
                 Report(progress, packageInfo.Package, PackageProgressStatus.PackageNotUpdated);

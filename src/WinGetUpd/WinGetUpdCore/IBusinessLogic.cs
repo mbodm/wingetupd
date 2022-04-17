@@ -3,11 +3,6 @@
     public interface IBusinessLogic
     {
         /// <summary>
-        /// Application data
-        /// </summary>
-        AppData AppData { get; }
-
-        /// <summary>
         /// Initializes BusinessLogic (call is reentrant)
         /// </summary>
         /// <param name="cancellationToken">Typical TAP cancellation token pattern for task cancellation</param>

@@ -24,7 +24,7 @@ namespace WinGetUpdCore
 
                 if (process != null)
                 {
-                    await process.WaitForExitAsync(cancellationToken);
+                    await process.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
 
                     return true;
                 }
@@ -41,7 +41,7 @@ namespace WinGetUpdCore
         {
             try
             {
-                await File.WriteAllTextAsync(AppData.LogFile, string.Empty, cancellationToken);
+                await File.WriteAllTextAsync(AppData.LogFile, string.Empty, cancellationToken).ConfigureAwait(false);
 
                 return true;
             }

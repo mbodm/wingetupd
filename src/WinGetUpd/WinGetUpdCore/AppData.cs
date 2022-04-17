@@ -10,6 +10,10 @@ namespace WinGetUpdCore
         public static string PkgFile => $"packages.txt";
         public static string LogFile => $"{AppName}.log";
         public static string AppFolder => AppContext.BaseDirectory;
-        public static string AppVersion => Assembly.GetExecutingAssembly()?.GetName()?.Version?.ToString() ?? string.Empty;
+        public static string AppVersion => Assembly.
+            GetEntryAssembly()?.
+            GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.
+            InformationalVersion?.
+            ToString() ?? string.Empty;
     }
 }

@@ -6,9 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\WinGetUpdLogging\WinGetUpdLogging.csproj" />
-    <ProjectReference Include="..\WinGet\WinGet.csproj" />
-  </ItemGroup>
-
 </Project>

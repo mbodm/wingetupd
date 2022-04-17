@@ -1,17 +1,17 @@
-﻿namespace WinGet
+﻿namespace WinGetUpdLogging
 {
-    public sealed class WinGetLogger : IWinGetLogger
+    public sealed class FileLogger : ILogger
     {
         private readonly SemaphoreSlim semaphoreSlim = new(1, 1);
 
         private readonly string logFile;
 
-        public WinGetLogger(string logFile)
+        public FileLogger(string logFile)
         {
             this.logFile = logFile ?? throw new ArgumentNullException(nameof(logFile));
         }
 
-        public async Task LogAsync(string call, string output, CancellationToken cancellationToken = default)
+        public async Task LogWinGetCallAsync(string call, string output, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(call))
             {

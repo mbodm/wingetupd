@@ -1,14 +1,21 @@
-﻿using WinGet;
+﻿using WinGetUpdLogging;
 
 namespace WinGetUpdCore
 {
     public sealed class WinGetWrapper : IWinGetWrapper
     {
         private readonly IWinGetRunner winGetRunner;
+        private readonly ILogger logger;
 
-        public WinGetWrapper(IWinGetRunner winGetRunner)
+        public WinGetWrapper(IWinGetRunner winGetRunner, ILogger logger)
         {
             this.winGetRunner = winGetRunner ?? throw new ArgumentNullException(nameof(winGetRunner));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
+        public async Task WinGetWarmup(CancellationToken cancellationToken)
+        {
+            await winGetRunner.RunWinGetAsync("search", string.Empty, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<bool> SearchPackageAsync(string package, CancellationToken cancellationToken = default)
@@ -18,7 +25,13 @@ namespace WinGetUpdCore
                 throw new ArgumentException($"'{nameof(package)}' cannot be null or whitespace.", nameof(package));
             }
 
-            var result = await winGetRunner.RunWinGetAsync("search", $"--exact --id {package}", cancellationToken);
+            var result = await winGetRunner.RunWinGetAsync("search", $"--exact --id {package}", cancellationToken).ConfigureAwait(false);
+
+            Console.WriteLine("--- SEARCH anfang ---");
+            Console.WriteLine(result.ProcessCall);
+            Console.WriteLine(result.ConsoleOutput);
+            Console.WriteLine("--- SEARCH ende ---");
+            Console.WriteLine();
 
             return result.ExitCode == 0 && result.ConsoleOutput.Contains(package);
         }
@@ -30,7 +43,7 @@ namespace WinGetUpdCore
                 throw new ArgumentException($"'{nameof(package)}' cannot be null or whitespace.", nameof(package));
             }
 
-            var result = await winGetRunner.RunWinGetAsync("list", $"--exact --id {package}", cancellationToken);
+            var result = await winGetRunner.RunWinGetAsync("list", $"--exact --id {package}", cancellationToken).ConfigureAwait(false);
 
             var installed = false;
             var updatable = false;
@@ -45,6 +58,12 @@ namespace WinGetUpdCore
                 }
             }
 
+            Console.WriteLine("--- LIST anfang ---");
+            Console.WriteLine(result.ProcessCall);
+            Console.WriteLine(result.ConsoleOutput);
+            Console.WriteLine("--- LIST ende ---");
+            Console.WriteLine();
+
             return new WinGetWrapperListResult(package, installed, updatable);
         }
 
@@ -55,7 +74,7 @@ namespace WinGetUpdCore
                 throw new ArgumentException($"'{nameof(package)}' cannot be null or whitespace.", nameof(package));
             }
 
-            var result = await winGetRunner.RunWinGetAsync("upgrade", $"--exact --id {package}", cancellationToken);
+            var result = await winGetRunner.RunWinGetAsync("upgrade", $"--exact --id {package}", cancellationToken).ConfigureAwait(false);
 
             return result.ExitCode == 0;
         }
