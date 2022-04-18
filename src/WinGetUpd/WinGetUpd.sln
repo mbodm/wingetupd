@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinGet", "WinGet\WinGet.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinGetUpdCore", "WinGetUpdCore\WinGetUpdCore.csproj", "{EA049375-5C00-40C8-AE0B-07FD870BE133}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinGetUpdLogging", "WinGetUpdLogging\WinGetUpdLogging.csproj", "{61031CF3-5013-43DF-ACA5-A0D79762C404}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinGetUpdLogging", "WinGetUpdLogging\WinGetUpdLogging.csproj", "{61031CF3-5013-43DF-ACA5-A0D79762C404}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinGetTestHost", "WinGetTestHost\WinGetTestHost.csproj", "{3DF6C146-C069-42EC-BEA2-9B387C7BC21C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinGetTestHost", "WinGetTestHost\WinGetTestHost.csproj", "{3DF6C146-C069-42EC-BEA2-9B387C7BC21C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinGetUpdLoggingTestHost", "WinGetUpdLoggingTestHost\WinGetUpdLoggingTestHost.csproj", "{04C443DD-421A-4B13-ADD5-324E5CF91FA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{3DF6C146-C069-42EC-BEA2-9B387C7BC21C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DF6C146-C069-42EC-BEA2-9B387C7BC21C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3DF6C146-C069-42EC-BEA2-9B387C7BC21C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04C443DD-421A-4B13-ADD5-324E5CF91FA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04C443DD-421A-4B13-ADD5-324E5CF91FA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04C443DD-421A-4B13-ADD5-324E5CF91FA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04C443DD-421A-4B13-ADD5-324E5CF91FA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

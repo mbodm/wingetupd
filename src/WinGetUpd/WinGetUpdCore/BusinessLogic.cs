@@ -1,4 +1,5 @@
 ﻿using WinGet;
+using WinGetUpdLogging;
 
 namespace WinGetUpdCore
 {
@@ -6,16 +7,18 @@ namespace WinGetUpdCore
     {
         private bool isInitialized;
 
+        private readonly IFileLogger fileLogger;
         private readonly IWinGetRunner winGetRunner;
         private readonly IWinGetManager winGetManager;
 
-        public BusinessLogic(IWinGetRunner winGetRunner, IWinGetManager winGetManager)
+        public BusinessLogic(IFileLogger fileLogger, IWinGetRunner winGetRunner, IWinGetManager winGetManager)
         {
+            this.fileLogger = fileLogger ?? throw new ArgumentNullException(nameof(fileLogger));
             this.winGetRunner = winGetRunner ?? throw new ArgumentNullException(nameof(winGetRunner));
             this.winGetManager = winGetManager ?? throw new ArgumentNullException(nameof(winGetManager));
         }
 
-        public void InitAsync(CancellationToken cancellationToken = default)
+        public async Task InitAsync(CancellationToken cancellationToken = default)
         {
             if (!isInitialized)
             {
@@ -26,10 +29,10 @@ namespace WinGetUpdCore
                     throw new BusinessLogicException($"The package-file ('{AppData.PkgFile}') not exists.");
                 }
 
-                //if (!await prerequisitesHelper.CanWriteLogFileAsync(cancellationToken).ConfigureAwait(false))
-                //{
-                //    throw new BusinessLogicException($"Can not create log file ('{AppData.LogFile}'). It seems this folder has no write permissions.");
-                //}
+                if (!await fileLogger.CanWriteLogFileAsync(cancellationToken).ConfigureAwait(false))
+                {
+                    throw new BusinessLogicException($"Can not create log file ('{fileLogger.LogFile}'). It seems this folder has no write permissions.");
+                }
 
                 if (!winGetRunner.WinGetIsInstalled)
                 {
@@ -41,7 +44,7 @@ namespace WinGetUpdCore
         public async Task<IEnumerable<string>> GetPackageFileEntries(CancellationToken cancellationToken = default)
         {
             var entries = await File.ReadAllLinesAsync(AppData.PkgFile, cancellationToken).ConfigureAwait(false);
-            
+
             var nonWhiteSpaceEntries = entries.Where(entry => !string.IsNullOrWhiteSpace(entry));
 
             if (!nonWhiteSpaceEntries.Any())
@@ -115,7 +118,7 @@ namespace WinGetUpdCore
             IProgress<PackageProgressData>? progress,
             CancellationToken cancellationToken)
         {
-            var valid = await winGetWrapper.SearchPackageAsync(package, cancellationToken).ConfigureAwait(false);
+            var valid = await winGetManager.SearchPackageAsync(package, cancellationToken).ConfigureAwait(false);
             if (!valid)
             {
                 Report(progress, package, PackageProgressStatus.PackageNotValid);
@@ -125,7 +128,7 @@ namespace WinGetUpdCore
 
             Report(progress, package, PackageProgressStatus.PackageValid);
 
-            var listResult = await winGetWrapper.ListPackageAsync(package, cancellationToken).ConfigureAwait(false);
+            var listResult = await winGetManager.ListPackageAsync(package, cancellationToken).ConfigureAwait(false);
             if (!listResult.IsInstalled)
             {
                 Report(progress, package, PackageProgressStatus.PackageNotInstalled);
@@ -179,7 +182,7 @@ namespace WinGetUpdCore
 
             Report(progress, packageInfo.Package, PackageProgressStatus.PackageUpdatable);
 
-            var updated = await winGetWrapper.UpgradePackageAsync(packageInfo.Package, cancellationToken).ConfigureAwait(false);
+            var updated = await winGetManager.UpgradePackageAsync(packageInfo.Package, cancellationToken).ConfigureAwait(false);
             if (!updated)
             {
                 Report(progress, packageInfo.Package, PackageProgressStatus.PackageNotUpdated);

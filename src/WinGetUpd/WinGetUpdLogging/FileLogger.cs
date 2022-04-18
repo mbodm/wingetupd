@@ -11,6 +11,8 @@
             this.logFile = logFile ?? throw new ArgumentNullException(nameof(logFile));
         }
 
+        public string LogFile => logFile;
+
         public async Task<bool> CanWriteLogFileAsync(CancellationToken cancellationToken = default)
         {
             try
@@ -37,20 +39,20 @@
                 throw new ArgumentNullException(nameof(output));
             }
 
+            var dateTime = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss:fff");
+
+            call = "\t" + call;
+
+            output = RemoveProgressUnicodeCharsFromWinGetOuput(output);
+            output = CorrectSpecificUnicodeCharsInWinGetOuput(output);
+            output = AddTabsToWinGetOuput(output);
+
+            var lines = new string[] { $"{dateTime}", call, output };
+
             await semaphoreSlim.WaitAsync(cancellationToken).ConfigureAwait(false);
 
             try
             {
-                var dateTime = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss:fff");
-
-                call = "\t" + call;
-
-                output = RemoveProgressUnicodeCharsFromWinGetOuput(output);
-                output = CorrectSpecificUnicodeCharsInWinGetOuput(output);
-                output = AddTabsToWinGetOuput(output);
-
-                var lines = new string[] { $"{dateTime}", call, output };
-
                 await File.AppendAllLinesAsync(logFile, lines, cancellationToken).ConfigureAwait(false);
             }
             finally
@@ -78,6 +80,9 @@
 
         private static string CorrectSpecificUnicodeCharsInWinGetOuput(string output)
         {
+            // This isn´t necessary when using UTF-8 Encoding for Process.StandardOutputEncoding.
+            // But since we don´t control the WinGet process here, we keep this as some fallback.
+
             if (output.Contains("Verf├╝gbar"))
             {
                 output = output.Replace("Verf├╝gbar", "Verfügbar");

@@ -2,17 +2,19 @@
 // in console apps. For more information about that topic, take a look at the following links:
 // https://devblogs.microsoft.com/dotnet/configureawait-faq/
 // https://stackoverflow.com/questions/25817703/configureawaitfalse-not-needed-in-console-win-service-apps-right
-// Of course, this is not true for libraries. Always use .ConfigureAwait(false) in libraries.
 
 using WinGetUpdLogging;
-using WinGetUpd;
+using WinGet;
 using WinGetUpdCore;
+using WinGetUpd;
 
 Console.WriteLine();
 Console.WriteLine($"{AppData.AppName} {AppData.AppVersion} (by MBODM {AppData.AppDate})");
 Console.WriteLine();
 
-var businessLogic = new BusinessLogic(new PrerequisitesHelper(), new WinGetWrapper(new WinGetRunner(), new FileLogger(AppData.LogFile)));
+var fileLogger = new FileLogger(AppData.LogFile);
+var winGetRunner = new WinGetRunner();
+var businessLogic = new BusinessLogic(fileLogger, winGetRunner, new WinGetManager(winGetRunner, fileLogger));
 
 try
 {

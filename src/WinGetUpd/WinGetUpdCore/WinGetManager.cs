@@ -1,14 +1,17 @@
 ﻿using WinGet;
+using WinGetUpdLogging;
 
 namespace WinGetUpdCore
 {
     public sealed class WinGetManager : IWinGetManager
     {
         private readonly IWinGetRunner winGetRunner;
+        private readonly IFileLogger fileLogger;
 
-        public WinGetManager(IWinGetRunner winGetRunner)
+        public WinGetManager(IWinGetRunner winGetRunner, IFileLogger fileLogger)
         {
             this.winGetRunner = winGetRunner ?? throw new ArgumentNullException(nameof(winGetRunner));
+            this.fileLogger = fileLogger ?? throw new ArgumentNullException(nameof(fileLogger));
         }
 
         public async Task<bool> SearchPackageAsync(string package, CancellationToken cancellationToken = default)
@@ -19,6 +22,8 @@ namespace WinGetUpdCore
             }
 
             var result = await winGetRunner.RunWinGetAsync($"search --exact --id {package}", cancellationToken).ConfigureAwait(false);
+
+            await fileLogger.LogWinGetCallAsync(result.ProcessCall, result.ConsoleOutput, cancellationToken).ConfigureAwait(false);
 
             return result.ExitCode == 0 && result.ConsoleOutput.Contains(package);
         }
@@ -31,6 +36,8 @@ namespace WinGetUpdCore
             }
 
             var result = await winGetRunner.RunWinGetAsync($"list --exact --id {package}", cancellationToken).ConfigureAwait(false);
+
+            await fileLogger.LogWinGetCallAsync(result.ProcessCall, result.ConsoleOutput, cancellationToken).ConfigureAwait(false);
 
             var installed = false;
             var updatable = false;
@@ -56,6 +63,8 @@ namespace WinGetUpdCore
             }
 
             var result = await winGetRunner.RunWinGetAsync($"upgrade --exact --id {package}", cancellationToken).ConfigureAwait(false);
+
+            await fileLogger.LogWinGetCallAsync(result.ProcessCall, result.ConsoleOutput, cancellationToken).ConfigureAwait(false);
 
             return result.ExitCode == 0;
         }
