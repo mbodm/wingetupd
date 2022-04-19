@@ -18,20 +18,22 @@ namespace WinGetUpdCore
             this.winGetManager = winGetManager ?? throw new ArgumentNullException(nameof(winGetManager));
         }
 
+        public static ApplicationData AppData { get; } = new ApplicationData();
+
         public async Task InitAsync(CancellationToken cancellationToken = default)
         {
             if (!isInitialized)
             {
                 isInitialized = true;
 
-                if (!File.Exists($"{AppData.PkgFile}"))
+                if (!File.Exists($"{AppData.PkgFilePath}"))
                 {
-                    throw new BusinessLogicException($"The package-file ('{AppData.PkgFile}') not exists.");
+                    throw new BusinessLogicException($"The package-file ('{AppData.PkgFileName}') not exists.");
                 }
 
                 if (!await fileLogger.CanWriteLogFileAsync(cancellationToken).ConfigureAwait(false))
                 {
-                    throw new BusinessLogicException($"Can not create log file ('{fileLogger.LogFile}'). It seems this folder has no write permissions.");
+                    throw new BusinessLogicException($"Can not create log file ('{AppData.LogFileName}'). It seems this folder has no write permissions.");
                 }
 
                 if (!winGetRunner.WinGetIsInstalled)
@@ -43,7 +45,7 @@ namespace WinGetUpdCore
 
         public async Task<IEnumerable<string>> GetPackageFileEntries(CancellationToken cancellationToken = default)
         {
-            var entries = await File.ReadAllLinesAsync(AppData.PkgFile, cancellationToken).ConfigureAwait(false);
+            var entries = await File.ReadAllLinesAsync(AppData.PkgFilePath, cancellationToken).ConfigureAwait(false);
 
             var nonWhiteSpaceEntries = entries.Where(entry => !string.IsNullOrWhiteSpace(entry));
 
@@ -75,7 +77,11 @@ namespace WinGetUpdCore
                 throw new InvalidOperationException("Given list of packages contains null or empty entries.");
             }
 
-            // Todo: Comment why we can not use concurrent version with Task.WhenAll() here.
+            // We can not use a concurrent logic here, by using some typical Task.WhenAll() approach. Because
+            // WinGet fails with "Failed in attempting to update the source" errors, when running in parallel.
+            // Therefore we sadly have to stick here with the non-concurrent, sequential, way slower approach.
+            // Nonetheless, all parts and modules of this App are designed with a concurrent approach in mind.
+            // So, if WinGet may change it´s behaviour in future, we are ready to use the concurrent approach.
 
             var packageInfos = new List<PackageInfo>();
 
@@ -104,11 +110,23 @@ namespace WinGetUpdCore
                 throw new InvalidOperationException("Given list of package infos is empty.");
             }
 
-            var tasks = packageInfos.Select(packageInfo => UpdatePackageAsync(packageInfo, progress, cancellationToken)).ToList();
+            // We can not use a concurrent logic here, by using some typical Task.WhenAll() approach. Because
+            // WinGet fails with "Failed in attempting to update the source" errors, when running in parallel.
+            // Therefore we sadly have to stick here with the non-concurrent, sequential, way slower approach.
+            // Nonetheless, all parts and modules of this App are designed with a concurrent approach in mind.
+            // So, if WinGet may change it´s behaviour in future, we are ready to use the concurrent approach.
 
-            var tuples = await Task.WhenAll(tasks).ConfigureAwait(false);
+            var updatedPackages = new List<string>();
 
-            var updatedPackages = tuples.Where(tuple => tuple.updated).Select(tuple => tuple.package);
+            foreach (var packageInfo in packageInfos)
+            {
+                var (package, updated) = await UpdatePackageAsync(packageInfo, progress, cancellationToken).ConfigureAwait(false);
+
+                if (updated)
+                {
+                    updatedPackages.Add(package);
+                }
+            }
 
             return updatedPackages;
         }
@@ -159,7 +177,7 @@ namespace WinGetUpdCore
             {
                 Report(progress, packageInfo.Package, PackageProgressStatus.PackageNotValid);
 
-                return (packageInfo.Package, false);
+                return NotUpdated(packageInfo);
             }
 
             Report(progress, packageInfo.Package, PackageProgressStatus.PackageValid);
@@ -168,7 +186,7 @@ namespace WinGetUpdCore
             {
                 Report(progress, packageInfo.Package, PackageProgressStatus.PackageNotInstalled);
 
-                return (packageInfo.Package, false);
+                return NotUpdated(packageInfo);
             }
 
             Report(progress, packageInfo.Package, PackageProgressStatus.PackageInstalled);
@@ -177,7 +195,7 @@ namespace WinGetUpdCore
             {
                 Report(progress, packageInfo.Package, PackageProgressStatus.PackageNotUpdatable);
 
-                return (packageInfo.Package, false);
+                return NotUpdated(packageInfo);
             }
 
             Report(progress, packageInfo.Package, PackageProgressStatus.PackageUpdatable);
@@ -187,12 +205,12 @@ namespace WinGetUpdCore
             {
                 Report(progress, packageInfo.Package, PackageProgressStatus.PackageNotUpdated);
 
-                return (packageInfo.Package, false);
+                return NotUpdated(packageInfo);
             }
 
             Report(progress, packageInfo.Package, PackageProgressStatus.PackageUpdated);
 
-            return (packageInfo.Package, true);
+            return Updated(packageInfo);
         }
 
         private static void Report(IProgress<PackageProgressData>? progress, string package, PackageProgressStatus status)
@@ -218,6 +236,16 @@ namespace WinGetUpdCore
         private static PackageInfo ValidInstalledAndUpdatable(string package)
         {
             return new PackageInfo(package, true, true, true);
+        }
+
+        private static (string package, bool updated) NotUpdated(PackageInfo packageInfo)
+        {
+            return (packageInfo.Package, false);
+        }
+
+        private static (string package, bool updated) Updated(PackageInfo packageInfo)
+        {
+            return (packageInfo.Package, true);
         }
     }
 }

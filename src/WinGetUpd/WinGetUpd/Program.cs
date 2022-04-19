@@ -8,13 +8,13 @@ using WinGet;
 using WinGetUpdCore;
 using WinGetUpd;
 
-Console.WriteLine();
-Console.WriteLine($"{AppData.AppName} {AppData.AppVersion} (by MBODM {AppData.AppDate})");
-Console.WriteLine();
-
-var fileLogger = new FileLogger(AppData.LogFile);
+var fileLogger = new FileLogger(BusinessLogic.AppData.LogFilePath);
 var winGetRunner = new WinGetRunner();
 var businessLogic = new BusinessLogic(fileLogger, winGetRunner, new WinGetManager(winGetRunner, fileLogger));
+
+Console.WriteLine();
+Console.WriteLine($"{BusinessLogic.AppData.AppName} {BusinessLogic.AppData.AppVersion} (by MBODM {BusinessLogic.AppData.AppDate})");
+Console.WriteLine();
 
 try
 {

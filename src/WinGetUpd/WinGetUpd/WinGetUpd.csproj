@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <Target Name="My-Build-Event" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
-    <Copy SourceFiles="$(ProjectDir)WinGetUpdPackages.txt" DestinationFiles="$(TargetDir)packages.txt" />
+    <Copy SourceFiles="$(ProjectDir)Packages.txt" DestinationFiles="$(TargetDir)packages.txt" />
     <Message Text="My-Build-Event finished." Importance="high" />
   </Target>
 
