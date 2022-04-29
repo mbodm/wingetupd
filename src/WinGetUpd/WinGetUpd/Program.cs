@@ -53,8 +53,7 @@ try
         if (ProgramHelper.AskUpdateQuestion(updatablePackages))
         {
             Console.Write("Updating ...");
-            var pis = await businessLogic.AnalyzePackagesAsync(entries, new PackageProgress(_ => Console.Write(".")));
-            var updatedPackages = pis.Where(pi => pi.IsUpdatable).Select(pi => pi.Package);
+            var updatedPackages = await businessLogic.UpdatePackagesAsync(packageInfos, new PackageProgress(_ => Console.Write(".")));
             Console.WriteLine(" finished.");
             Console.WriteLine();
             Console.WriteLine($"{updatedPackages.Count()} {ProgramHelper.PackageOrPackages(updatedPackages)} updated.");
@@ -63,9 +62,10 @@ try
         {
             Console.WriteLine("Canceled, no packages updated.");
         }
+
+        Console.WriteLine();
     }
 
-    Console.WriteLine();
     Console.WriteLine("Have a nice day.");
 
     ProgramHelper.ExitApp(0);

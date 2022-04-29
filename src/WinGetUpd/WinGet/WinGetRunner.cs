@@ -7,11 +7,7 @@ namespace WinGet
     public sealed class WinGetRunner : IWinGetRunner
     {
         private const string WinGetApp = "winget.exe";
-
-        private readonly byte winGetAppTimeoutInSeconds = 30;
-
-        public WinGetRunner() { }
-        public WinGetRunner(byte winGetAppTimeoutInSeconds) => this.winGetAppTimeoutInSeconds = winGetAppTimeoutInSeconds;
+        private const double WinGetAppTimeoutInSeconds = 15;
 
         public bool WinGetIsInstalled
         {
@@ -41,7 +37,10 @@ namespace WinGet
             }
         }
 
-        public async Task<WinGetRunnerResult> RunWinGetAsync(string parameters, CancellationToken cancellationToken = default)
+        public Task<WinGetRunnerResult> RunWinGetAsync(string parameters, CancellationToken cancellationToken = default) =>
+            RunWinGetAsync(parameters, TimeSpan.FromSeconds(WinGetAppTimeoutInSeconds), cancellationToken);
+
+        public async Task<WinGetRunnerResult> RunWinGetAsync(string parameters, TimeSpan timeout, CancellationToken cancellationToken = default)
         {
             if (parameters is null)
             {
@@ -80,9 +79,9 @@ namespace WinGet
                 throw new WinGetRunnerException($"{WinGetApp} process not started.");
             }
 
-            // Use typical timeout cancellation pattern by using CreateLinkedTokenSource() method:
+            // Some typical timeout cancellation pattern here, using CreateLinkedTokenSource() method.
 
-            using var ctsTimeout = new CancellationTokenSource(TimeSpan.FromSeconds(winGetAppTimeoutInSeconds));
+            using var ctsTimeout = new CancellationTokenSource(timeout);
             using var ctsLinked = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, ctsTimeout.Token);
 
             var consoleOutput = string.Empty;
@@ -105,7 +104,7 @@ namespace WinGet
             }
             catch (OperationCanceledException) when (ctsTimeout.IsCancellationRequested)
             {
-                throw new WinGetRunnerException($"{WinGetApp} reached timeout after {winGetAppTimeoutInSeconds} second(s). {WinGetApp} process canceled.");
+                throw new WinGetRunnerException($"{WinGetApp} reached timeout after {timeout.Seconds} second(s). {WinGetApp} process canceled.");
             }
 
             var processCall = $"{process.StartInfo.FileName} {process.StartInfo.Arguments}".Trim();

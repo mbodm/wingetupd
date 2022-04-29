@@ -62,7 +62,11 @@ namespace WinGetUpdCore
                 throw new ArgumentException($"'{nameof(package)}' cannot be null or whitespace.", nameof(package));
             }
 
-            var result = await winGetRunner.RunWinGetAsync($"upgrade --exact --id {package}", cancellationToken).ConfigureAwait(false);
+            // Since some software/packages can take a good amount of time while updating, timeout is adjusted accordingly here.
+
+            var timeout = TimeSpan.FromMinutes(30);
+
+            var result = await winGetRunner.RunWinGetAsync($"upgrade --exact --id {package}", timeout, cancellationToken).ConfigureAwait(false);
 
             await fileLogger.LogWinGetCallAsync(result.ProcessCall, result.ConsoleOutput, cancellationToken).ConfigureAwait(false);
 

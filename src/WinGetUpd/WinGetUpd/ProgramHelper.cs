@@ -36,11 +36,22 @@ namespace WinGetUpd
             var updatablePackages = packageInfos.Where(packageInfo => packageInfo.IsUpdatable).Select(packageInfo => packageInfo.Package);
 
             Console.WriteLine($"{packageInfos.Count()} package-file {EntryOrEntries(packageInfos)} processed.");
+
             Console.WriteLine($"{validPackages.Count()} package-file {EntryOrEntries(packageInfos)} validated.");
+
             Console.WriteLine($"{installedPackages.Count()} {PackageOrPackages(installedPackages)} installed:");
             ListPackages(installedPackages);
-            Console.WriteLine($"{updatablePackages.Count()} {PackageOrPackages(updatablePackages)} updatable:");
-            ListPackages(updatablePackages);
+
+            Console.Write($"{updatablePackages.Count()} {PackageOrPackages(updatablePackages)} updatable");
+            if (updatablePackages.Any())
+            {
+                Console.WriteLine(":");
+                ListPackages(updatablePackages);
+            }
+            else
+            {
+                Console.WriteLine(".");
+            }
         }
 
         public static bool AskUpdateQuestion(IEnumerable<string> updateablePackages)

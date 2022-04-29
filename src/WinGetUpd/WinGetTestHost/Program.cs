@@ -16,7 +16,7 @@ if (!Tests.WinGetIsInstalled())
     Environment.Exit(1);
 }
 
-var timeoutReached = await Tests.TimeoutAsync(5);
+var timeoutReached = await Tests.TimeoutAsync(10);
 
 if (!timeoutReached)
 {

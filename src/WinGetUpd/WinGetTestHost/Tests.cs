@@ -47,15 +47,15 @@ namespace WinGetTestHost
             ShowDuration(command, stopwatch.Elapsed.Seconds);
         }
 
-        public static async Task<bool> TimeoutAsync(byte timeout)
+        public static async Task<bool> TimeoutAsync(uint seconds)
         {
             // Play around with WinGetRunner timeout for this testing
 
-            var winGetRunner = new WinGetRunner(timeout);
+            var winGetRunner = new WinGetRunner();
 
             try
             {
-                var result = await winGetRunner.RunWinGetAsync("search");
+                var result = await winGetRunner.RunWinGetAsync("search", TimeSpan.FromSeconds(seconds));
 
                 ShowResult(result);
 
