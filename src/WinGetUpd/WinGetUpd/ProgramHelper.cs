@@ -24,7 +24,7 @@ namespace WinGetUpd
             Console.WriteLine("but those packages are not already installed on this machine yet:");
             ListPackages(notInstalledPackages);
             Console.WriteLine();
-            Console.WriteLine("You can use 'winget list' to list all installed packages and their package id´s.");
+            Console.WriteLine("You can use 'winget list' to show all installed packages and their package id´s.");
             Console.WriteLine();
             Console.WriteLine("Please verify package-file and try again.");
         }
