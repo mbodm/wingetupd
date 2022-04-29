@@ -69,12 +69,12 @@ namespace WinGetUpdCore
 
             if (!packages.Any())
             {
-                throw new InvalidOperationException("Given list of packages is empty.");
+                throw new ArgumentException("Given list of packages is empty.", nameof(packages));
             }
 
             if (packages.Any(package => string.IsNullOrWhiteSpace(package)))
             {
-                throw new InvalidOperationException("Given list of packages contains null or empty entries.");
+                throw new ArgumentException("Given list of packages contains null or empty entries.", nameof(packages));
             }
 
             // We can not use a concurrent logic here, by using some typical Task.WhenAll() approach. Because
@@ -107,7 +107,7 @@ namespace WinGetUpdCore
 
             if (!packageInfos.Any())
             {
-                throw new InvalidOperationException("Given list of package infos is empty.");
+                throw new ArgumentException("Given list of package infos is empty.", nameof(packageInfos));
             }
 
             // We can not use a concurrent logic here, by using some typical Task.WhenAll() approach. Because

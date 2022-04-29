@@ -7,7 +7,11 @@ namespace WinGet
     public sealed class WinGetRunner : IWinGetRunner
     {
         private const string WinGetApp = "winget.exe";
-        private const double WinGetAppTimeoutInSeconds = 30;
+
+        private readonly byte winGetAppTimeoutInSeconds = 30;
+
+        public WinGetRunner() { }
+        public WinGetRunner(byte winGetAppTimeoutInSeconds) => this.winGetAppTimeoutInSeconds = winGetAppTimeoutInSeconds;
 
         public bool WinGetIsInstalled
         {
@@ -23,12 +27,9 @@ namespace WinGet
                         UseShellExecute = false,
                     });
 
-                    if (process != null)
+                    if (process != null && !process.HasExited)
                     {
-                        if (!process.HasExited)
-                        {
-                            process.Kill();
-                        }
+                        process.Kill();
                     }
 
                     return true;
@@ -46,6 +47,10 @@ namespace WinGet
             {
                 throw new ArgumentNullException(nameof(parameters));
             }
+
+            // Any redirection of StandardError is explicitly omitted here, cause it can lead to various crazy problems
+            // when combined with StandardOutput redirection. Also WinGet actually makes no use of it anyway. And if MS
+            // ever starts changing such basic WinGet behaviours, we have to adjust many things accordingly here anyway.
 
             using var process = new Process();
 
@@ -75,23 +80,32 @@ namespace WinGet
                 throw new WinGetRunnerException($"{WinGetApp} process not started.");
             }
 
-            // Since .NET 6 Process.WaitForExitAsync() waits for redirected Output/Error.
-            // Have a look at the comments of the GitHub issue, linked in this blog post:
-            // https://www.meziantou.net/process-waitforexitasync-doesn-t-behave-like-process-waitforexit.htm
+            // Use typical timeout cancellation pattern by using CreateLinkedTokenSource() method:
 
-            var consoleOutput = await process.StandardOutput.ReadToEndAsync().ConfigureAwait(false);
-            process.StandardOutput.Close();
-
-            using var ctsTimeout = new CancellationTokenSource(TimeSpan.FromSeconds(WinGetAppTimeoutInSeconds));
+            using var ctsTimeout = new CancellationTokenSource(TimeSpan.FromSeconds(winGetAppTimeoutInSeconds));
             using var ctsLinked = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, ctsTimeout.Token);
+
+            var consoleOutput = string.Empty;
 
             try
             {
+                // Since ReadToEndAsync() has no CancellationToken support before .NET 7,
+                // the .WaitAsync() cancellation pattern helps, when timeout has reached.
+                // Have a look at the following pages, to get some more infos about this:
+                // https://github.com/dotnet/runtime/issues/20824
+                // https://andrewlock.net/cancelling-await-calls-in-dotnet-6-with-task-waitasync
+
+                consoleOutput = await process.StandardOutput.ReadToEndAsync().WaitAsync(ctsLinked.Token).ConfigureAwait(false);
+
+                // Since .NET 6 release WaitForExitAsync() waits for redirected Output/Error.
+                // Have a look at the comments of the GitHub issue, linked in this blog post:
+                // https://www.meziantou.net/process-waitforexitasync-doesn-t-behave-like-process-waitforexit.htm
+
                 await process.WaitForExitAsync(ctsLinked.Token).ConfigureAwait(false);
             }
             catch (OperationCanceledException) when (ctsTimeout.IsCancellationRequested)
             {
-                throw new WinGetRunnerException($"{WinGetApp} reached timeout after {WinGetAppTimeoutInSeconds} seconds. {WinGetApp} process canceled.");
+                throw new WinGetRunnerException($"{WinGetApp} reached timeout after {winGetAppTimeoutInSeconds} seconds. {WinGetApp} process canceled.");
             }
 
             var processCall = $"{process.StartInfo.FileName} {process.StartInfo.Arguments}".Trim();

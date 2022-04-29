@@ -20,7 +20,7 @@ else
     Environment.Exit(1);
 }
 
-Console.WriteLine("Add log entries concurrent ...");
+Console.WriteLine("Write log entries concurrent ...");
 var tasks = new List<Task>
 {
     fileLogger.LogWinGetCallAsync("winget.exe --version1", "v1.0.0"),
@@ -28,10 +28,10 @@ var tasks = new List<Task>
     fileLogger.LogWinGetCallAsync("winget.exe --version3", "v3.0.0"),
 };
 await Task.WhenAll(tasks);
-Console.WriteLine("Done.");
+Console.WriteLine($"{tasks.Count} log entries successfully written.");
 Console.WriteLine();
 
-Console.WriteLine("Added log entries:");
+Console.WriteLine("Written log entries:");
 var lines = await File.ReadAllLinesAsync(fileLogger.LogFile);
 lines.ToList().ForEach(line => Console.WriteLine(line));
 Console.WriteLine();

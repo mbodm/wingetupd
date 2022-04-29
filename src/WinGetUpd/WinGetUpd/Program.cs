@@ -24,21 +24,28 @@ try
     Console.WriteLine();
     Console.Write("Processing ...");
     var packageInfos = await businessLogic.AnalyzePackagesAsync(entries, new PackageProgress(_ => Console.Write(".")));
-    Console.WriteLine(" Finished.");
+    Console.WriteLine(" finished.");
     Console.WriteLine();
-    if (ProgramHelper.ShowInvalidPackagesError(packageInfos))
+    var invalidPackages = packageInfos.Where(packageInfo => !packageInfo.IsValid).Select(packageInfo => packageInfo.Package);
+    if (invalidPackages.Any())
     {
+        ProgramHelper.ShowInvalidPackagesError(invalidPackages);
         Environment.Exit(1);
     }
     ProgramHelper.ShowSummary(packageInfos);
+    Console.WriteLine();
+    ProgramHelper.ShowLogInfo();
+    Console.WriteLine();
 }
 catch (BusinessLogicException e)
 {
     Console.WriteLine($"Error: {e.Message}");
     Environment.Exit(1);
 }
-
-// have a look at log file or winget log at:
-// %LOCALAPPDATA%\Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\DiagOutputDir
-
-Console.WriteLine();
+catch (WinGetRunnerException e)
+{
+    Console.WriteLine();
+    Console.WriteLine();
+    Console.WriteLine($"Error: {e.Message}");
+    Environment.Exit(1);
+}

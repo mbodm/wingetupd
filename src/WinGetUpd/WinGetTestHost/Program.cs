@@ -10,16 +10,21 @@ var packages = new string[] {
     "Microsoft.VisualStudioCode",
 };
 
-if (!Tests.Installed())
+if (!Tests.WinGetIsInstalled())
 {
     Console.WriteLine("WinGet is not installed.");
     Environment.Exit(1);
 }
 
-for (int i = 0; i < maxTestRepetitions; i++)
+var timeoutReached = await Tests.TimeoutAsync(5);
+
+if (!timeoutReached)
 {
-    await Tests.RunAsync("search", packages, concurrentMode, silentMode);
-    await Tests.RunAsync("list", packages, concurrentMode, silentMode);
+    for (int i = 0; i < maxTestRepetitions; i++)
+    {
+        await Tests.RunWinGetAsync("search", packages, concurrentMode, silentMode);
+        await Tests.RunWinGetAsync("list", packages, concurrentMode, silentMode);
+    }
 }
 
 Console.WriteLine("Have a nice day.");

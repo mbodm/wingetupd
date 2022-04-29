@@ -5,14 +5,14 @@ namespace WinGetTestHost
 {
     internal static class Tests
     {
-        public static bool Installed()
+        public static bool WinGetIsInstalled()
         {
             var winGetRunner = new WinGetRunner();
 
             return winGetRunner.WinGetIsInstalled;
         }
 
-        public static async Task RunAsync(string command, string[] packages, bool concurrentMode, bool silentMode)
+        public static async Task RunWinGetAsync(string command, string[] packages, bool concurrentMode, bool silentMode)
         {
             var stopwatch = new Stopwatch();
             var winGetRunner = new WinGetRunner();
@@ -45,6 +45,29 @@ namespace WinGetTestHost
             stopwatch.Stop();
 
             ShowDuration(command, stopwatch.Elapsed.Seconds);
+        }
+
+        public static async Task<bool> TimeoutAsync(byte timeout)
+        {
+            // Play around with WinGetRunner timeout for this testing
+
+            var winGetRunner = new WinGetRunner(timeout);
+
+            try
+            {
+                var result = await winGetRunner.RunWinGetAsync("search");
+
+                ShowResult(result);
+
+                return false;
+            }
+            catch (WinGetRunnerException e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine();
+
+                return true;
+            }
         }
 
         private static void ShowResult(WinGetRunnerResult result)
