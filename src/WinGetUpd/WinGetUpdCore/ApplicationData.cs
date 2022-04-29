@@ -10,7 +10,7 @@ namespace WinGetUpdCore
             GetEntryAssembly()?.
             GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.
             InformationalVersion?.
-            ToString() ?? "Unknown";
+            ToString() ?? "0.0.0-unknown";
         public string AppFolder => AppContext.BaseDirectory;
         public string AppFileName => $"{AppName}.exe";
         public string AppFilePath => Path.Combine(AppFolder, AppFileName);

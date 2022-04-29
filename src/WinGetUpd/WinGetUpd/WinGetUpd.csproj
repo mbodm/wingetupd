@@ -17,7 +17,7 @@
     <RemoveDir Directories="$(PublishDir)zip"></RemoveDir>
     <MakeDir Directories="$(PublishDir)zip"></MakeDir>
     <Copy SourceFiles="$(PublishDir)WinGetUpd.exe" DestinationFiles="$(PublishDir)zip\wingetupd.exe" />
-    <Copy SourceFiles="$(ProjectDir)WinGetUpdPackages.txt" DestinationFiles="$(PublishDir)zip\packages.txt" />
+    <Copy SourceFiles="$(ProjectDir)Packages.txt" DestinationFiles="$(PublishDir)zip\packages.txt" />
     <ZipDirectory SourceDirectory="$(PublishDir)zip" DestinationFile="$(PublishDir)wingetupd.zip" Overwrite="true" />
     <RemoveDir Directories="$(PublishDir)zip"></RemoveDir>
     <Message Text="My-Publish-Event finished." Importance="high" />

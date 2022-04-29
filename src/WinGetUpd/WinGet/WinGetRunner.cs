@@ -105,7 +105,7 @@ namespace WinGet
             }
             catch (OperationCanceledException) when (ctsTimeout.IsCancellationRequested)
             {
-                throw new WinGetRunnerException($"{WinGetApp} reached timeout after {winGetAppTimeoutInSeconds} seconds. {WinGetApp} process canceled.");
+                throw new WinGetRunnerException($"{WinGetApp} reached timeout after {winGetAppTimeoutInSeconds} second(s). {WinGetApp} process canceled.");
             }
 
             var processCall = $"{process.StartInfo.FileName} {process.StartInfo.Arguments}".Trim();
