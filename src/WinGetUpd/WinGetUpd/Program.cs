@@ -13,7 +13,7 @@ var winGetRunner = new WinGetRunner();
 var businessLogic = new BusinessLogic(fileLogger, winGetRunner, new WinGetManager(winGetRunner, fileLogger));
 
 Console.WriteLine();
-Console.WriteLine($"{BusinessLogic.AppData.AppName} {BusinessLogic.AppData.AppVersion} (by MBODM {BusinessLogic.AppData.AppDate})");
+Console.WriteLine($"{BusinessLogic.AppData.AppName} v{BusinessLogic.AppData.AppVersion} (by MBODM {BusinessLogic.AppData.AppDate})");
 Console.WriteLine();
 
 try
@@ -30,6 +30,12 @@ try
     if (invalidPackages.Any())
     {
         ProgramHelper.ShowInvalidPackagesError(invalidPackages);
+        Environment.Exit(1);
+    }
+    var notInstalledPackages = packageInfos.Where(packageInfo => !packageInfo.IsInstalled).Select(packageInfo => packageInfo.Package);
+    if (notInstalledPackages.Any())
+    {
+        ProgramHelper.ShowNotInstalledPackagesError(notInstalledPackages);
         Environment.Exit(1);
     }
     ProgramHelper.ShowSummary(packageInfos);

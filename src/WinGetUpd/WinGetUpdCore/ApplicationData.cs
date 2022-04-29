@@ -5,12 +5,12 @@ namespace WinGetUpdCore
     public sealed record ApplicationData
     {
         public string AppName => "wingetupd";
-        public string AppDate => "2022-04-19";
+        public string AppDate => "2022-04-29";
         public string AppVersion => Assembly.
             GetEntryAssembly()?.
             GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.
             InformationalVersion?.
-            ToString() ?? string.Empty;
+            ToString() ?? "Unknown";
         public string AppFolder => AppContext.BaseDirectory;
         public string AppFileName => $"{AppName}.exe";
         public string AppFilePath => Path.Combine(AppFolder, AppFileName);

@@ -1,9 +1,12 @@
 ﻿using WinGet;
 using WinGetUpdLogging;
 
+// The word 'package' is used synonym for 'WinGet package ID' in the whole project,
+// since everything package-related will always be based on WinGet package ID here.
+
 namespace WinGetUpdCore
 {
-    public sealed class BusinessLogic : IBusinessLogic
+    public sealed class BusinessLogic
     {
         private bool isInitialized;
 
@@ -18,8 +21,16 @@ namespace WinGetUpdCore
             this.winGetManager = winGetManager ?? throw new ArgumentNullException(nameof(winGetManager));
         }
 
+        /// <summary>
+        /// Contains common application informations
+        /// </summary>
         public static ApplicationData AppData { get; } = new ApplicationData();
 
+        /// <summary>
+        /// Initializes BusinessLogic (call is reentrant)
+        /// </summary>
+        /// <param name="cancellationToken">Typical TAP cancellation token pattern for task cancellation</param>
+        /// <returns></returns>
         public async Task InitAsync(CancellationToken cancellationToken = default)
         {
             if (!isInitialized)
@@ -38,11 +49,16 @@ namespace WinGetUpdCore
 
                 if (!winGetRunner.WinGetIsInstalled)
                 {
-                    throw new BusinessLogicException("It seems WinGet is not installed on this computer.");
+                    throw new BusinessLogicException("It seems WinGet is not installed on this machine.");
                 }
             }
         }
 
+        /// <summary>
+        /// Get entries from package file
+        /// </summary>
+        /// <param name="cancellationToken">Typical TAP cancellation token pattern for task cancellation</param>
+        /// <returns>List of WinGet package id entries from package file</returns>
         public async Task<IEnumerable<string>> GetPackageFileEntries(CancellationToken cancellationToken = default)
         {
             var entries = await File.ReadAllLinesAsync(AppData.PkgFilePath, cancellationToken).ConfigureAwait(false);
@@ -57,6 +73,13 @@ namespace WinGetUpdCore
             return nonWhiteSpaceEntries;
         }
 
+        /// <summary>
+        /// Analyzes every package in a list of given packages
+        /// </summary>
+        /// <param name="packages">List of WinGet package id´s</param>
+        /// <param name="progress">Typical TAP progress handler pattern for progressing every step</param>
+        /// <param name="cancellationToken">Typical TAP cancellation token pattern for task cancellation</param>
+        /// <returns>List of package infos (containing a package info for every analyzed package)</returns>
         public async Task<IEnumerable<PackageInfo>> AnalyzePackagesAsync(
             IEnumerable<string> packages,
             IProgress<PackageProgressData>? progress = default,
@@ -95,6 +118,13 @@ namespace WinGetUpdCore
             return packageInfos;
         }
 
+        /// <summary>
+        /// Updates every WinGet package on computer listed as 'updatable' in a given list of package infos
+        /// </summary>
+        /// <param name="packageInfos">List of package infos returned by AnalyzePackagesAsync() method</param>
+        /// <param name="progress">Typical TAP progress handler pattern for progressing every step</param>
+        /// <param name="cancellationToken">Typical TAP cancellation token pattern for task cancellation</param>
+        /// <returns>List of WinGet package id´s (containing a WinGet package id for every updated WinGet package)</returns>
         public async Task<IEnumerable<string>> UpdatePackagesAsync(
             IEnumerable<PackageInfo> packageInfos,
             IProgress<PackageProgressData>? progress = default,
@@ -213,39 +243,25 @@ namespace WinGetUpdCore
             return Updated(packageInfo);
         }
 
-        private static void Report(IProgress<PackageProgressData>? progress, string package, PackageProgressStatus status)
-        {
+        private static void Report(IProgress<PackageProgressData>? progress, string package, PackageProgressStatus status) =>
             progress?.Report(new PackageProgressData(package, status));
-        }
 
-        private static PackageInfo NotValid(string package)
-        {
-            return new PackageInfo(package, false, false, false);
-        }
+        private static PackageInfo NotValid(string package) =>
+            new(package, false, false, false);
 
-        private static PackageInfo ValidButNotInstalled(string package)
-        {
-            return new PackageInfo(package, true, false, false);
-        }
+        private static PackageInfo ValidButNotInstalled(string package) =>
+            new(package, true, false, false);
 
-        private static PackageInfo ValidInstalledButNotUpdatable(string package)
-        {
-            return new PackageInfo(package, true, true, false);
-        }
+        private static PackageInfo ValidInstalledButNotUpdatable(string package) =>
+            new(package, true, true, false);
 
-        private static PackageInfo ValidInstalledAndUpdatable(string package)
-        {
-            return new PackageInfo(package, true, true, true);
-        }
+        private static PackageInfo ValidInstalledAndUpdatable(string package) =>
+            new(package, true, true, true);
 
-        private static (string package, bool updated) NotUpdated(PackageInfo packageInfo)
-        {
-            return (packageInfo.Package, false);
-        }
+        private static (string package, bool updated) NotUpdated(PackageInfo packageInfo) =>
+            (packageInfo.Package, false);
 
-        private static (string package, bool updated) Updated(PackageInfo packageInfo)
-        {
-            return (packageInfo.Package, true);
-        }
+        private static (string package, bool updated) Updated(PackageInfo packageInfo) =>
+            (packageInfo.Package, true);
     }
 }

@@ -9,9 +9,22 @@ namespace WinGetUpd
             Console.WriteLine("Error: The package-file contains invalid entries.");
             Console.WriteLine();
             Console.WriteLine("The following package-file entries are not valid WinGet package id´s:");
-            invalidPackages.ToList().ForEach(package => Console.WriteLine($"  {package}"));
+            ListPackages(invalidPackages);
             Console.WriteLine();
             Console.WriteLine("You can use 'winget search' to list all valid package id´s.");
+            Console.WriteLine();
+            Console.WriteLine("Please verify package-file and try again.");
+        }
+
+        public static void ShowNotInstalledPackagesError(IEnumerable<string> notInstalledPackages)
+        {
+            Console.WriteLine("Error: The package-file contains non-installed packages.");
+            Console.WriteLine();
+            Console.WriteLine("The following package-file entries are valid WinGet package id´s,");
+            Console.WriteLine("but those packages are not already installed on this machine yet:");
+            ListPackages(notInstalledPackages);
+            Console.WriteLine();
+            Console.WriteLine("You can use 'winget list' to list all installed packages and their package id´s.");
             Console.WriteLine();
             Console.WriteLine("Please verify package-file and try again.");
         }
@@ -23,19 +36,11 @@ namespace WinGetUpd
             var updatablePackages = packageInfos.Where(packageInfo => packageInfo.IsUpdatable).Select(packageInfo => packageInfo.Package);
 
             Console.WriteLine($"{packageInfos.Count()} package-file {EntryOrEntries(packageInfos)} processed.");
-            Console.WriteLine($"{validPackages.Count()} package-file {EntryOrEntries(packageInfos)} verified (valid WinGet package id).");
-            
+            Console.WriteLine($"{validPackages.Count()} package-file {EntryOrEntries(packageInfos)} validated.");
             Console.WriteLine($"{installedPackages.Count()} {PackageOrPackages(installedPackages)} installed on this machine:");
-            foreach (var package in installedPackages)
-            {
-                Console.WriteLine($"  {package}");
-            }
-            
+            ListPackages(installedPackages);
             Console.WriteLine($"{updatablePackages.Count()} {PackageOrPackages(updatablePackages)} updatable:");
-            foreach (var package in updatablePackages)
-            {
-                Console.WriteLine($"  {package}");
-            }
+            ListPackages(updatablePackages);
         }
 
         public static void ShowLogInfo()
@@ -49,24 +54,19 @@ namespace WinGetUpd
             Console.WriteLine(winGetLogFolder);
         }
 
-        public static string EntryOrEntries<T>(IEnumerable<T> enumerable)
-        {
-            return SingularOrPlural(enumerable, "entry", "entries");
-        }
+        public static string EntryOrEntries<T>(IEnumerable<T> enumerable) =>
+            SingularOrPlural(enumerable, "entry", "entries");
 
-        public static string PackageOrPackages<T>(IEnumerable<T> enumerable)
-        {
-            return SingularOrPlural(enumerable, "package", "packages");
-        }
+        public static string PackageOrPackages<T>(IEnumerable<T> enumerable) =>
+            SingularOrPlural(enumerable, "package", "packages");
 
-        public static string IdOrIds<T>(IEnumerable<T> enumerable)
-        {
-            return SingularOrPlural(enumerable, "id", "id´s");
-        }
+        public static string IdOrIds<T>(IEnumerable<T> enumerable) =>
+            SingularOrPlural(enumerable, "id", "id´s");
 
-        private static string SingularOrPlural<T>(IEnumerable<T> enumerable, string singular, string plural)
-        {
-            return enumerable.Count() == 1 ? singular : plural;
-        }
+        private static string SingularOrPlural<T>(IEnumerable<T> enumerable, string singular, string plural) =>
+            enumerable.Count() == 1 ? singular : plural;
+        
+        private static void ListPackages(IEnumerable<string> packages) => packages.ToList().ForEach(package =>
+            Console.WriteLine($"  - {package}"));
     }
 }
