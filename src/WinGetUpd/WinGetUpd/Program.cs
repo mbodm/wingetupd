@@ -8,21 +8,30 @@ using WinGetUpd;
 using WinGetUpdCore;
 using WinGetUpdLogging;
 
-var winGetRunner = new WinGetRunner();
-var fileLogger = new FileLogger(BusinessLogic.AppData.LogFilePath);
-var winGetManager = new WinGetManager(winGetRunner, fileLogger);
-var businessLogic = new BusinessLogic(fileLogger, winGetRunner, winGetManager);
+Console.WriteLine();
+Console.WriteLine($"{ProgramData.AppName} v{ProgramData.AppVersion} (by MBODM {ProgramData.AppDate})");
+Console.WriteLine();
 
-Console.WriteLine();
-Console.WriteLine($"{BusinessLogic.AppData.AppName} v{BusinessLogic.AppData.AppVersion} (by MBODM {BusinessLogic.AppData.AppDate})");
-Console.WriteLine();
+ProgramParams.Args = args;
+
+if (!ProgramParams.ArgsValid)
+{
+    ProgramHelper.ShowUsage(ProgramData.AppFileName, !ProgramParams.ShowHelp);
+    ProgramHelper.ExitApp(1, false);
+}
 
 try
 {
-    await businessLogic.InitAsync();
+    var fileLogger = new FileLogger(ProgramData.LogFilePath);
+    var packageFileReader = new PackageFileReader(ProgramData.PkgFilePath);
+    var winGetRunner = new WinGetRunner();
+    var winGetManager = new WinGetManager(winGetRunner, fileLogger);
+    var businessLogic = new BusinessLogic(fileLogger, packageFileReader, winGetRunner, winGetManager);
 
-    var entries = await businessLogic.GetPackageFileEntries();
-    Console.WriteLine($"Found package-file, containing {entries.Count()} {ProgramHelper.EntryOrEntries(entries)}.");
+    await businessLogic.InitAsync(!ProgramParams.NoLog);
+
+    var entries = await businessLogic.GetPackageFileEntriesAsync();
+    ProgramHelper.ShowPackageFileEntries(entries);
     Console.WriteLine();
 
     Console.Write("Processing ...");
@@ -34,14 +43,14 @@ try
     if (invalidPackages.Any())
     {
         ProgramHelper.ShowInvalidPackagesError(invalidPackages);
-        ProgramHelper.ExitApp(1);
+        ProgramHelper.ExitApp(1, !ProgramParams.NoConfirm);
     }
 
     var nonInstalledPackages = packageInfos.Where(packageInfo => !packageInfo.IsInstalled).Select(packageInfo => packageInfo.Package);
     if (nonInstalledPackages.Any())
     {
         ProgramHelper.ShowNonInstalledPackagesError(nonInstalledPackages);
-        ProgramHelper.ExitApp(1);
+        ProgramHelper.ExitApp(1, !ProgramParams.NoConfirm);
     }
 
     ProgramHelper.ShowSummary(packageInfos);
@@ -50,25 +59,25 @@ try
     var updatablePackages = packageInfos.Where(packageInfo => packageInfo.IsUpdatable).Select(packageInfo => packageInfo.Package);
     if (updatablePackages.Any())
     {
-        if (ProgramHelper.AskUpdateQuestion(updatablePackages))
+        // This boolean statement is written a bit extraordinary to make the logic a bit more readable.
+
+        if ((ProgramParams.NoConfirm == false) && (ProgramHelper.AskUpdateQuestion(updatablePackages) == false))
         {
-            Console.Write("Updating ...");
-            var updatedPackages = await businessLogic.UpdatePackagesAsync(packageInfos, new PackageProgress(_ => Console.Write(".")));
-            Console.WriteLine(" finished.");
-            Console.WriteLine();
-            Console.WriteLine($"{updatedPackages.Count()} {ProgramHelper.PackageOrPackages(updatedPackages)} updated.");
+            Console.WriteLine("Canceled, no packages updated.");
         }
         else
         {
-            Console.WriteLine("Canceled, no packages updated.");
+            Console.Write("Updating ...");
+            var updatedPackages = updatablePackages;  // await businessLogic.UpdatePackagesAsync(packageInfos, new PackageProgress(_ => Console.Write(".")));
+            Console.WriteLine(" finished.");
+            ProgramHelper.ShowUpdatedPackages(updatedPackages);
         }
 
         Console.WriteLine();
     }
 
-    Console.WriteLine("Have a nice day.");
-
-    ProgramHelper.ExitApp(0);
+    ProgramHelper.ShowGoodByeMessage();
+    ProgramHelper.ExitApp(0, !ProgramParams.NoConfirm);
 }
 catch (Exception e)
 {
@@ -78,7 +87,7 @@ catch (Exception e)
             Console.WriteLine($"Error: {e.Message}");
             break;
         case WinGetRunnerException:
-            ProgramHelper.ShowWinGetError(e.Message);
+            ProgramHelper.ShowWinGetError(e.Message, ProgramData.LogFileName);
             break;
         default:
             Console.WriteLine("Unexpected error occurred:");
@@ -87,5 +96,5 @@ catch (Exception e)
             break;
     }
 
-    ProgramHelper.ExitApp(1);
+    ProgramHelper.ExitApp(1, !ProgramParams.NoConfirm);
 }

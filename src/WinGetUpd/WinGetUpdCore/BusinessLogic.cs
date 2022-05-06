@@ -11,46 +11,54 @@ namespace WinGetUpdCore
         private bool isInitialized;
 
         private readonly IFileLogger fileLogger;
+        private readonly IPackageFileReader packageFileReader;
         private readonly IWinGetRunner winGetRunner;
         private readonly IWinGetManager winGetManager;
 
-        public BusinessLogic(IFileLogger fileLogger, IWinGetRunner winGetRunner, IWinGetManager winGetManager)
+        public BusinessLogic(IFileLogger fileLogger, IPackageFileReader packageFileReader, IWinGetRunner winGetRunner, IWinGetManager winGetManager)
         {
             this.fileLogger = fileLogger ?? throw new ArgumentNullException(nameof(fileLogger));
+            this.packageFileReader = packageFileReader ?? throw new ArgumentNullException(nameof(packageFileReader));
             this.winGetRunner = winGetRunner ?? throw new ArgumentNullException(nameof(winGetRunner));
             this.winGetManager = winGetManager ?? throw new ArgumentNullException(nameof(winGetManager));
         }
 
         /// <summary>
-        /// Contains common application informations
-        /// </summary>
-        public static ApplicationData AppData { get; } = new ApplicationData();
-
-        /// <summary>
         /// Initializes BusinessLogic (call is reentrant)
         /// </summary>
+        /// <param name="writeLogFile">Boolean value indicating if this module will write a log file</param>
         /// <param name="cancellationToken">Typical TAP cancellation token pattern for task cancellation</param>
-        /// <returns></returns>
-        public async Task InitAsync(CancellationToken cancellationToken = default)
+        /// <returns>Task</returns>
+        /// <exception cref="BusinessLogicException"></exception>
+        public async Task InitAsync(bool writeLogFile, CancellationToken cancellationToken = default)
         {
             if (!isInitialized)
             {
-                isInitialized = true;
-
-                if (!File.Exists($"{AppData.PkgFilePath}"))
+                if (writeLogFile)
                 {
-                    throw new BusinessLogicException($"The package-file ('{AppData.PkgFileName}') not exists.");
+                    if (!await fileLogger.CanWriteLogFileAsync(cancellationToken).ConfigureAwait(false))
+                    {
+                        var logFile = Path.GetFileName(fileLogger.LogFile);
+
+                        throw new BusinessLogicException($"Can not create log file ('{logFile}'). It seems this folder has no write permissions.");
+                    }
                 }
 
-                if (!await fileLogger.CanWriteLogFileAsync(cancellationToken).ConfigureAwait(false))
+                if (!packageFileReader.PackageFileExists)
                 {
-                    throw new BusinessLogicException($"Can not create log file ('{AppData.LogFileName}'). It seems this folder has no write permissions.");
+                    var packageFile = Path.GetFileName(packageFileReader.PackageFile);
+
+                    throw new BusinessLogicException($"The package-file ('{packageFile}') not exists.");
                 }
 
                 if (!winGetRunner.WinGetIsInstalled)
                 {
                     throw new BusinessLogicException("It seems WinGet is not installed on this machine.");
                 }
+
+                winGetManager.LogWinGetCalls = writeLogFile;
+
+                isInitialized = true;
             }
         }
 
@@ -59,18 +67,18 @@ namespace WinGetUpdCore
         /// </summary>
         /// <param name="cancellationToken">Typical TAP cancellation token pattern for task cancellation</param>
         /// <returns>List of WinGet package id entries from package file</returns>
-        public async Task<IEnumerable<string>> GetPackageFileEntries(CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<string>> GetPackageFileEntriesAsync(CancellationToken cancellationToken = default)
         {
-            var entries = await File.ReadAllLinesAsync(AppData.PkgFilePath, cancellationToken).ConfigureAwait(false);
+            var entries = await packageFileReader.ReadPackageFileAsync(cancellationToken).ConfigureAwait(false);
 
-            var nonWhiteSpaceEntries = entries.Where(entry => !string.IsNullOrWhiteSpace(entry));
-
-            if (!nonWhiteSpaceEntries.Any())
+            if (!entries.Any())
             {
-                throw new BusinessLogicException("Package-File is empty.");
+                var packageFile = Path.GetFileName(packageFileReader.PackageFile);
+
+                throw new BusinessLogicException($"Package-File {packageFile} is empty.");
             }
 
-            return nonWhiteSpaceEntries;
+            return entries;
         }
 
         /// <summary>
@@ -98,6 +106,11 @@ namespace WinGetUpdCore
             if (packages.Any(package => string.IsNullOrWhiteSpace(package)))
             {
                 throw new ArgumentException("Given list of packages contains null or empty entries.", nameof(packages));
+            }
+
+            if (!isInitialized)
+            {
+                throw new BusinessLogicException($"{nameof(BusinessLogic)} not initialized.");
             }
 
             // We can not use a concurrent logic here, by using some typical Task.WhenAll() approach. Because
@@ -138,6 +151,11 @@ namespace WinGetUpdCore
             if (!packageInfos.Any())
             {
                 throw new ArgumentException("Given list of package infos is empty.", nameof(packageInfos));
+            }
+
+            if (!isInitialized)
+            {
+                throw new BusinessLogicException($"{nameof(BusinessLogic)} not initialized.");
             }
 
             // We can not use a concurrent logic here, by using some typical Task.WhenAll() approach. Because

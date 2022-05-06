@@ -14,6 +14,8 @@ namespace WinGetUpdCore
             this.fileLogger = fileLogger ?? throw new ArgumentNullException(nameof(fileLogger));
         }
 
+        public bool LogWinGetCalls { get; set; } = true;
+
         public async Task<bool> SearchPackageAsync(string package, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(package))
@@ -23,7 +25,10 @@ namespace WinGetUpdCore
 
             var result = await winGetRunner.RunWinGetAsync($"search --exact --id {package}", cancellationToken).ConfigureAwait(false);
 
-            await fileLogger.LogWinGetCallAsync(result.ProcessCall, result.ConsoleOutput, cancellationToken).ConfigureAwait(false);
+            if (LogWinGetCalls)
+            {
+                await fileLogger.LogWinGetCallAsync(result.ProcessCall, result.ConsoleOutput, cancellationToken).ConfigureAwait(false);
+            }
 
             return result.ExitCode == 0 && result.ConsoleOutput.Contains(package);
         }
@@ -37,7 +42,10 @@ namespace WinGetUpdCore
 
             var result = await winGetRunner.RunWinGetAsync($"list --exact --id {package}", cancellationToken).ConfigureAwait(false);
 
-            await fileLogger.LogWinGetCallAsync(result.ProcessCall, result.ConsoleOutput, cancellationToken).ConfigureAwait(false);
+            if (LogWinGetCalls)
+            {
+                await fileLogger.LogWinGetCallAsync(result.ProcessCall, result.ConsoleOutput, cancellationToken).ConfigureAwait(false);
+            }
 
             var installed = false;
             var updatable = false;
@@ -68,7 +76,10 @@ namespace WinGetUpdCore
 
             var result = await winGetRunner.RunWinGetAsync($"upgrade --exact --id {package}", timeout, cancellationToken).ConfigureAwait(false);
 
-            await fileLogger.LogWinGetCallAsync(result.ProcessCall, result.ConsoleOutput, cancellationToken).ConfigureAwait(false);
+            if (LogWinGetCalls)
+            {
+                await fileLogger.LogWinGetCallAsync(result.ProcessCall, result.ConsoleOutput, cancellationToken).ConfigureAwait(false);
+            }
 
             return result.ExitCode == 0;
         }

@@ -3,6 +3,11 @@
     public interface IWinGetManager
     {
         /// <summary>
+        /// Boolean value indicating if this module will log WinGet calls
+        /// </summary>
+        bool LogWinGetCalls { get; set; }
+
+        /// <summary>
         /// Validates existence of WinGet package by running 'search' command
         /// </summary>
         /// <param name="package">WinGet package id</param>
