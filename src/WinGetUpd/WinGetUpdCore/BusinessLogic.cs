@@ -73,9 +73,7 @@ namespace WinGetUpdCore
 
             if (!entries.Any())
             {
-                var packageFile = Path.GetFileName(packageFileReader.PackageFile);
-
-                throw new BusinessLogicException($"Package-File {packageFile} is empty.");
+                throw new BusinessLogicException($"The package-file is empty.");
             }
 
             return entries;
