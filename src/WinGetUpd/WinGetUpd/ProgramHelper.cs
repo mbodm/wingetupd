@@ -135,10 +135,10 @@ namespace WinGetUpd
             Console.WriteLine($"For details have a look at the log file ('{log}').");
             Console.WriteLine();
             Console.WriteLine("For even more details have a look at WinGet´s own log files:");
-            Console.WriteLine($"-> {winGetLogFolder}");
+            Console.WriteLine(winGetLogFolder);
             Console.WriteLine();
             Console.WriteLine("You can also find further information on the WinGet site: ");
-            Console.WriteLine($"-> {winGetWebSite}");
+            Console.WriteLine(winGetWebSite);
         }
 
         public static void ExitApp(int exitCode, bool showConfirm)

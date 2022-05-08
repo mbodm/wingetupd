@@ -1,16 +1,16 @@
-﻿using WinGet;
-using WinGetUpdLogging;
+﻿using WinGetUpdLogging;
+using WinGetUpdProcessHandling;
 
-namespace WinGetUpdCore
+namespace WinGetUpdPackageManagement
 {
-    public sealed class WinGetManager : IWinGetManager
+    public sealed class PackageManager : IPackageManager
     {
-        private readonly IWinGetRunner winGetRunner;
+        private readonly IWinGet winGet;
         private readonly IFileLogger fileLogger;
 
-        public WinGetManager(IWinGetRunner winGetRunner, IFileLogger fileLogger)
+        public PackageManager(IWinGet winGet, IFileLogger fileLogger)
         {
-            this.winGetRunner = winGetRunner ?? throw new ArgumentNullException(nameof(winGetRunner));
+            this.winGet = winGet ?? throw new ArgumentNullException(nameof(winGet));
             this.fileLogger = fileLogger ?? throw new ArgumentNullException(nameof(fileLogger));
         }
 
@@ -23,7 +23,7 @@ namespace WinGetUpdCore
                 throw new ArgumentException($"'{nameof(package)}' cannot be null or whitespace.", nameof(package));
             }
 
-            var result = await winGetRunner.RunWinGetAsync($"search --exact --id {package}", cancellationToken).ConfigureAwait(false);
+            var result = await winGet.RunWinGetAsync($"search --exact --id {package}", cancellationToken).ConfigureAwait(false);
 
             if (LogWinGetCalls)
             {
@@ -33,14 +33,14 @@ namespace WinGetUpdCore
             return result.ExitCode == 0 && result.ConsoleOutput.Contains(package);
         }
 
-        public async Task<WinGetManagerListResult> ListPackageAsync(string package, CancellationToken cancellationToken = default)
+        public async Task<PackageManagerListResult> ListPackageAsync(string package, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(package))
             {
                 throw new ArgumentException($"'{nameof(package)}' cannot be null or whitespace.", nameof(package));
             }
 
-            var result = await winGetRunner.RunWinGetAsync($"list --exact --id {package}", cancellationToken).ConfigureAwait(false);
+            var result = await winGet.RunWinGetAsync($"list --exact --id {package}", cancellationToken).ConfigureAwait(false);
 
             if (LogWinGetCalls)
             {
@@ -60,7 +60,7 @@ namespace WinGetUpdCore
                 }
             }
 
-            return new WinGetManagerListResult(package, installed, updatable);
+            return new PackageManagerListResult(package, installed, updatable);
         }
 
         public async Task<bool> UpgradePackageAsync(string package, CancellationToken cancellationToken = default)
@@ -74,7 +74,7 @@ namespace WinGetUpdCore
 
             var timeout = TimeSpan.FromMinutes(30);
 
-            var result = await winGetRunner.RunWinGetAsync($"upgrade --exact --id {package}", timeout, cancellationToken).ConfigureAwait(false);
+            var result = await winGet.RunWinGetAsync($"upgrade --exact --id {package}", timeout, cancellationToken).ConfigureAwait(false);
 
             if (LogWinGetCalls)
             {

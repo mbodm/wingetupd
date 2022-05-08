@@ -4,20 +4,18 @@
     {
         private readonly SemaphoreSlim semaphoreSlim = new(1, 1);
 
-        private readonly string logFile;
-
         public FileLogger(string logFile)
         {
-            this.logFile = logFile ?? throw new ArgumentNullException(nameof(logFile));
+            LogFile = logFile ?? throw new ArgumentNullException(nameof(logFile));
         }
 
-        public string LogFile => logFile;
+        public string LogFile { get; }
 
         public async Task<bool> CanWriteLogFileAsync(CancellationToken cancellationToken = default)
         {
             try
             {
-                await File.WriteAllTextAsync(logFile, string.Empty, cancellationToken).ConfigureAwait(false);
+                await File.WriteAllTextAsync(LogFile, string.Empty, cancellationToken).ConfigureAwait(false);
 
                 return true;
             }
@@ -53,7 +51,7 @@
 
             try
             {
-                await File.AppendAllLinesAsync(logFile, lines, cancellationToken).ConfigureAwait(false);
+                await File.AppendAllLinesAsync(LogFile, lines, cancellationToken).ConfigureAwait(false);
             }
             finally
             {

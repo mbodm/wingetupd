@@ -8,8 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WinGet\WinGet.csproj" />
+    <ProjectReference Include="..\WinGetUpdConfig\WinGetUpdConfig.csproj" />
     <ProjectReference Include="..\WinGetUpdLogging\WinGetUpdLogging.csproj" />
+    <ProjectReference Include="..\WinGetUpdPackageManagement\WinGetUpdPackageManagement.csproj" />
+    <ProjectReference Include="..\WinGetUpdProcessHandling\WinGetUpdProcessHandling.csproj" />
   </ItemGroup>
 
 </Project>

@@ -3,10 +3,12 @@
 // https://devblogs.microsoft.com/dotnet/configureawait-faq/
 // https://stackoverflow.com/questions/25817703/configureawaitfalse-not-needed-in-console-win-service-apps-right
 
-using WinGet;
 using WinGetUpd;
+using WinGetUpdConfig;
 using WinGetUpdCore;
 using WinGetUpdLogging;
+using WinGetUpdPackageManagement;
+using WinGetUpdProcessHandling;
 
 Console.WriteLine();
 Console.WriteLine($"{ProgramData.AppName} v{ProgramData.AppVersion} (by MBODM {ProgramData.AppDate})");
@@ -24,9 +26,9 @@ try
 {
     var fileLogger = new FileLogger(ProgramData.LogFilePath);
     var packageFileReader = new PackageFileReader(ProgramData.PkgFilePath);
-    var winGetRunner = new WinGetRunner();
-    var winGetManager = new WinGetManager(winGetRunner, fileLogger);
-    var businessLogic = new BusinessLogic(fileLogger, packageFileReader, winGetRunner, winGetManager);
+    var winGet = new WinGet();
+    var packageManager = new PackageManager(winGet, fileLogger);
+    var businessLogic = new BusinessLogic(winGet, fileLogger, packageManager, packageFileReader);
 
     await businessLogic.InitAsync(!ProgramParams.NoLog);
 
@@ -86,7 +88,7 @@ catch (Exception e)
         case BusinessLogicException:
             Console.WriteLine($"Error: {e.Message}");
             break;
-        case WinGetRunnerException:
+        case WinGetException:
             ProgramHelper.ShowWinGetError(e.Message, ProgramData.LogFileName);
             break;
         default:

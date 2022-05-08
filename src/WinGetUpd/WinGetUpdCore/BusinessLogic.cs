@@ -1,5 +1,7 @@
-﻿using WinGet;
+﻿using WinGetUpdConfig;
 using WinGetUpdLogging;
+using WinGetUpdPackageManagement;
+using WinGetUpdProcessHandling;
 
 // The word 'package' is used synonym for 'WinGet package ID' in the whole project,
 // since everything package-related will always be based on WinGet package ID here.
@@ -10,30 +12,35 @@ namespace WinGetUpdCore
     {
         private bool isInitialized;
 
+        private readonly IWinGet winGet;
         private readonly IFileLogger fileLogger;
+        private readonly IPackageManager packageManager;
         private readonly IPackageFileReader packageFileReader;
-        private readonly IWinGetRunner winGetRunner;
-        private readonly IWinGetManager winGetManager;
 
-        public BusinessLogic(IFileLogger fileLogger, IPackageFileReader packageFileReader, IWinGetRunner winGetRunner, IWinGetManager winGetManager)
+        public BusinessLogic(IWinGet winGet, IFileLogger fileLogger, IPackageManager packageManager, IPackageFileReader packageFileReader)
         {
+            this.winGet = winGet ?? throw new ArgumentNullException(nameof(winGet));
             this.fileLogger = fileLogger ?? throw new ArgumentNullException(nameof(fileLogger));
+            this.packageManager = packageManager ?? throw new ArgumentNullException(nameof(packageManager));
             this.packageFileReader = packageFileReader ?? throw new ArgumentNullException(nameof(packageFileReader));
-            this.winGetRunner = winGetRunner ?? throw new ArgumentNullException(nameof(winGetRunner));
-            this.winGetManager = winGetManager ?? throw new ArgumentNullException(nameof(winGetManager));
         }
 
         /// <summary>
-        /// Initializes BusinessLogic (call is reentrant)
+        /// Asynchronously initializes BusinessLogic (call is reentrant).
         /// </summary>
-        /// <param name="writeLogFile">Boolean value indicating if this module will write a log file</param>
-        /// <param name="cancellationToken">Typical TAP cancellation token pattern for task cancellation</param>
-        /// <returns>Task</returns>
+        /// <param name="writeLogFile">A boolean value, indicating if this module will create a log file.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+        /// <returns>A task.</returns>
         /// <exception cref="BusinessLogicException"></exception>
         public async Task InitAsync(bool writeLogFile, CancellationToken cancellationToken = default)
         {
             if (!isInitialized)
             {
+                if (!winGet.WinGetIsInstalled)
+                {
+                    throw new BusinessLogicException("It seems WinGet is not installed on this machine.");
+                }
+
                 if (writeLogFile)
                 {
                     if (!await fileLogger.CanWriteLogFileAsync(cancellationToken).ConfigureAwait(false))
@@ -44,6 +51,8 @@ namespace WinGetUpdCore
                     }
                 }
 
+                packageManager.LogWinGetCalls = writeLogFile;
+
                 if (!packageFileReader.PackageFileExists)
                 {
                     var packageFile = Path.GetFileName(packageFileReader.PackageFile);
@@ -51,22 +60,15 @@ namespace WinGetUpdCore
                     throw new BusinessLogicException($"The package-file ('{packageFile}') not exists.");
                 }
 
-                if (!winGetRunner.WinGetIsInstalled)
-                {
-                    throw new BusinessLogicException("It seems WinGet is not installed on this machine.");
-                }
-
-                winGetManager.LogWinGetCalls = writeLogFile;
-
                 isInitialized = true;
             }
         }
 
         /// <summary>
-        /// Get entries from package file
+        /// Asynchronously gets entries from package file.
         /// </summary>
-        /// <param name="cancellationToken">Typical TAP cancellation token pattern for task cancellation</param>
-        /// <returns>List of WinGet package id entries from package file</returns>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+        /// <returns>A task that represents the WinGet package id entries from package file.</returns>
         public async Task<IEnumerable<string>> GetPackageFileEntriesAsync(CancellationToken cancellationToken = default)
         {
             var entries = await packageFileReader.ReadPackageFileAsync(cancellationToken).ConfigureAwait(false);
@@ -80,12 +82,12 @@ namespace WinGetUpdCore
         }
 
         /// <summary>
-        /// Analyzes every package in a list of given packages
+        /// Asynchronously analyzes every package in a list of given packages.
         /// </summary>
-        /// <param name="packages">List of WinGet package id´s</param>
-        /// <param name="progress">Typical TAP progress handler pattern for progressing every step</param>
-        /// <param name="cancellationToken">Typical TAP cancellation token pattern for task cancellation</param>
-        /// <returns>List of package infos (containing a package info for every analyzed package)</returns>
+        /// <param name="packages">A list of WinGet package id´s.</param>
+        /// <param name="progress">The typical TAP-Pattern progress handler, to get notified about every single step.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+        /// <returns>A task that represents a list of package infos, containing one package info for every analyzed package.</returns>
         public async Task<IEnumerable<PackageInfo>> AnalyzePackagesAsync(
             IEnumerable<string> packages,
             IProgress<PackageProgressData>? progress = default,
@@ -130,12 +132,12 @@ namespace WinGetUpdCore
         }
 
         /// <summary>
-        /// Updates every WinGet package on computer listed as 'updatable' in a given list of package infos
+        /// Asynchronously updates every WinGet package that is listed as 'updatable' in a given list of package infos.
         /// </summary>
-        /// <param name="packageInfos">List of package infos returned by AnalyzePackagesAsync() method</param>
-        /// <param name="progress">Typical TAP progress handler pattern for progressing every step</param>
-        /// <param name="cancellationToken">Typical TAP cancellation token pattern for task cancellation</param>
-        /// <returns>List of WinGet package id´s (containing a WinGet package id for every updated WinGet package)</returns>
+        /// <param name="packageInfos">The list of package infos, returned by <see cref="AnalyzePackagesAsync"/> method.</param>
+        /// <param name="progress">The typical TAP-Pattern progress handler, to get notified about every single step.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+        /// <returns>A task that represents a list of WinGet package id´s, containing one WinGet package id for every updated WinGet package.</returns>
         public async Task<IEnumerable<string>> UpdatePackagesAsync(
             IEnumerable<PackageInfo> packageInfos,
             IProgress<PackageProgressData>? progress = default,
@@ -182,7 +184,7 @@ namespace WinGetUpdCore
             IProgress<PackageProgressData>? progress,
             CancellationToken cancellationToken)
         {
-            var valid = await winGetManager.SearchPackageAsync(package, cancellationToken).ConfigureAwait(false);
+            var valid = await packageManager.SearchPackageAsync(package, cancellationToken).ConfigureAwait(false);
             if (!valid)
             {
                 Report(progress, package, PackageProgressStatus.PackageNotValid);
@@ -192,7 +194,7 @@ namespace WinGetUpdCore
 
             Report(progress, package, PackageProgressStatus.PackageValid);
 
-            var listResult = await winGetManager.ListPackageAsync(package, cancellationToken).ConfigureAwait(false);
+            var listResult = await packageManager.ListPackageAsync(package, cancellationToken).ConfigureAwait(false);
             if (!listResult.IsInstalled)
             {
                 Report(progress, package, PackageProgressStatus.PackageNotInstalled);
@@ -246,7 +248,7 @@ namespace WinGetUpdCore
 
             Report(progress, packageInfo.Package, PackageProgressStatus.PackageUpdatable);
 
-            var updated = await winGetManager.UpgradePackageAsync(packageInfo.Package, cancellationToken).ConfigureAwait(false);
+            var updated = await packageManager.UpgradePackageAsync(packageInfo.Package, cancellationToken).ConfigureAwait(false);
             if (!updated)
             {
                 Report(progress, packageInfo.Package, PackageProgressStatus.PackageNotUpdated);
