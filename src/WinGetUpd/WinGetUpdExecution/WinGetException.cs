@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace WinGetUpdProcessHandling
+namespace WinGetUpdExecution
 {
     [Serializable]
     public class WinGetException : Exception

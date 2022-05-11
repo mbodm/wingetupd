@@ -1,4 +1,4 @@
-﻿namespace WinGetUpdProcessHandling
+﻿namespace WinGetUpdExecution
 {
     public interface IWinGet
     {

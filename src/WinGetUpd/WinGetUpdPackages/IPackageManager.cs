@@ -1,4 +1,4 @@
-﻿namespace WinGetUpdPackageManagement
+﻿namespace WinGetUpdPackages
 {
     public interface IPackageManager
     {

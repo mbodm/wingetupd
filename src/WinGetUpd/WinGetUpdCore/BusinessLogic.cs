@@ -1,10 +1,10 @@
-﻿using WinGetUpdConfig;
-using WinGetUpdLogging;
-using WinGetUpdPackageManagement;
-using WinGetUpdProcessHandling;
-
-// The word 'package' is used synonym for 'WinGet package ID' in the whole project,
+﻿// The word 'package' is used synonym for 'WinGet package ID' in the whole project,
 // since everything package-related will always be based on WinGet package ID here.
+
+using WinGetUpdConfig;
+using WinGetUpdExecution;
+using WinGetUpdLogging;
+using WinGetUpdPackages;
 
 namespace WinGetUpdCore
 {

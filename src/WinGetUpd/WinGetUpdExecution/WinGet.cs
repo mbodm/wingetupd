@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Text;
 
-namespace WinGetUpdProcessHandling
+namespace WinGetUpdExecution
 {
     public sealed class WinGet : IWinGet
     {

@@ -1,7 +1,7 @@
-﻿using WinGetUpdLogging;
-using WinGetUpdProcessHandling;
+﻿using WinGetUpdExecution;
+using WinGetUpdLogging;
 
-namespace WinGetUpdPackageManagement
+namespace WinGetUpdPackages
 {
     public sealed class PackageManager : IPackageManager
     {
@@ -72,7 +72,7 @@ namespace WinGetUpdPackageManagement
 
             // Since some software/packages can take a good amount of time while updating, timeout is adjusted accordingly here.
 
-            var timeout = TimeSpan.FromMinutes(30);
+            var timeout = TimeSpan.FromMinutes(60);
 
             var result = await winGet.RunWinGetAsync($"upgrade --exact --id {package}", timeout, cancellationToken).ConfigureAwait(false);
 

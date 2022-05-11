@@ -24,7 +24,11 @@
   </Target>
 
   <ItemGroup>
+    <ProjectReference Include="..\WinGetUpdConfig\WinGetUpdConfig.csproj" />
     <ProjectReference Include="..\WinGetUpdCore\WinGetUpdCore.csproj" />
+    <ProjectReference Include="..\WinGetUpdExecution\WinGetUpdExecution.csproj" />
+    <ProjectReference Include="..\WinGetUpdLogging\WinGetUpdLogging.csproj" />
+    <ProjectReference Include="..\WinGetUpdPackages\WinGetUpdPackages.csproj" />
   </ItemGroup>
 
 </Project>

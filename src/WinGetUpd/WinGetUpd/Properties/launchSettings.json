@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "WinGetUpd": {
-      "commandName": "Project",
-      "commandLineArgs": "--no-confirm"
-    }
-  }
-}
