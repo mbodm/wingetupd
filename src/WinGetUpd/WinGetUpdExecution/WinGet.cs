@@ -94,7 +94,17 @@ namespace WinGetUpdExecution
                 // https://github.com/dotnet/runtime/issues/20824
                 // https://andrewlock.net/cancelling-await-calls-in-dotnet-6-with-task-waitasync
 
-                consoleOutput = await process.StandardOutput.ReadToEndAsync().WaitAsync(ctsLinked.Token).ConfigureAwait(false);
+                // consoleOutput = await process.StandardOutput.ReadToEndAsync().WaitAsync(ctsLinked.Token).ConfigureAwait(false);
+
+                // Since above used WaitAsync() method will run in the background, until the encapsulated process ends,
+                // i decided against it. Instead of that approach, i´m now using the BaseStream´s CopyToAsync() method,
+                // together with a MemoryStream, since the CopyToAsync() method has CancellationToken support. As said
+                // above, after the release of .NET 7 i will start using StreamReader´s ReadToEndAsync() method anyway.
+
+                using var memoryStream = new MemoryStream();
+                await process.StandardOutput.BaseStream.CopyToAsync(memoryStream, ctsLinked.Token).ConfigureAwait(false);
+                consoleOutput = Encoding.UTF8.GetString(memoryStream.ToArray());
+                memoryStream.Close();
 
                 // Since .NET 6 release WaitForExitAsync() waits for redirected Output/Error.
                 // Have a look at the comments of the GitHub issue, linked in this blog post:
