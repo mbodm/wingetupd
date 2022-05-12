@@ -31,19 +31,18 @@ There are not any special requirements, besides having WinGet installed on your 
 - All internally used _WinGet_ calls are based on exact WinGet package-id´s (_WinGet_ parameters: `--exact --id`).
 - _Why not just use `winget --upgrade-all` ?_ Well, often you don´t wanna update everything (i.e. runtimes).
 - _Why not just use some .bat or .ps script ?_ Well, `wingetupd.exe` is maybe a better "out of the box" approach.
-- `wingetupd.exe` asks the user, if it should update the updatable packages.
-- You can use the `--no-confirm` parameter to automatically update all updatable packages, without asking for a confirmation (`wingetupd.exe --no-confirm`).
-- `wingetupd.exe` asks the user for pressing a key, before it exits (for an easier usage, when started by doubleclick in _Windows Explorer_).
-- By using the `--no-confirm` parameter this confirmation is also omitted (useful for script integration).
+- `wingetupd.exe` asks the user if it should update the updatable packages. So the user has to confirm this.
+- You can use the `--no-confirm` parameter to automatically update all updatable packages, without asking for confirmation (`wingetupd.exe --no-confirm`).
+- The `--no-confirm` parameter is useful when running `wingetupd.exe` in scripts.
 - At time of writing, the package-id _Zoom.Zoom_ seems to missmatch the corresponding installed _Zoom_ package.
 - I assume the WinGet-Team will correct this wrong behaviour in their [packages repository](https://github.com/microsoft/winget-pkgs/tree/master/manifests) soon.
-- `wingetupd.exe` is written in C#, is using .NET 6 and is built with _Visual Studio 2022_.
-- If you wanna compile the source by your own, you just need _Visual Studio 2022 Community_ (or one of the other editions). Nothing else.
-- The release-binaries are compiled as _self-contained_ .NET 6 .exe files, with "_x64 Windows_" as target.
+- `wingetupd.exe` is written in C#, is using .NET 6 and is built with Visual Studio 2022.
+- If you wanna compile the source by your own, you just need Visual Studio 2022 Community (or one of the other editions). Nothing else.
+- The release-binaries are compiled as _self-contained_ .NET 6 .exe files, with "x64 Windows" as target.
 - _Self-contained_: That´s the reason why the binariy-size is 15 MB and why there is no framework requirement.
-- The _.csproj_ source file contains some _MSBUILD_ task, to create a zip file, when publishing with _Visual Studio 2022_.
-- GitHub´s default _.gitignore_ excludes _Visual Studio 2022_ publish-profiles, so i added a [publish-settings screenshot](img/screenshot-publish-settings.png) to repo.
-- The source is using an asynchronous TAP pattern approach, including "_Progress&lt;T&gt;_" and "_async/await_" concepts.
+- The _.csproj_ source file contains some MSBUILD task, to create a zip file, when publishing with Visual Studio 2022.
+- GitHub´s default _.gitignore_ excludes Visual Studio 2022 publish-profiles, so i added a [publish-settings screenshot](img/screenshot-publish-settings.png) to repo.
+- The source is using an asynchronous TAP pattern approach, including `Progress&lt;T&gt;` and `async/await` concepts.
 - `wingetupd.exe` just exists, because i am lazy and made my life a bit easier, by writing this tool. :grin:
 
 #### Have fun.
