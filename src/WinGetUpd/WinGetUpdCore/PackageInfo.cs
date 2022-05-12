@@ -1,4 +1,4 @@
 ﻿namespace WinGetUpdCore
 {
-    public sealed record PackageInfo(string Package, bool IsValid, bool IsInstalled, bool IsUpdatable);
+    public sealed record PackageInfo(string Package, bool IsValid, bool IsInstalled, bool IsUpdatable, string InstalledVersion, string UpdateVersion);
 }

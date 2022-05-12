@@ -208,12 +208,12 @@ namespace WinGetUpdCore
             {
                 Report(progress, package, PackageProgressStatus.PackageNotUpdatable);
 
-                return ValidInstalledButNotUpdatable(package);
+                return ValidInstalledButNotUpdatable(package, listResult.InstalledVersion);
             }
 
             Report(progress, package, PackageProgressStatus.PackageUpdatable);
 
-            return ValidInstalledAndUpdatable(package);
+            return ValidInstalledAndUpdatable(package, listResult.InstalledVersion, listResult.UpdateVersion);
         }
 
         private async Task<(string package, bool updated)> UpdatePackageAsync(
@@ -265,16 +265,16 @@ namespace WinGetUpdCore
             progress?.Report(new PackageProgressData(package, status));
 
         private static PackageInfo NotValid(string package) =>
-            new(package, false, false, false);
+            new(package, false, false, false, string.Empty, string.Empty);
 
         private static PackageInfo ValidButNotInstalled(string package) =>
-            new(package, true, false, false);
+            new(package, true, false, false, string.Empty, string.Empty);
 
-        private static PackageInfo ValidInstalledButNotUpdatable(string package) =>
-            new(package, true, true, false);
+        private static PackageInfo ValidInstalledButNotUpdatable(string package, string installedVersion) =>
+            new(package, true, true, false, installedVersion, string.Empty);
 
-        private static PackageInfo ValidInstalledAndUpdatable(string package) =>
-            new(package, true, true, true);
+        private static PackageInfo ValidInstalledAndUpdatable(string package, string installedVersion, string updateVersion) =>
+            new(package, true, true, true, installedVersion, updateVersion);
 
         private static (string package, bool updated) NotUpdated(PackageInfo packageInfo) =>
             (packageInfo.Package, false);

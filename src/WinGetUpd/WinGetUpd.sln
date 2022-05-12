@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinGetUpdLogging", "WinGetU
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinGetUpdPackages", "WinGetUpdPackages\WinGetUpdPackages.csproj", "{BFF982F1-7A74-40C7-AAB0-84E67CEFC466}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinGetUpdParsing", "WinGetUpdParsing\WinGetUpdParsing.csproj", "{7849B5D5-C698-434E-9FDE-9CABDF90A2BD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{BFF982F1-7A74-40C7-AAB0-84E67CEFC466}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFF982F1-7A74-40C7-AAB0-84E67CEFC466}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFF982F1-7A74-40C7-AAB0-84E67CEFC466}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7849B5D5-C698-434E-9FDE-9CABDF90A2BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7849B5D5-C698-434E-9FDE-9CABDF90A2BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7849B5D5-C698-434E-9FDE-9CABDF90A2BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7849B5D5-C698-434E-9FDE-9CABDF90A2BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

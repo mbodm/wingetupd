@@ -9,6 +9,7 @@ using WinGetUpdCore;
 using WinGetUpdExecution;
 using WinGetUpdLogging;
 using WinGetUpdPackages;
+using WinGetUpdParsing;
 
 Console.WriteLine();
 Console.WriteLine($"{ProgramData.AppName} v{ProgramData.AppVersion} (by MBODM {ProgramData.AppDate})");
@@ -27,7 +28,8 @@ try
     var fileLogger = new FileLogger(ProgramData.LogFilePath);
     var packageFileReader = new PackageFileReader(ProgramData.PkgFilePath);
     var winGet = new WinGet();
-    var packageManager = new PackageManager(winGet, fileLogger);
+    var winGetOutputParser = new WinGetOutputParser();
+    var packageManager = new PackageManager(winGet, fileLogger, winGetOutputParser);
     var businessLogic = new BusinessLogic(winGet, fileLogger, packageManager, packageFileReader);
 
     await businessLogic.InitAsync(!ProgramParams.NoLog);

@@ -1,5 +1,6 @@
 ﻿using WinGetUpdExecution;
 using WinGetUpdLogging;
+using WinGetUpdParsing;
 
 namespace WinGetUpdPackages
 {
@@ -7,11 +8,13 @@ namespace WinGetUpdPackages
     {
         private readonly IWinGet winGet;
         private readonly IFileLogger fileLogger;
+        private readonly IWinGetOutputParser winGetOutputParser;
 
-        public PackageManager(IWinGet winGet, IFileLogger fileLogger)
+        public PackageManager(IWinGet winGet, IFileLogger fileLogger, IWinGetOutputParser winGetOutputParser)
         {
             this.winGet = winGet ?? throw new ArgumentNullException(nameof(winGet));
             this.fileLogger = fileLogger ?? throw new ArgumentNullException(nameof(fileLogger));
+            this.winGetOutputParser = winGetOutputParser ?? throw new ArgumentNullException(nameof(winGetOutputParser));
         }
 
         public bool LogWinGetCalls { get; set; } = true;
@@ -47,20 +50,16 @@ namespace WinGetUpdPackages
                 await fileLogger.LogWinGetCallAsync(result.ProcessCall, result.ConsoleOutput, cancellationToken).ConfigureAwait(false);
             }
 
-            var installed = false;
-            var updatable = false;
-
             if (result.ExitCode == 0 && result.ConsoleOutput.Contains(package))
             {
-                installed = true;
+                // If we are here, the package is at least installed.
 
-                if (result.ConsoleOutput.Contains(" Available ") || result.ConsoleOutput.Contains(" Verfügbar "))
-                {
-                    updatable = true;
-                }
+                var parsed = winGetOutputParser.ParseListOutput(result.ConsoleOutput);
+
+                return new PackageManagerListResult(package, true, parsed.IsUpdatable, parsed.OldVersion, parsed.NewVersion);
             }
 
-            return new PackageManagerListResult(package, installed, updatable);
+            return new PackageManagerListResult(package, false, false, string.Empty, string.Empty);
         }
 
         public async Task<bool> UpgradePackageAsync(string package, CancellationToken cancellationToken = default)

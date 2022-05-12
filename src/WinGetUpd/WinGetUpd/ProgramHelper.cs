@@ -58,7 +58,7 @@ namespace WinGetUpd
         {
             var validPackages = packageInfos.Where(packageInfo => packageInfo.IsValid).Select(packageInfo => packageInfo.Package);
             var installedPackages = packageInfos.Where(packageInfo => packageInfo.IsInstalled).Select(packageInfo => packageInfo.Package);
-            var updatablePackages = packageInfos.Where(packageInfo => packageInfo.IsUpdatable).Select(packageInfo => packageInfo.Package);
+            var updatablePackages = packageInfos.Where(packageInfo => packageInfo.IsUpdatable);
 
             Console.WriteLine($"{packageInfos.Count()} package-file {EntryOrEntries(packageInfos)} processed.");
 
@@ -71,7 +71,7 @@ namespace WinGetUpd
             if (updatablePackages.Any())
             {
                 Console.WriteLine(":");
-                ListPackages(updatablePackages);
+                ListUpdateablePackages(updatablePackages);
             }
             else
             {
@@ -163,7 +163,10 @@ namespace WinGetUpd
         private static string SingularOrPlural<T>(IEnumerable<T> enumerable, string singular, string plural) =>
             enumerable.Count() == 1 ? singular : plural;
 
-        private static void ListPackages(IEnumerable<string> packages) => packages.ToList().ForEach(package =>
-            Console.WriteLine($"  - {package}"));
+        private static void ListPackages(IEnumerable<string> packages) =>
+            packages.ToList().ForEach(package => Console.WriteLine($"  - {package}"));
+
+        private static void ListUpdateablePackages(IEnumerable<PackageInfo> packageInfos) =>
+            packageInfos.ToList().ForEach(pi => Console.WriteLine($"  - {pi.Package} {pi.InstalledVersion} => {pi.UpdateVersion}"));
     }
 }

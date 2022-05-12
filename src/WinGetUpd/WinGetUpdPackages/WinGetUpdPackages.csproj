@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\WinGetUpdExecution\WinGetUpdExecution.csproj" />
     <ProjectReference Include="..\WinGetUpdLogging\WinGetUpdLogging.csproj" />
+    <ProjectReference Include="..\WinGetUpdParsing\WinGetUpdParsing.csproj" />
   </ItemGroup>
 
 </Project>
