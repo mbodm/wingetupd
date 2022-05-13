@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>1.0.8</Version>
+    <Version>2.0.0</Version>
   </PropertyGroup>
 
   <Target Name="My-Build-Event" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
@@ -24,12 +24,12 @@
   </Target>
 
   <ItemGroup>
-    <ProjectReference Include="..\WinGetUpdConfig\WinGetUpdConfig.csproj" />
-    <ProjectReference Include="..\WinGetUpdCore\WinGetUpdCore.csproj" />
-    <ProjectReference Include="..\WinGetUpdExecution\WinGetUpdExecution.csproj" />
-    <ProjectReference Include="..\WinGetUpdLogging\WinGetUpdLogging.csproj" />
-    <ProjectReference Include="..\WinGetUpdPackages\WinGetUpdPackages.csproj" />
-    <ProjectReference Include="..\WinGetUpdParsing\WinGetUpdParsing.csproj" />
+    <ProjectReference Include="..\WinGetUpd.Config\WinGetUpd.Config.csproj" />
+    <ProjectReference Include="..\WinGetUpd.Core\WinGetUpd.Core.csproj" />
+    <ProjectReference Include="..\WinGetUpd.Execution\WinGetUpd.Execution.csproj" />
+    <ProjectReference Include="..\WinGetUpd.Logging\WinGetUpd.Logging.csproj" />
+    <ProjectReference Include="..\WinGetUpd.Packages\WinGetUpd.Packages.csproj" />
+    <ProjectReference Include="..\WinGetUpd.Parsing\WinGetUpd.Parsing.csproj" />
   </ItemGroup>
 
 </Project>

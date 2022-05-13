@@ -5,7 +5,7 @@ namespace WinGetUpd
     internal static class ProgramData
     {
         public static string AppName => "wingetupd";
-        public static string AppDate => "2022-05-12";
+        public static string AppDate => "2022-05-13";
         public static string AppVersion => Assembly.
             GetEntryAssembly()?.
             GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.

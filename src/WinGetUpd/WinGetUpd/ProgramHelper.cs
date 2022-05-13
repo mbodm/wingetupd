@@ -1,4 +1,4 @@
-﻿using WinGetUpdCore;
+﻿using WinGetUpd.Core;
 
 namespace WinGetUpd
 {

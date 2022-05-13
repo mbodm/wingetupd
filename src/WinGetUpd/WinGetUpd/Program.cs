@@ -4,12 +4,12 @@
 // https://stackoverflow.com/questions/25817703/configureawaitfalse-not-needed-in-console-win-service-apps-right
 
 using WinGetUpd;
-using WinGetUpdConfig;
-using WinGetUpdCore;
-using WinGetUpdExecution;
-using WinGetUpdLogging;
-using WinGetUpdPackages;
-using WinGetUpdParsing;
+using WinGetUpd.Config;
+using WinGetUpd.Core;
+using WinGetUpd.Execution;
+using WinGetUpd.Logging;
+using WinGetUpd.Packages;
+using WinGetUpd.Parsing;
 
 Console.WriteLine();
 Console.WriteLine($"{ProgramData.AppName} v{ProgramData.AppVersion} (by MBODM {ProgramData.AppDate})");
