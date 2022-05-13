@@ -17,7 +17,7 @@
         Task<WinGetResult> RunWinGetAsync(string parameters, CancellationToken cancellationToken = default);
 
         /// <inheritdoc/>
-        /// <param name="timeout">The amount of time to wait for WinGet process, before process gets canceled. Default implementation is 15 seconds.</param>
+        /// <param name="timeout">The amount of time to wait for WinGet process, before process gets canceled. Default implementation is 30 seconds.</param>
         Task<WinGetResult> RunWinGetAsync(string parameters, TimeSpan timeout, CancellationToken cancellationToken = default);
     }
 }

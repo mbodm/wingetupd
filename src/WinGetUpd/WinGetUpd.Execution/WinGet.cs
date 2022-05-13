@@ -7,7 +7,7 @@ namespace WinGetUpd.Execution
     public sealed class WinGet : IWinGet
     {
         private const string WinGetApp = "winget.exe";
-        private const double WinGetAppTimeoutInSeconds = 15;
+        private const double WinGetAppTimeoutInSeconds = 30;
 
         public bool WinGetIsInstalled
         {
