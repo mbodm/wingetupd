@@ -72,7 +72,7 @@ try
         else
         {
             Console.Write("Updating ......");
-            var updatedPackages = await businessLogic.UpdatePackagesAsync(packageInfos, new PackageProgress(_ => Console.Write("...")));
+            var updatedPackages = await businessLogic.UpdatePackagesAsync(packageInfos, new PackageProgress(_ => Console.Write(".")));
             Console.WriteLine(" finished.");
             ProgramHelper.ShowUpdatedPackages(updatedPackages);
         }

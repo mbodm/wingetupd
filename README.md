@@ -48,6 +48,7 @@ There are not any special requirements, besides having WinGet installed on your 
 - Q: _Why this tool and not just some .bat or .ps script ?_ A: Maybe this is some better "out of the box" approach.
 - At time of writing, the package-id _Zoom.Zoom_ seems to missmatch the corresponding installed _Zoom_ package.
 - I assume the WinGet-Team will correct this wrong behaviour in their [packages repository](https://github.com/microsoft/winget-pkgs/tree/master/manifests) soon.
+- WinGet doesn´t support being called in parallel. If you fork: Don´t use concurrency, like `Task.WhenAll()`.
 - `wingetupd.exe` is written in C#, is using .NET 6 and is built with Visual Studio 2022.
 - If you wanna compile the source by your own, you just need Visual Studio 2022 (any edition). Nothing else.
 - The release-binaries are compiled as _self-contained_ .NET 6 .exe files, with "win-x64" as target.
