@@ -27,7 +27,7 @@ Btw: WinGet is imo a __fantastic__ piece of software, to manage all of your Wind
 
 `--no-confirm` prevents `wingetupd.exe` from asking the user for confirmation, if it should update the updatable packages. So you can use this parameter to automatically update all updatable packages, without asking for confirmation. This parameter is useful when running `wingetupd.exe` in scripts.
 
-`--help` shows the usage screen and listing the `wingetupd.exe` parameters.
+`--help` shows the usage screen and lists the `wingetupd.exe` parameters.
 
 ### Requirements
 There are not any special requirements, besides having WinGet installed on your machine. `wingetupd.exe` is just a typical command line _.exe_ file for Windows. Just download the newest release, from the [Releases](https://github.com/MBODM/wingetupd/releases) page, unzip and run it. All the releases are compiled for x64, assuming you are using some 64-bit Windows (and that's quite likely).
