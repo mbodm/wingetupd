@@ -48,7 +48,7 @@ There are not any special requirements, besides having WinGet installed on your 
 - At time of writing, the package-id _Zoom.Zoom_ seems to missmatch the corresponding installed _Zoom_ package.
 - I assume the WinGet-Team will correct this wrong behaviour in their [packages repository](https://github.com/microsoft/winget-pkgs/tree/master/manifests) soon.
 - `wingetupd.exe` is written in C#, is using .NET 6 and is built with Visual Studio 2022.
-- If you wanna compile the source by your own, you just need Visual Studio 2022 Community (or one of the other editions). Nothing else.
+- If you wanna compile the source by your own, you just need Visual Studio 2022 (any edition). Nothing else.
 - The release-binaries are compiled as _self-contained_ .NET 6 .exe files, with "win-x64" as target.
 - _Self-contained_: That´s the reason why the binariy-size is 15 MB and why there is no framework requirement.
 - The _.csproj_ source file contains some MSBUILD task, to create a zip file, when publishing with Visual Studio 2022.
