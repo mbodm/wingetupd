@@ -13,7 +13,7 @@ When using WinGet to install and update Windows software, `wingetupd.exe` just w
 By the way: WinGet is imo a __fantastic__ piece of software, to manage all of your Windows applications and keep your Windows software up2date. Fat kudos :thumbsup: to Microsoft here!  For more information about WinGet itself, take a look at the [WinGet page](https://docs.microsoft.com/en-us/windows/package-manager/winget) or use your Google-Fu techniques.
 
 ### How it works
-- When started, `wingetupd.exe` searches for a so-called "package-file". The package-file is simply a file named _packages.txt_, located in the same folder as the `wingetupd.exe`. The package-file contains a list of WinGet package-id´s (__not__ package-names, this is important, see [Notes](#Notes) section below).
+- When started, `wingetupd.exe` searches for a so-called "package-file". The package-file is simply a file named _"packages.txt"_, located in the same folder as the `wingetupd.exe`. The package-file contains a list of WinGet package-id´s (__not__ package-names, this is important, see [Notes](#Notes) section below).
 - So, when `wingetupd.exe` is started and it founds a package-file, it just checks for each WinGet package-id listed in the package-file, if that package exists, if that package is installed and if that package has an update. If so, it updates the package. `wingetupd.exe` does all of this, by using WinGet internally.
 - This means: All you have to do, is to edit the package-file and insert the WinGet package-id´s of your installed Windows applications you want to update. When `wingetupd.exe` is executed, it will try to update all that packages (aka "your Windows applications").
 
