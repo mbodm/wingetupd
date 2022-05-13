@@ -6,7 +6,7 @@ A tiny command line tool, using [WinGet](https://docs.microsoft.com/en-us/window
 ### What it is
 It´s a simple and tiny tool named `wingetupd.exe`, used on the Windows command line. The tool works on top of the popular Windows-App [WinGet](https://docs.microsoft.com/en-us/windows/package-manager/winget). The tool uses WinGet, to update a specific user-defined set of packages, on a Windows machine.
 
-When using WinGet to install and update Windows software, `wingetupd.exe` just wants to make your life a tiny bit easier, by updating all your software (or better said: a specific bunch of software) within a single call.
+When using WinGet to install and update Windows software, `wingetupd.exe` just wanna make your life a tiny bit easier, by updating all your software (or better said: a specific bunch of software) within a single call.
 
 `wingetupd.exe` is specifically __not__ designed to install packages, that actually aren´t already installed on your machine. It´s sole purpose is just to update your installed packages. Means: Before you can update some of your applications with this tool, you have to install them "by hand" or by using WinGet. In short: This tool can not (and want not) install any software. It´s just there for updating your already existing software.
 
