@@ -20,7 +20,7 @@ ProgramParams.Args = args;
 if (!ProgramParams.ArgsValid)
 {
     ProgramHelper.ShowUsage(ProgramData.AppFileName, !ProgramParams.ShowHelp);
-    ProgramHelper.ExitApp(1, false);
+    Environment.Exit(1);
 }
 
 try
@@ -47,14 +47,14 @@ try
     if (invalidPackages.Any())
     {
         ProgramHelper.ShowInvalidPackagesError(invalidPackages);
-        ProgramHelper.ExitApp(1, !ProgramParams.NoConfirm);
+        Environment.Exit(1);
     }
 
     var nonInstalledPackages = packageInfos.Where(packageInfo => !packageInfo.IsInstalled).Select(packageInfo => packageInfo.Package);
     if (nonInstalledPackages.Any())
     {
         ProgramHelper.ShowNonInstalledPackagesError(nonInstalledPackages);
-        ProgramHelper.ExitApp(1, !ProgramParams.NoConfirm);
+        Environment.Exit(1);
     }
 
     ProgramHelper.ShowSummary(packageInfos);
@@ -81,7 +81,7 @@ try
     }
 
     ProgramHelper.ShowGoodByeMessage();
-    ProgramHelper.ExitApp(0, !ProgramParams.NoConfirm);
+    Environment.Exit(0);
 }
 catch (Exception e)
 {
@@ -100,5 +100,5 @@ catch (Exception e)
             break;
     }
 
-    ProgramHelper.ExitApp(1, !ProgramParams.NoConfirm);
+    Environment.Exit(1);
 }
