@@ -41,6 +41,8 @@ There are not any special requirements, besides having WinGet installed on your 
 - All internally used _WinGet_ calls are based on exact WinGet package-id´s (_WinGet_ parameters: `--exact --id`).
 - Use `winget search`, to find out the package-id´s (you put into the package-file) of your installed applications.
 - Use the `--no-confirm` parameter, to automatically update packages, if you wanna run `wingetupd.exe` inside a script.
+- `wingetupd.exe` uses a timeout of 30 seconds, when waiting for WinGet to finish.
+- Since some installations can take rather much time, while the update process this timeout is increased to 60 minutes.
 - _Why not just use `winget --upgrade-all` ?_ Well, often you don´t wanna update everything (i.e. runtimes).
 - _Why not just use some .bat or .ps script ?_ Well, `wingetupd.exe` is maybe a better "out of the box" approach.
 - At time of writing, the package-id _Zoom.Zoom_ seems to missmatch the corresponding installed _Zoom_ package.
