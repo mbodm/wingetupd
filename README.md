@@ -52,7 +52,7 @@ There are not any special requirements, besides having WinGet installed on your 
 - The release-binaries are compiled as _self-contained_ .NET 6 .exe files, with "win-x64" as target.
 - _Self-contained_: That´s the reason why the binariy-size is 15 MB and why there is no framework requirement.
 - The _.csproj_ source file contains some MSBUILD task, to create a zip file, when publishing with Visual Studio 2022.
-- GitHub´s default _.gitignore_ excludes Visual Studio 2022 publish-profiles, so i added a [publish-settings screenshot](img/screenshot-publish-settings.png) to repo.
+- GitHub´s default _.gitignore_ excludes Visual Studio publish-profiles, so i added a [publish-settings screenshot](img/screenshot-publish-settings.png) to repo.
 - The source is using an asynchronous TAP pattern approach, including `Progress&lt;T&gt;` and `async/await` concepts.
 - `wingetupd.exe` just exists, because i am lazy and made my life a bit easier, by writing this tool. :grin:
 
