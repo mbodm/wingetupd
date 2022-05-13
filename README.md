@@ -40,7 +40,7 @@ There are not any special requirements, besides having WinGet installed on your 
 - You can also use the `--no-log` parameter, to prevent the creation of the log file (`wingetupd.exe --no-log`).
 - All internally used WinGet calls are based on exact WinGet package-id´s (WinGet parameters: `--exact --id`).
 - Use `winget search`, to find out the package-id´s (you put into the package-file) of your installed applications.
-- Use the `--no-confirm` parameter, to automatically update packages, if you wanna run `wingetupd.exe` inside a script.
+- Use the `--no-confirm` parameter, to automatically update packages, if `wingetupd.exe` is used inside a script.
 - `wingetupd.exe` uses a timeout of 30 seconds, when waiting for WinGet to finish.
 - Since some installations can take rather much time, while the update process this timeout is increased to 60 minutes.
 - _Why not just use `winget --upgrade-all` ?_ Well, often you don´t wanna update everything (i.e. runtimes).
