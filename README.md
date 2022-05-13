@@ -33,7 +33,7 @@ By the way: WinGet is imo a __fantastic__ piece of software, to manage all of yo
 There are not any special requirements, besides having WinGet installed on your machine. `wingetupd.exe` is just a typical command line ".exe" file for Windows. Just download the newest release, from the [Releases](https://github.com/MBODM/wingetupd/releases) page, unzip and run it. All the releases are compiled for x64, assuming you are using some 64-bit Windows (and that's quite likely).
 
 ### Notes
-- When `wingetupd.exe` starts, it creates a log file named _wingetupd.log_ in the same folder.
+- When `wingetupd.exe` starts, it creates a log file named "wingetupd.log" in the same folder.
 - So keep in mind: That folder needs security permissions for writing files in it.
 - Some locations like _C:\\_ or _C:\ProgramFiles_ don´t have such security permissions (for a good reason).
 - If you don´t wanna run `wingetupd.exe` just from your Desktop, _C:\Users\USERNAME\AppData\Local_ is fine too.
