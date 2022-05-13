@@ -35,7 +35,7 @@ There are not any special requirements, besides having WinGet installed on your 
 ### Notes
 - When `wingetupd.exe` starts, it creates a log file named "wingetupd.log" in the same folder.
 - So keep in mind: That folder needs security permissions for writing files in it.
-- Some locations like _C:\\_ or _C:\ProgramFiles_ don´t have such security permissions (for a good reason).
+- Some locations like "C:\\" or "C:\ProgramFiles" don´t have such security permissions (for a good reason).
 - If you don´t wanna run `wingetupd.exe` just from your Desktop, _C:\Users\USERNAME\AppData\Local_ is fine too.
 - You can also use the `--no-log` parameter, to prevent the creation of the log file (`wingetupd.exe --no-log`).
 - All internally used _WinGet_ calls are based on exact WinGet package-id´s (_WinGet_ parameters: `--exact --id`).
