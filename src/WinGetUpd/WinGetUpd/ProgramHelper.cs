@@ -15,7 +15,7 @@ namespace WinGetUpd
             Console.WriteLine($"Usage: {exeFile} [--no-log] [--no-confirm]");
             Console.WriteLine();
             Console.WriteLine("  --no-log      Don´t create log file (useful when running from a folder without write permissions)");
-            Console.WriteLine("  --no-confirm  Don´t ask for any confirmation (useful for script integration)");
+            Console.WriteLine("  --no-confirm  Don´t ask for update confirmation (useful for script integration)");
             Console.WriteLine();
             Console.WriteLine("For more information have a look at the GitHub page (https://github.com/MBODM/wingetupd)");
         }
@@ -139,19 +139,6 @@ namespace WinGetUpd
             Console.WriteLine();
             Console.WriteLine("You can also find further information on the WinGet site: ");
             Console.WriteLine(winGetWebSite);
-        }
-
-        public static void ExitApp(int exitCode, bool showConfirm)
-        {
-            if (showConfirm)
-            {
-                Console.WriteLine();
-                Console.Write("Press any key to exit ... ");
-                Console.ReadKey(true);
-                Console.WriteLine();
-            }
-
-            Environment.Exit(exitCode);
         }
 
         private static string EntryOrEntries<T>(IEnumerable<T> enumerable) =>
