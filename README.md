@@ -30,7 +30,7 @@ By the way: WinGet is imo a __fantastic__ piece of software, to manage all of yo
 `--help` shows the usage screen and lists the `wingetupd.exe` parameters.
 
 ### Requirements
-There are not any special requirements, besides having WinGet installed on your machine. `wingetupd.exe` is just a typical command line .exe file for Windows. Just download the newest release, from the [Releases](https://github.com/MBODM/wingetupd/releases) page, unzip and run it. All the releases are compiled for x64, assuming you are using some 64-bit Windows (and that's quite likely).
+There are not any special requirements, besides having WinGet installed on your machine. `wingetupd.exe` is just a typical command line ".exe" file for Windows. Just download the newest release, from the [Releases](https://github.com/MBODM/wingetupd/releases) page, unzip and run it. All the releases are compiled for x64, assuming you are using some 64-bit Windows (and that's quite likely).
 
 ### Notes
 - When `wingetupd.exe` starts, it creates a log file named _wingetupd.log_ in the same folder.
