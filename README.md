@@ -23,14 +23,11 @@ Btw: WinGet is imo a __fantastic__ piece of software, to manage all of your Wind
 - `--no-confirm`
 - `--help`
 
-`--no-log`
-Prevents `wingetupd.exe` from writing a log file. The log file contains all the internally used WinGet calls and their output, so you can exactly see how WinGet was used. Sometimes you don´t wanna create a log file or `wingetupd.exe` resides in a folder that has no write permissions (see [Notes](#Notes) section below).
+`--no-log` prevents `wingetupd.exe` from writing a log file. The log file contains all the internally used WinGet calls and their output, so you can exactly see how WinGet was used. Sometimes you don´t wanna create a log file or `wingetupd.exe` resides in a folder that has no write permissions (see [Notes](#Notes) section below).
 
-`--no-confirm`
-`wingetupd.exe` asks the user if it should update the updatable packages. So the user has to confirm this. You can use the `--no-confirm` parameter to automatically update all updatable packages, without asking for confirmation. The `--no-confirm` parameter is useful when running `wingetupd.exe` in scripts.
+`--no-confirm` prevents `wingetupd.exe` from asking the user for confirmation, if it should update the updatable packages. You can use the `--no-confirm` parameter to automatically update all updatable packages, without asking for confirmation. The `--no-confirm` parameter is useful when running `wingetupd.exe` in scripts.
 
-`--help`
-Shows the usage screen and listing the `wingetupd.exe` parameters.
+`--help` shows the usage screen and listing the `wingetupd.exe` parameters.
 
 ### Requirements
 There are not any special requirements, besides having WinGet installed on your machine. `wingetupd.exe` is just a typical command line _.exe_ file for Windows. Just download the newest release, from the [Releases](https://github.com/MBODM/wingetupd/releases) page, unzip and run it. All the releases are compiled for x64, assuming you are using some 64-bit Windows (and that's quite likely).
