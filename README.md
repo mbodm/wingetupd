@@ -44,7 +44,7 @@ There are not any special requirements, besides having WinGet installed on your 
 - `wingetupd.exe` uses a timeout of 30 seconds, when waiting for WinGet to finish.
 - Since some installations can take rather long, this timeout is increased to 60 minutes, while updates occur.
 - Q: _Why this tool and not just `winget --upgrade-all` ?_ A: Often you don´t wanna update all stuff (i.e. runtimes).
-- Q: _Why this tool and not just some .bat or .ps script ?_ A: `wingetupd.exe` is maybe a better "out of the box" approach.
+- Q: _Why this tool and not just some .bat or .ps script ?_ A: Maybe this is some better "out of the box" approach.
 - At time of writing, the package-id _Zoom.Zoom_ seems to missmatch the corresponding installed _Zoom_ package.
 - I assume the WinGet-Team will correct this wrong behaviour in their [packages repository](https://github.com/microsoft/winget-pkgs/tree/master/manifests) soon.
 - `wingetupd.exe` is written in C#, is using .NET 6 and is built with Visual Studio 2022.
