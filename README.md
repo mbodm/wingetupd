@@ -17,6 +17,21 @@ Btw: WinGet is imo a __fantastic__ piece of software, to manage all of your Wind
 - So, when `wingetupd.exe` is started and it founds a package-file, it just checks for each WinGet package-id listed in the package-file, if that package exists, if that package is installed and if that package has an update. If so, it updates the package. `wingetupd.exe` does all of this, by using WinGet internally.
 - This means: All you have to do, is to edit the package-file and insert the WinGet package-id´s of your installed Windows applications you want to update. When `wingetupd.exe` is executed, it will try to update all that packages (aka "your Windows applications").
 
+### Parameters
+`wingetupd.exe` knows the following parameters:
+- `--no-log`
+- `--no-confirm`
+- `--help`
+
+`--no-log`
+Prevents `wingetupd.exe` from writing a log file. The log file contains all the internally used WinGet calls and their output, so you can exactly see how WinGet was used. Sometimes you don´t wanna create a log file or `wingetupd.exe` resides in a folder that has no write permissions (see [Notes](#Notes) section below).
+
+`--no-confirm`
+`wingetupd.exe` asks the user if it should update the updatable packages. So the user has to confirm this. You can use the `--no-confirm` parameter to automatically update all updatable packages, without asking for confirmation. The `--no-confirm` parameter is useful when running `wingetupd.exe` in scripts.
+
+`--help`
+Shows the usage screen and listing the `wingetupd.exe` parameters.
+
 ### Requirements
 There are not any special requirements, besides having WinGet installed on your machine. `wingetupd.exe` is just a typical command line _.exe_ file for Windows. Just download the newest release, from the [Releases](https://github.com/MBODM/wingetupd/releases) page, unzip and run it. All the releases are compiled for x64, assuming you are using some 64-bit Windows (and that's quite likely).
 
@@ -26,14 +41,11 @@ There are not any special requirements, besides having WinGet installed on your 
 - Some locations like _C:\\_ or _C:\ProgramFiles_ don´t have such security permissions (for a good reason).
 - If you don´t wanna run `wingetupd.exe` just from your Desktop, _C:\Users\USERNAME\AppData\Local_ is fine too.
 - You can also use the `--no-log` parameter, to prevent the creation of the log file (`wingetupd.exe --no-log`).
-- The log file contains all the internally used WinGet calls and their output, so you can exactly see how WinGet was used.
-- Use `winget search`, to find out the package-id´s (you put into the package-file) of your installed applications.
 - All internally used _WinGet_ calls are based on exact WinGet package-id´s (_WinGet_ parameters: `--exact --id`).
+- Use `winget search`, to find out the package-id´s (you put into the package-file) of your installed applications.
+- Use the `--no-confirm` parameter, to automatically update packages, if you wanna run `wingetupd.exe` inside a script.
 - _Why not just use `winget --upgrade-all` ?_ Well, often you don´t wanna update everything (i.e. runtimes).
 - _Why not just use some .bat or .ps script ?_ Well, `wingetupd.exe` is maybe a better "out of the box" approach.
-- `wingetupd.exe` asks the user if it should update the updatable packages. So the user has to confirm this.
-- You can use the `--no-confirm` parameter to automatically update all updatable packages, without asking for confirmation (`wingetupd.exe --no-confirm`).
-- The `--no-confirm` parameter is useful when running `wingetupd.exe` in scripts.
 - At time of writing, the package-id _Zoom.Zoom_ seems to missmatch the corresponding installed _Zoom_ package.
 - I assume the WinGet-Team will correct this wrong behaviour in their [packages repository](https://github.com/microsoft/winget-pkgs/tree/master/manifests) soon.
 - `wingetupd.exe` is written in C#, is using .NET 6 and is built with Visual Studio 2022.
