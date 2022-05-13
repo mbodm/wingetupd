@@ -23,7 +23,7 @@ By the way: WinGet is imo a __fantastic__ piece of software, to manage all of yo
 - `--no-confirm`
 - `--help`
 
-`--no-log` prevents `wingetupd.exe` from writing a log file. The log file contains all the internally used WinGet calls and their output, so you can exactly see how WinGet was used. Sometimes you just don´t want a log file (for whatever reason). Or maybe `wingetupd.exe` can´t create a log file, because it resides in a folder that has no write permissions (see [Notes](#Notes) section below).
+`--no-log` prevents `wingetupd.exe` from writing a log file. The log file contains all the internally used WinGet calls and their output, so you can exactly see how WinGet was used. Sometimes you just don´t want a log file (for whatever reason). Or maybe `wingetupd.exe` can´t create a log file, because it resides in a folder that has no write permissions (see [Notes](#Notes) section below). In such situations this parameter is to the rescue.
 
 `--no-confirm` prevents `wingetupd.exe` from asking the user for confirmation, if it should update the updatable packages. So you can use this parameter to automatically update all updatable packages, without asking for confirmation. This parameter is useful when running `wingetupd.exe` in scripts.
 
