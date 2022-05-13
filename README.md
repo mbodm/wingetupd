@@ -43,7 +43,7 @@ There are not any special requirements, besides having WinGet installed on your 
 - Use the `--no-confirm` parameter, to automatically update packages, if `wingetupd.exe` is used inside a script.
 - `wingetupd.exe` uses a timeout of 30 seconds, when waiting for WinGet to finish.
 - Since some installations can take rather long, this timeout is increased to 60 minutes, while updates occur.
-- The releases also contain a `wingetupd.bat` batch file, so you can run `wingetupd.exe` by a simple doubleclick.
+- The release binaries also contain a `wingetupd.bat` batch file, so you can run `wingetupd.exe` by a simple doubleclick.
 - Q: _Why this tool and not just `winget --upgrade-all` ?_ A: Often you don´t wanna update all stuff (i.e. runtimes).
 - Q: _Why this tool and not just some .bat or .ps script ?_ A: Maybe this is some better "out of the box" approach.
 - At time of writing, the package-id _Zoom.Zoom_ seems to missmatch the corresponding installed _Zoom_ package.
